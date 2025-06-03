@@ -1,0 +1,26 @@
+<div class="login-container">
+  <h2>Login</h2>
+  <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+    <label for="username">Username:</label>
+    <input
+      id="username"
+      name="username"
+      [(ngModel)]="username"
+      required
+    />
+
+    <label for="password">Password:</label>
+    <input
+      id="password"
+      name="password"
+      type="password"
+      [(ngModel)]="password"
+      required
+    />
+
+    <div *ngIf="error" style="color: rgb(212, 74, 74); margin-top: 1rem;">{{ error }}</div>
+
+    <button type="submit" [disabled]="!loginForm.valid">Login</button>
+  </form>
+</div>
+
