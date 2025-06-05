@@ -1,1 +1,15 @@
-<p>display works!</p>
+<div class="app-container">
+  <div class="sigma-container">
+    <div id="sigma-container"></div>
+  </div>
+
+  <aside class="side-panel">
+    <h2>Controls</h2>
+    <button (click)="zoomIn()">Zoom In</button>
+    <button (click)="zoomOut()">Zoom Out</button>
+
+    <h3>Statistics</h3>
+    <p>Nodes: {{ stats.nodes }}</p>
+    <p>Edges: {{ stats.edges }}</p>
+  </aside>
+</div>
