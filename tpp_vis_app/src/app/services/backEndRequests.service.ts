@@ -16,6 +16,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+
+
 @Injectable({
   providedIn: 'root',
 })
@@ -26,5 +28,13 @@ export class backendApiService {
 
   getTrial(): Observable<any> {
     return this.http.get(`${this.apiUrl}/trial`);
+  }
+
+  getJSON(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/getJSON`);
+  }
+
+  getNuclearFamily(nodeID: string):Observable<any> {
+    return this.http.post(`${this.apiUrl}/getNuclearFamily`,nodeID);
   }
 }
