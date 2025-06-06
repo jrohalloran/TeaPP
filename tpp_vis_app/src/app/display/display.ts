@@ -71,6 +71,7 @@ export class DisplayComponent implements AfterViewInit {
       this.loadGraph();
     }
   }
+  
 
   async getTrial(): Promise<void> {
     console.log('Getting Trial Data');
@@ -97,15 +98,25 @@ export class DisplayComponent implements AfterViewInit {
     const data = this.jsonData;
     const graph = this.graph;
 
-    // Creating a Graph 
-    // Clear graph if previously initialized
+    // Dispose of the old Sigma renderer if it exists
+    if (this.renderer) {
+      this.renderer.kill(); // Properly destroy the renderer
+      //this.renderer = null;
+
+      // Optionally clear the DOM container
+      if (this.container?.nativeElement) {
+        this.container.nativeElement.innerHTML = '';
+      }
+    }
+
+    // Clear previous graph data
     if (graph.order > 0) {
       graph.clear();
     }
-    // Add nodes with originalColor for resetting highlight
+
+    // Add nodes
     data.nodes.forEach(node => {
       graph.addNode(node.id, {
-        //label: node.label,
         name: node.label,
         x: node.x,
         y: node.y,
@@ -118,7 +129,7 @@ export class DisplayComponent implements AfterViewInit {
       });
     });
 
-    // Add edges with originalColor
+    // Add edges
     data.edges.forEach(edge => {
       graph.addEdge(edge.source, edge.target, {
         id: edge.id,
@@ -128,11 +139,68 @@ export class DisplayComponent implements AfterViewInit {
       });
     });
 
+    // Create new Sigma renderer
     this.renderer = new Sigma(graph, this.container.nativeElement);
 
+    // Setup interactivity again
     this.setupHighlighting();
     this.getSelectedNode();
   }
+
+  loadNewGraph(): void {
+  const data = this.jsonData;
+  const graph = this.graph;
+
+  // Dispose of the old Sigma renderer if it exists
+  if (this.renderer) {
+    this.renderer.kill(); // Properly destroy the renderer
+    //this.renderer = null;
+
+    // Optionally clear the DOM container
+    if (this.container?.nativeElement) {
+      this.container.nativeElement.innerHTML = '';
+    }
+  }
+
+  // Clear previous graph data
+  if (graph.order > 0) {
+    graph.clear();
+  }
+
+  // Add nodes
+  data.nodes.forEach(node => {
+    graph.addNode(node.id, {
+      name: node.label,
+      label: node.label,
+      x: node.x,
+      y: node.y,
+      size: node.size,
+      color: node.color,
+      year: node.year,
+      siblings: node.siblings,
+      parents: node.parents,
+      originalColor: node.color
+    });
+  });
+
+  // Add edges
+  data.edges.forEach(edge => {
+    graph.addEdge(edge.source, edge.target, {
+      id: edge.id,
+      size: edge.size,
+      color: edge.color,
+      originalColor: edge.color
+    });
+  });
+
+  // Create new Sigma renderer
+  this.renderer = new Sigma(graph, this.container.nativeElement);
+
+  // Setup interactivity again
+  //this.setupHighlighting();
+  //this.getSelectedNode();
+}
+
 
   private getAncestors(nodeId: string, ancestors: Set<string> = new Set()): Set<string> {
     this.graph.inNeighbors(nodeId).forEach(parentId => {
@@ -209,17 +277,32 @@ export class DisplayComponent implements AfterViewInit {
       // Reset nodes and edges to original color/size
       let data = this.graph.getNodeAttributes(node);
       console.log(data)
-      const nodeID = node;
+      console.log("Siblings: "+data['siblings']);
+      console.log("Parents: "+data['parents']);
+      let nodeID;
+
+
+      // If node if singular node (no siblings) - assign its ID for query as its node label
+      if (data['siblings']== undefined){
+        nodeID = node;
+        console.log(nodeID);
+      }
+      else{
+        // Else Assign the ID for querying as the list of siblings for looping through 
+        nodeID = data['siblings'];
+        console.log(nodeID);
+      }
       try {
         console.log("Retrieving Nuclear Family");
-        const response = await firstValueFrom(this.backendApiService.getNuclearFamily(nodeID));
+        const response = await firstValueFrom(this.backendApiService.getNuclearFamily2(nodeID));
         console.log('Response from backend:', response);
+        this.jsonData = response;
+        this.loadNewGraph();
     } catch (error) {
       console.error('Error:', error);
     }
   });
   };
-  
 
   zoomIn() {
     console.log('Zoom in clicked');

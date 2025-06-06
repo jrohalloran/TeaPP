@@ -34,7 +34,13 @@ export class backendApiService {
     return this.http.get(`${this.apiUrl}/getJSON`);
   }
 
+  /*
   getNuclearFamily(nodeID: string):Observable<any> {
     return this.http.post(`${this.apiUrl}/getNuclearFamily`,nodeID);
+  }
+  */
+ 
+  getNuclearFamily2(nodeID: string):Observable<any> {
+    return this.http.post(`${this.apiUrl}/getNuclearFamily2`,nodeID);
   }
 }
