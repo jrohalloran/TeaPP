@@ -95,57 +95,58 @@ export class DisplayComponent implements AfterViewInit {
   }
 
   loadGraph(): void {
-    const data = this.jsonData;
-    const graph = this.graph;
+  const data = this.jsonData;
+  const graph = this.graph;
 
-    // Dispose of the old Sigma renderer if it exists
-    if (this.renderer) {
-      this.renderer.kill(); // Properly destroy the renderer
-      //this.renderer = null;
-
-      // Optionally clear the DOM container
-      if (this.container?.nativeElement) {
-        this.container.nativeElement.innerHTML = '';
-      }
-    }
-
-    // Clear previous graph data
-    if (graph.order > 0) {
-      graph.clear();
-    }
-
-    // Add nodes
-    data.nodes.forEach(node => {
-      graph.addNode(node.id, {
-        name: node.label,
-        x: node.x,
-        y: node.y,
-        size: node.size,
-        color: node.color,
-        year: node.year,
-        siblings: node.siblings,
-        parents: node.parents,
-        originalColor: node.color
-      });
-    });
-
-    // Add edges
-    data.edges.forEach(edge => {
-      graph.addEdge(edge.source, edge.target, {
-        id: edge.id,
-        size: edge.size,
-        color: edge.color,
-        originalColor: edge.color
-      });
-    });
-
-    // Create new Sigma renderer
-    this.renderer = new Sigma(graph, this.container.nativeElement);
-
-    // Setup interactivity again
-    this.setupHighlighting();
-    this.getSelectedNode();
+  // 1. Properly dispose of old Sigma renderer
+  if (this.renderer) {
+    this.renderer.kill();
+    this.container.nativeElement.innerHTML = '';
+    //this.renderer = []; // optional but recommended to avoid reuse
   }
+
+  // 2. Clear container DOM (to remove old canvases)
+  if (this.container?.nativeElement) {
+    this.container.nativeElement.innerHTML = '';
+  }
+
+  // 3. Clear old graph data
+  if (graph.order > 0) {
+    graph.clear();
+  }
+
+  // 4. Add nodes and edges
+  data.nodes.forEach(node => {
+    graph.addNode(node.id, {
+      name: node.label,
+      x: node.x,
+      y: node.y,
+      size: node.size,
+      color: node.color,
+      year: node.year,
+      siblings: node.siblings,
+      parents: node.parents,
+      originalColor: node.color
+    });
+  });
+
+  data.edges.forEach(edge => {
+    graph.addEdge(edge.source, edge.target, {
+      id: edge.id,
+      size: edge.size,
+      color: edge.color,
+      originalColor: edge.color
+    });
+  });
+
+  // 5. Create new Sigma renderer (with fresh graph and clean container)
+  this.renderer = new Sigma(graph, this.container.nativeElement);
+
+  // 6. Setup interactions
+  this.setupHighlighting();
+  this.getSelectedNode();
+}
+
 
   loadNewGraph(): void {
   const data = this.jsonData;
@@ -153,16 +154,17 @@ export class DisplayComponent implements AfterViewInit {
 
   // Dispose of the old Sigma renderer if it exists
   if (this.renderer) {
-    this.renderer.kill(); // Properly destroy the renderer
-    //this.renderer = null;
-
-    // Optionally clear the DOM container
-    if (this.container?.nativeElement) {
-      this.container.nativeElement.innerHTML = '';
-    }
+    this.renderer.kill();
+    this.container.nativeElement.innerHTML = '';
+    //this.renderer = []; // optional but recommended to avoid reuse
   }
 
-  // Clear previous graph data
+  // 2. Clear container DOM (to remove old canvases)
+  if (this.container?.nativeElement) {
+    this.container.nativeElement.innerHTML = '';
+  }
+
+  // 3. Clear old graph data
   if (graph.order > 0) {
     graph.clear();
   }
@@ -293,8 +295,8 @@ export class DisplayComponent implements AfterViewInit {
         console.log(nodeID);
       }
       try {
-        console.log("Retrieving Nuclear Family");
-        const response = await firstValueFrom(this.backendApiService.getNuclearFamily2(nodeID));
+        //console.log("Retrieving Nuclear Family");
+        const response = await firstValueFrom(this.backendApiService.getPedigree(nodeID));
         console.log('Response from backend:', response);
         this.jsonData = response;
         this.loadNewGraph();

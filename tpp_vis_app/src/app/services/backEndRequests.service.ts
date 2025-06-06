@@ -39,8 +39,21 @@ export class backendApiService {
     return this.http.post(`${this.apiUrl}/getNuclearFamily`,nodeID);
   }
   */
- 
+
   getNuclearFamily2(nodeID: string):Observable<any> {
+    console.log("Sending Data to /api/getNuclearFamily");
     return this.http.post(`${this.apiUrl}/getNuclearFamily2`,nodeID);
   }
+
+  getWholeFamily(nodeID: string):Observable<any> {
+    console.log("Sending Data to /api/getWholeFamily");
+    return this.http.post(`${this.apiUrl}/getWholeFamily`,nodeID);
+  }
+
+  getPedigree(nodeID: string):Observable<any> {
+    console.log("Sending Data to /api/getPedigree");
+    return this.http.post(`${this.apiUrl}/getPedigree`,nodeID);
+  }
+
+  
 }

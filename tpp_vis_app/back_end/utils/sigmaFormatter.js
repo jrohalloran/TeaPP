@@ -77,6 +77,60 @@ export async function formatForSigma(data) {
   };
 }
 
+export async function formatForSigma2(data) {
+  // Use empty arrays as defaults if data.nodes or data.family are missing or not arrays
+  const allNodes = [
+    ...(Array.isArray(data.nodes) ? data.nodes : []),
+    ...(Array.isArray(data.family) ? data.family : [])
+  ];
+  
+  allNodes.forEach(node => {
+    console.log(node.year);
+  });
+
+  // Create Sigma.js node objects
+  const sigmaNodes = allNodes.map(node => ({
+    id: node.id,
+    label: node.name || node.id,
+    x: Math.random(), // or 0, or use a layout engine later
+    y: Math.random(),
+    year: node.year,
+    gener: node.gener,
+    size: 1,
+    color: '#6699cc'
+  }));
+
+  // Fetch edges between these nodes
+  const session = driver.session();
+  const allIds = allNodes.map(n => n.id);
+
+  const edgesQuery = `
+    MATCH (n)-[r:PARENT_OF|CHILD_OF]-(m)
+    WHERE n.id IN $ids AND m.id IN $ids
+    RETURN n.id AS source, m.id AS target, type(r) AS type
+  `;
+
+  let sigmaEdges = [];
+  try {
+    const edgesResult = await session.run(edgesQuery, { ids: allIds });
+
+    sigmaEdges = edgesResult.records.map((record, index) => ({
+      id: `e${index}`,
+      source: record.get('source'),
+      target: record.get('target'),
+      color: '#ccc',
+      size: 1,
+      label: record.get('type')
+    }));
+  } finally {
+    await session.close();
+  }
+
+  return {
+    nodes: sigmaNodes,
+    edges: sigmaEdges
+  };
+}
 
 
 export function layerByYearReverse(graphData) {

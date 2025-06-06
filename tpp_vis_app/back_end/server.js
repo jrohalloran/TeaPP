@@ -17,7 +17,8 @@ import bodyParser from 'body-parser';
 import fs from 'fs';
 import neo4j from 'neo4j-driver';
 import nuclearFamilyRoutes from './routes/nuclearFamily.js';
-
+import wholeFamilyRoutes from './routes/wholeFamily.js';
+import pedigreeRoutes from './routes/pedigree.js';
 
 
 const app = express();
@@ -51,6 +52,10 @@ app.get('/api/getJSON', (req, res) => {
 });  
 
 app.use('/api', nuclearFamilyRoutes);
+
+app.use('/api', wholeFamilyRoutes);
+
+app.use('/api', pedigreeRoutes);
 
 /*
 app.post('/api/getNuclearFamily', (req, res) => {
