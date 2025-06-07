@@ -19,7 +19,7 @@ import neo4j from 'neo4j-driver';
 import nuclearFamilyRoutes from './routes/nuclearFamily.js';
 import wholeFamilyRoutes from './routes/wholeFamily.js';
 import pedigreeRoutes from './routes/pedigree.js';
-
+import allNodesEdgesRoutes from "./routes/allNodesEdges.js"
 
 const app = express();
 
@@ -36,15 +36,6 @@ app.use(express.text({ limit: '10mb' }));
 app.use(express.json({ limit: '10mb' })); 
 
 
-
-
-app.get('/api/trial', (req, res) => {
-
-  console.log("Trial Successful");
-  res.json({ message: 'This is trial data' });
-});
-
-
 app.get('/api/getJSON', (req, res) => {
   console.log("Reading JSON Data")
   const data = fs.readFileSync('./plant_clone_sigma_size_by_children_gencol.json', 'utf-8');
@@ -56,6 +47,12 @@ app.use('/api', nuclearFamilyRoutes);
 app.use('/api', wholeFamilyRoutes);
 
 app.use('/api', pedigreeRoutes);
+
+app.use('/api', allNodesEdgesRoutes);
+
+
+
+
 
 /*
 app.post('/api/getNuclearFamily', (req, res) => {

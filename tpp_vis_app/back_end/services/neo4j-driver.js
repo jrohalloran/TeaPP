@@ -84,7 +84,6 @@ export async function fetchNuclearFamilyData(nodeIDs) {
   return combinedResult;
 }
 
-
 export async function fetchWholeFamilyData(nodeIDs) {
   if (!Array.isArray(nodeIDs)) nodeIDs = [nodeIDs];
 
@@ -187,4 +186,104 @@ export async function fetchPedigreeData(nodeIDs) {
   );
 
   return { nodes: combinedNodes };
+}
+
+export async function fetchAllNodesEdges2(){
+  console.log('fetchAllNodesEdges called...');
+  
+  const session = driver.session();  // open a session here
+  
+  try {
+    const result = await session.run(`
+      MATCH (n)
+      OPTIONAL MATCH (n)-[r]->(m)
+      RETURN collect(DISTINCT { node: n, id }) AS nodesWithLabels, collect(DISTINCT r) AS relationships
+
+    `);
+
+    const record = result.records[0];
+    //const nodes = record.get('nodes');
+    const relationships = record.get('relationships');
+    console.log(relationships);
+
+    const nodesWithLabels = record.get('nodesWithLabels');
+
+    const sigmaNodes = nodesWithLabels.map(({ node, labels }, index) => ({
+      id: node.identity.toString(),
+      label: node.properties.name || labels.join(', ') || `Node ${node.identity}`,
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      size: 1,
+      color: '#666'
+    }));
+
+    /*
+    const sigmaEdges = relationships.map((rel, index) => ({
+      id: `e${index}`,
+      source: rel.start.toString(),
+      target: rel.end.toString(),
+      label: rel.type
+    }));*/
+
+    const sigmaGraph = {
+      nodes: sigmaNodes,
+      //edges: sigmaEdges
+    };
+
+    //console.log("Edges: "+sigmaEdges);
+    console.log("Nodes: "+sigmaNodes)
+    return sigmaNodes;
+
+  } catch (err) {
+    console.error('Error exporting graph:', err);
+    throw err; // rethrow to handle upstream if needed
+  } finally {
+    await session.close();
+  }
+}
+
+
+export async function fetchAllNodesEdges() {
+  const session = driver.session();
+  try {
+    const result = await session.run(`
+      MATCH (p:Plant)
+      OPTIONAL MATCH (p)-[:PARENT_OF]->(c:Plant)
+      RETURN
+        collect(DISTINCT {
+          id: p.id,
+          gener: p.gener,
+          par1: p.par1,
+          par2: p.par2,
+          year: p.year
+        }) AS nodes,
+        collect(DISTINCT {
+          source: p.id,
+          target: c.id
+        }) AS edges
+    `);
+
+    const record = result.records[0];
+    const nodes = record.get('nodes').map(node => ({
+      id: node.id,
+      gener: node.gener,
+      par1: node.par1,
+      par2: node.par2,
+      year: node.year ? node.year.toNumber() : null  // convert neo4j int to JS number
+    }));
+
+    const edges = record.get('edges').filter(edge => edge.source != null && edge.target != null);
+
+
+    const graphData = {
+    nodes: nodes,
+    edges: edges
+  };
+    return graphData;
+  } catch (error) {
+    console.error('Error fetching plant graph:', error);
+    throw error;
+  } finally {
+    await session.close();
+  }
 }

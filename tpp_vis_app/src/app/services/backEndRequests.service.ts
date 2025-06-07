@@ -26,12 +26,13 @@ export class backendApiService {
 
   constructor(private http: HttpClient) {}
 
-  getTrial(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/trial`);
-  }
-
   getJSON(): Observable<any> {
     return this.http.get(`${this.apiUrl}/getJSON`);
+  }
+
+  getAllNodesEdges(): Observable<any> {
+    console.log("Retrieving all Nodes and Edges");
+    return this.http.get(`${this.apiUrl}/getAllNodesEdges`);
   }
 
   /*

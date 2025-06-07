@@ -3,6 +3,8 @@ import { backendApiService } from '../services/backEndRequests.service';
 import Graph from 'graphology';
 import Sigma from 'sigma';
 import { firstValueFrom } from 'rxjs';
+import { VisualisationService } from '../services/visualisation.service';
+
 
 
 // Setting Up Data Formats
@@ -14,7 +16,7 @@ interface GraphNode {
   size: number;
   color: string;
   year: number | null;
-  siblings: []| null,
+  siblings?: []| null,
   parents: [] | null,
   gener: number;
 }
@@ -58,12 +60,14 @@ export class DisplayComponent implements AfterViewInit {
   graph = new Graph({ multi: true });
   renderer!: Sigma;
 
-  constructor(private backendApiService: backendApiService) {}
+  constructor(private backendApiService: backendApiService,
+    private visualisationService: VisualisationService
+  ) {}
 
   async ngAfterViewInit(): Promise<void> {
     console.log('Initialize Sigma in #sigma-container');
-    await this.getTrial();
     await this.getJSON();
+    await this.getGroupedData();
 
     if (!this.container) {
       console.error('Container is undefined in ngAfterViewInit');
@@ -72,28 +76,28 @@ export class DisplayComponent implements AfterViewInit {
     }
   }
   
-
-  async getTrial(): Promise<void> {
-    console.log('Getting Trial Data');
+  async getJSON(): Promise<void> {
+    console.log('Getting JSON Data');
     try {
-      const response = await this.backendApiService.getTrial().toPromise();
+      const response = await firstValueFrom(this.backendApiService.getJSON());
       console.log('Response from backend:', response);
+      //this.jsonData = response;
     } catch (error) {
       console.error('Error:', error);
     }
   }
 
-  async getJSON(): Promise<void> {
-    console.log('Getting JSON Data');
+    async getGroupedData(): Promise<void> {
+    console.log('Retrieving JSON for all Data');
     try {
-      const response = await firstValueFrom(this.backendApiService.getJSON());
+      const response = await firstValueFrom(this.backendApiService.getAllNodesEdges());
       console.log('Response from backend:', response);
       this.jsonData = response;
     } catch (error) {
       console.error('Error:', error);
     }
   }
-
+/*
   loadGraph(): void {
   const data = this.jsonData;
   const graph = this.graph;
@@ -146,8 +150,37 @@ export class DisplayComponent implements AfterViewInit {
   this.setupHighlighting();
   this.getSelectedNode();
 }
+*/
 
+loadGraph(): void {
+  if (this.renderer) {
+    this.renderer.kill();
+  }
 
+  this.renderer = this.visualisationService.loadGraph(
+    this.graph,
+    this.jsonData,
+    this.container.nativeElement
+  );
+
+  this.setupHighlighting();
+  this.getSelectedNode();
+}
+
+loadNewGraph(): void {
+  if (this.renderer) {
+    this.renderer.kill();
+  }
+
+  this.renderer = this.visualisationService.loadGraph(
+    this.graph,
+    this.jsonData,
+    this.container.nativeElement
+  );
+
+}
+
+/*
   loadNewGraph(): void {
   const data = this.jsonData;
   const graph = this.graph;
@@ -201,7 +234,7 @@ export class DisplayComponent implements AfterViewInit {
   // Setup interactivity again
   //this.setupHighlighting();
   //this.getSelectedNode();
-}
+}*/
 
 
   private getAncestors(nodeId: string, ancestors: Set<string> = new Set()): Set<string> {
@@ -273,6 +306,9 @@ export class DisplayComponent implements AfterViewInit {
       this.renderer.refresh();
     });
   }
+
+
+
 
   async getSelectedNode():Promise<void>{
       this.renderer.on('clickNode', async ({ node }) => {
