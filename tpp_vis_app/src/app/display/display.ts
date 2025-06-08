@@ -68,6 +68,7 @@ export class DisplayComponent implements AfterViewInit {
     console.log('Initialize Sigma in #sigma-container');
     await this.getJSON();
     await this.getGroupedData();
+    await this.getAllPlants();
 
     if (!this.container) {
       console.error('Container is undefined in ngAfterViewInit');
@@ -97,74 +98,46 @@ export class DisplayComponent implements AfterViewInit {
       console.error('Error:', error);
     }
   }
-/*
-  loadGraph(): void {
-  const data = this.jsonData;
-  const graph = this.graph;
 
-  // 1. Properly dispose of old Sigma renderer
-  if (this.renderer) {
-    this.renderer.kill();
-    this.container.nativeElement.innerHTML = '';
-    //this.renderer = []; // optional but recommended to avoid reuse
+  async getAllPlants(): Promise<void> {
+    console.log('Retrieving Postgres 100 Plants:');
+    try {
+      const response = await firstValueFrom(this.backendApiService.getAllPlants());
+      console.log('Postgres Response from getAllPlants:', response);
+      //this.jsonData = response;
+    } catch (error) {
+      console.error('Error:', error);
+    }
   }
 
-  // 2. Clear container DOM (to remove old canvases)
-  if (this.container?.nativeElement) {
-    this.container.nativeElement.innerHTML = '';
+  async getSelectPlantPG(nodeID: any): Promise<void> {
+    console.log('Retrieving Selected:');
+    console.log(nodeID);
+    try {
+      const response = await firstValueFrom(this.backendApiService.getSelectedPlantPG(nodeID));
+      console.log('Postgres Response from getSelectedPlant:', response);
+      //this.jsonData = response;
+    } catch (error) {
+      console.error('Error:', error);
+    }
   }
-
-  // 3. Clear old graph data
-  if (graph.order > 0) {
-    graph.clear();
-  }
-
-  // 4. Add nodes and edges
-  data.nodes.forEach(node => {
-    graph.addNode(node.id, {
-      name: node.label,
-      x: node.x,
-      y: node.y,
-      size: node.size,
-      color: node.color,
-      year: node.year,
-      siblings: node.siblings,
-      parents: node.parents,
-      originalColor: node.color
-    });
-  });
-
-  data.edges.forEach(edge => {
-    graph.addEdge(edge.source, edge.target, {
-      id: edge.id,
-      size: edge.size,
-      color: edge.color,
-      originalColor: edge.color
-    });
-  });
-
-  // 5. Create new Sigma renderer (with fresh graph and clean container)
-  this.renderer = new Sigma(graph, this.container.nativeElement);
-
-  // 6. Setup interactions
-  this.setupHighlighting();
-  this.getSelectedNode();
-}
-*/
 
 loadGraph(): void {
   if (this.renderer) {
     this.renderer.kill();
   }
-
-  this.renderer = this.visualisationService.loadGraph(
-    this.graph,
+  
+  const graph = this.visualisationService.loadGraph(
     this.jsonData,
     this.container.nativeElement
   );
+  this.graph = graph.graph;
+  this.renderer = graph.renderer
+
 
   this.setupHighlighting();
   this.getSelectedNode();
+
 }
 
 loadNewGraph(): void {
@@ -172,11 +145,13 @@ loadNewGraph(): void {
     this.renderer.kill();
   }
 
-  this.renderer = this.visualisationService.loadGraph(
-    this.graph,
+  const graph = this.visualisationService.loadGraph(
     this.jsonData,
     this.container.nativeElement
   );
+  this.graph = graph.graph;
+  this.renderer = graph.renderer
+
 
 }
 
@@ -322,7 +297,7 @@ loadNewGraph(): void {
 
       // If node if singular node (no siblings) - assign its ID for query as its node label
       if (data['siblings']== undefined){
-        nodeID = node;
+        nodeID = [node];
         console.log(nodeID);
       }
       else{
@@ -330,8 +305,10 @@ loadNewGraph(): void {
         nodeID = data['siblings'];
         console.log(nodeID);
       }
+
       try {
-        //console.log("Retrieving Nuclear Family");
+        console.log("Retrieving Data...");
+        this.getSelectPlantPG(nodeID);
         const response = await firstValueFrom(this.backendApiService.getPedigree(nodeID));
         console.log('Response from backend:', response);
         this.jsonData = response;

@@ -28,12 +28,12 @@ export const getWholeFamily = async (req, res) => {
     const sigmaData = await formatForSigma(rawData);
 
     // Saving the file to local directory -- for finding optimal layout
-    await saveJsonToFile(sigmaData, 'wholeFamilyGraph.json');
+    //await saveJsonToFile(sigmaData, 'wholeFamilyGraph.json');
 
     let plotData = layerByYearReverse(sigmaData);
     plotData = convertToSigmaFormat(plotData);
 
-    await saveJsonToFile(plotData, 'plotData_wholeFamily.json')
+    //await saveJsonToFile(plotData, 'plotData_wholeFamily.json')
 
     res.json(plotData);
   } catch (err) {

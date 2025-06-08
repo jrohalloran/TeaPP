@@ -27,7 +27,7 @@ export const getAllNodesEdges = async (req, res) => {
 
     const groupedData = groupSiblings(filteredData);
 
-    console.log(filteredData.nodes[0]);
+    //console.log(filteredData.nodes[0]);
 
     const layeredData = allNodeslayerByYearReverse(groupedData);
 
@@ -35,19 +35,6 @@ export const getAllNodesEdges = async (req, res) => {
 
     const plotData = convertToSigmaFormat(cleanedData);
 
-    // Format raw data to Sigma.js format
-    //const sigmaData = await getSigmaEdges(nodes);
-
-
-    //console.log(ndoes);
-
-    // Saving the file to local directory -- for finding optimal layout
-    //await saveJsonToFile(sigmaData, 'nuclearFamilyGraph.json');
-
-    //let plotData = layerByYearReverse(groupedData);
-    //plotData = convertToSigmaFormat(plotData);
-
-    //await saveJsonToFile(plotData, 'plotData.json')
 
     res.json(plotData);
 

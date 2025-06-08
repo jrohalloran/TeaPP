@@ -8,6 +8,7 @@ import Graph from 'graphology';
 export class VisualisationService {
   constructor() {}
 
+  /*
   loadGraph(graph: Graph, data: any, container: HTMLElement): Sigma {
 
     container.innerHTML = '';
@@ -43,5 +44,42 @@ export class VisualisationService {
 
     // 4. Create and return Sigma renderer
     return new Sigma(graph, container);
-  }
+  }*/
+
+  loadGraph(data: any, container: HTMLElement): { renderer: Sigma, graph: Graph } {
+    container.innerHTML = ''; // Clean container
+
+    const graph = new Graph({ multi: true });
+
+    data.nodes.forEach((node: any) => {
+      graph.addNode(node.id, {
+        name: node.label,
+        label: node.label,
+        x: node.x,
+        y: node.y,
+        size: node.size,
+        color: node.color,
+        year: node.year,
+        siblings: node.siblings,
+        parents: node.parents,
+        originalColor: node.color,
+      });
+    });
+
+    data.edges.forEach((edge: any) => {
+      graph.addEdge(edge.source, edge.target, {
+        id: edge.id,
+        size: edge.size,
+        color: edge.color,
+        originalColor: edge.color,
+      });
+    });
+
+    const renderer = new Sigma(graph, container);
+    return { renderer, graph };
 }
+
+}
+
+
+

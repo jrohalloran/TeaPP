@@ -28,12 +28,12 @@ export const getNuclearFamily = async (req, res) => {
     const sigmaData = await formatForSigma(rawData);
 
     // Saving the file to local directory -- for finding optimal layout
-    await saveJsonToFile(sigmaData, 'nuclearFamilyGraph.json');
+    //await saveJsonToFile(sigmaData, 'nuclearFamilyGraph.json');
 
     let plotData = layerByYearReverse(sigmaData);
     plotData = convertToSigmaFormat(plotData);
 
-    await saveJsonToFile(plotData, 'plotData.json')
+    //await saveJsonToFile(plotData, 'plotData.json')
 
     res.json(plotData);
   } catch (err) {

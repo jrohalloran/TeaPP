@@ -28,12 +28,12 @@ export const getPedigree= async (req, res) => {
     const sigmaData = await formatForSigma2(rawData);
 
     // Saving the file to local directory -- for finding optimal layout
-    await saveJsonToFile(sigmaData, 'PedigreeGraph.json');
+    //await saveJsonToFile(sigmaData, 'PedigreeGraph.json');
 
     let plotData = layerByYearReverse(sigmaData);
     plotData = convertToSigmaFormat(plotData);
 
-    await saveJsonToFile(plotData, 'plotData_pedigree.json')
+    //await saveJsonToFile(plotData, 'plotData_pedigree.json')
 
     res.json(plotData);
   } catch (err) {

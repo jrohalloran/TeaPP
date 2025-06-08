@@ -30,6 +30,8 @@ export class backendApiService {
     return this.http.get(`${this.apiUrl}/getJSON`);
   }
 
+  /// NEO4J API REQUESTS 
+
   getAllNodesEdges(): Observable<any> {
     console.log("Retrieving all Nodes and Edges");
     return this.http.get(`${this.apiUrl}/getAllNodesEdges`);
@@ -54,6 +56,22 @@ export class backendApiService {
   getPedigree(nodeID: string):Observable<any> {
     console.log("Sending Data to /api/getPedigree");
     return this.http.post(`${this.apiUrl}/getPedigree`,nodeID);
+  }
+
+
+
+
+
+
+  /// POSTGRES API REQUESTS 
+  getAllPlants(): Observable<any> {
+    console.log("Retrieving all Nodes and Edges");
+    return this.http.get(`${this.apiUrl}/getAllPlants`);
+  }
+
+  getSelectedPlantPG(nodeID: any): Observable<any> {
+    console.log("Retrieving all Nodes and Edges");
+    return this.http.post(`${this.apiUrl}/getSelectedPlant`, nodeID);
   }
 
   

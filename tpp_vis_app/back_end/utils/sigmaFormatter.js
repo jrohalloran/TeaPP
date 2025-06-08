@@ -86,7 +86,7 @@ export async function formatForSigma2(data) {
     ...(Array.isArray(data.family) ? data.family : [])
   ];
 
-  console.log("All Nodes: "+allNodes);
+  //console.log("All Nodes: "+allNodes);
   
   allNodes.forEach(node => {
     //console.log(node.year);
@@ -130,7 +130,7 @@ export async function formatForSigma2(data) {
     await session.close();
   }
 
-  console.log("Resulting Edges:" +sigmaEdges);
+  //console.log("Resulting Edges:" +sigmaEdges);
   return {
     nodes: sigmaNodes,
     edges: sigmaEdges
@@ -462,8 +462,7 @@ export function groupSiblings(graphData) {
 
     const parents = group[0].parents;
     const siblingIds = group.map(n => n.id);
-    //console.log(siblingIds);
-    //console.log(parents);
+
     const groupId = `grp_${parents.join('_')}_${group[0].gener}_${group[0].year}`;
 
     const newGroupNode = {
