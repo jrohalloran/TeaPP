@@ -1,16 +1,59 @@
-<div class="app-container">
-  <div class="sigma-container">
-   <div id="sigma-container" #sigmaContainer></div>
+<!-- Top-level container -->
+<div class="app-wrapper">
+
+  <!-- Top bar -->
+  <header class="top-bar">
+    <div class="top-bar-content">
+      <h1>TPP Vis</h1>
+    </div>
+  </header>
+
+  <!-- Main content area -->
+  <div class="app-container">
+
+    <!-- Left side: split into top and bottom halves -->
+    <div class="left-side">
+
+      <!-- Top Sigma container -->
+      <div class="half-container sigma-top">
+        <div class="loading-overlay" *ngIf="isTopLoading">
+          <div class="spinner"></div>
+          <p>Loading top visualization...</p>
+        </div>
+        <div id="sigma-top-container" #sigmaContainerTop></div>
+      </div>
+
+      <!-- Bottom Sigma container -->
+      <div class="half-container sigma-bottom">
+        <div class="loading-overlay" *ngIf="isBottomLoading">
+          <div class="spinner"></div>
+          <p>Loading bottom visualization...</p>
+        </div>
+        <div id="sigma-bottom-container" #sigmaContainerBottom></div>
+      </div>
+
+    </div>
+
+    <!-- Right side panel -->
+    <aside class="side-panel">
+
+      <!-- Controls section -->
+      <div class="top-half">
+        <h2>Controls</h2>
+        <button (click)="zoomIn()">Zoom In</button>
+        <button (click)="zoomOut()">Zoom Out</button>
+      </div>
+
+      <!-- Stats section -->
+      <div class="bottom-half">
+        <h3>Statistics</h3>
+        <p>Nodes: {{ stats.nodes }}</p>
+        <p>Edges: {{ stats.edges }}</p>
+      </div>
+
+    </aside>
+
   </div>
 
-  <aside class="side-panel">
-    <h2>Controls</h2>
-    <button (click)="zoomIn()">Zoom In</button>
-    <button (click)="zoomOut()">Zoom Out</button>
-
-    <h3>Statistics</h3>
-    <p>Nodes: {{ stats.nodes }}</p>
-    <p>Edges: {{ stats.edges }}</p>
-  </aside>
 </div>
 

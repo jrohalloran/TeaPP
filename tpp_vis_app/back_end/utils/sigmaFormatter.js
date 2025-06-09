@@ -318,6 +318,78 @@ export function layerByYearReverse(graphData) {
 }
 
 
+// Layering by year and adapting node spacing to the number of nodes in the layer 
+export function layerByYearBoundedSpacing(graphData) {
+  console.log("------------------------------")
+  console.log("Starting to layer -- adaptive to number of nodes")
+  console.log("------------------------------")
+  const layers = {};
+  const nullGen0 = [];
+  const nullGenPos = [];
+
+  // Group nodes - Grouping by year 
+  graphData.nodes.forEach(node => {
+    if (node.year === null || node.year === undefined) {
+      if (Number(node.gener) === 0) nullGen0.push(node);
+      else nullGenPos.push(node);
+    } else {
+      const key = String(node.year);
+      if (!layers[key]) layers[key] = [];
+      layers[key].push(node);
+    }
+  });
+
+
+  const sortedYears = Object.keys(layers).sort((a, b) => Number(b) - Number(a));
+  const layerHeight = 500_000_000; // standard spacing between layers 
+
+  // Determining the number of nodes per layer 
+  const getSpacing = (count) => {
+    if (count <= 2) return 2_000_000_000;
+    if (count <= 3) return 800_000_000;
+    if (count <= 5) return 700_000_000;
+    if (count <= 10) return 500_000_000;
+    if (count <= 50) return 200_000_000;
+    if (count <= 100) return 100_000_000;
+    return 50_000_000;
+  };
+
+  // Assign x/y coordinates
+  sortedYears.forEach((year, layerIndex) => {
+    const nodes = layers[year];
+    const count = nodes.length;
+    const spacing = getSpacing(count);
+    nodes.forEach((node, i) => {
+      node.x = (i - (count - 1) / 2) * spacing;
+      node.y = layerIndex * layerHeight;
+    });
+  });
+
+  const lastLayerY = sortedYears.length * layerHeight;
+
+  // Position nullGenPos
+  {
+    const count = nullGenPos.length;
+    const spacing = getSpacing(count);
+    nullGenPos.forEach((node, i) => {
+      node.x = (i - (count - 1) / 2) * spacing;
+      node.y = lastLayerY;
+    });
+  }
+
+  // Position nullGen0
+  {
+    const count = nullGen0.length;
+    const spacing = getSpacing(count);
+    nullGen0.forEach((node, i) => {
+      node.x = (i - (count - 1) / 2) * spacing;
+      node.y = lastLayerY + layerHeight;
+    });
+  }
+
+  return graphData;
+}
+
 
 
 //  ------- Inital Group mapping functions ----------
@@ -370,6 +442,7 @@ export function allNodeslayerByYearReverse(graphData) {
 }
 
 
+/*
 export function convertToSigmaFormat(graphData) {
   const nodeById = new Map(graphData.nodes.map(n => [n.id, n]));
   const childrenCount = {};
@@ -422,6 +495,99 @@ export function convertToSigmaFormat(graphData) {
     size: edge.size || 1,
     color: edge.color || '#999'
   }));
+
+  return { nodes: sigmaNodes, edges: sigmaEdges };
+}
+*/
+
+
+
+
+// General Functions 
+
+
+
+export function convertToSigmaFormat(graphData) {
+  const nodeById = new Map(graphData.nodes.map(n => [n.id, n]));
+  const childrenCount = {};
+
+  graphData.edges.forEach(edge => {
+    const sourceNode = nodeById.get(edge.source);
+    const targetNode = nodeById.get(edge.target);
+    if (!sourceNode || !targetNode) return;
+
+    if (Number(targetNode.gener) > Number(sourceNode.gener)) {
+      if (!childrenCount[edge.source]) childrenCount[edge.source] = 0;
+      childrenCount[edge.source]++;
+    }
+  });
+
+  const generations = graphData.nodes
+    .map(n => Number(n.gener) || 0)
+    .filter(g => g != null);
+  const uniqueGenerations = [...new Set(generations)].sort((a, b) => a - b);
+
+  function interpolateColor(gener) {
+    if (gener == null) return '#00FF00';
+    //const colors = ['#e6194B', '#f58231', '#ffe119', '#3cb44b', '#4363d8', '#911eb4']; // original colours 
+    //const colors = ['#A8D5BA', '#F9D5E5', '#FCF5C7', '#C2E7E5', '#E5C3D1', '#D0C4DF']; // Pastel Colours 
+    //const colors = ['#A0522D', '#CD853F', '#DEB887', '#F4A460', '#D2B48C', '#BC8F8F']; // Brown Tones
+    //const colors = ['#E69F00', '#56B4E9', '#009E73', '#F0E442', '#0072B2', '#D55E00']; // Accessible tones
+    //const colors = ['#5DA5A4', '#CBA328', '#A97D60', '#666666', '#A2C4C9', '#B4A7D6', '#DD7E6B']; //Dashboard
+    //const colors = ['#E41A1C', '#377EB8', '#4DAF4A', '#984EA3', '#FF7F00', '#FFFF33', '#A65628']; // Bright 
+    //const colors = ['#6B8E23', '#2E8B57', '#3CB371', '#20B2AA', '#4682B4', '#9ACD32', '#D2B48C']; // Greens
+    const colors = [
+  '#1B9E77', // dark teal green
+  '#E7298A', // magenta accent
+  '#7570B3', // muted violet
+  '#66A61E', // olive green
+  '#D95F02', // burnt orange
+  '#A6761D', // earthy mustard brown
+  '#666666'  // dark gray
+  ];
+
+
+
+
+
+    const index = uniqueGenerations.indexOf(Number(gener));
+    return colors[index % colors.length] || '#00FF00';
+  }
+
+  const sigmaNodes = graphData.nodes.map(node => {
+    const childCount = childrenCount[node.id] || 0;
+    const size = Math.min(40, 6 + Math.log2(childCount + 1) * 2);
+    return {
+      id: node.id,
+      label: node.label || node.id,
+      x: Number(node.x),
+      y: Number(node.y),
+      size,
+      color: interpolateColor(node.gener),
+      year: node.year,
+      parents: node.parents,
+      siblings: node.sibling,
+      gener: Number(node.gener || 0)
+    };
+  });
+
+  // Set to track added edge keys to prevent duplicates
+  const seenEdges = new Set();
+  const sigmaEdges = [];
+
+  graphData.edges.forEach((edge, i) => {
+    const key = [edge.source, edge.target].sort().join('->');
+    if (seenEdges.has(key)) return; // Skip duplicates
+    seenEdges.add(key);
+
+    sigmaEdges.push({
+      id: `e${i}`,
+      source: edge.source,
+      target: edge.target,
+      size: edge.size || 1,
+      color: edge.color || '#999'
+    });
+  });
 
   return { nodes: sigmaNodes, edges: sigmaEdges };
 }

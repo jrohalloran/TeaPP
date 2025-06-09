@@ -1,1 +1,14 @@
-/* You can add global styles to this file, and also import other style files */
+@font-face {
+  font-family: 'Karst ExtraBold';
+  src: url('/assets/karst.extrabold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'World of Water';
+  src: url('/assets/world-of-water.regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+

@@ -7,7 +7,7 @@
 
 
 import { fetchPedigreeData } from '../services/neo4j-driver.js';
-import { formatForSigma2,convertToSigmaFormat,layerByYearReverse } from '../utils/sigmaFormatter.js';
+import { formatForSigma2,convertToSigmaFormat,layerByYearBoundedSpacing } from '../utils/sigmaFormatter.js';
 import { saveJsonToFile } from '../utils/fileWriter.js';
 
 
@@ -30,7 +30,7 @@ export const getPedigree= async (req, res) => {
     // Saving the file to local directory -- for finding optimal layout
     //await saveJsonToFile(sigmaData, 'PedigreeGraph.json');
 
-    let plotData = layerByYearReverse(sigmaData);
+    let plotData = layerByYearBoundedSpacing(sigmaData);
     plotData = convertToSigmaFormat(plotData);
 
     //await saveJsonToFile(plotData, 'plotData_pedigree.json')

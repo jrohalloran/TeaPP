@@ -11,8 +11,20 @@ const URI = 'neo4j+s://a71c11d2.databases.neo4j.io';
 const USER = 'neo4j';
 const PASSWORD = 'KPoauq4gefxZaMGDId8t3lRtudtCCMJdM1gVDe84JiQ';
 
-const driver = neo4j.driver(URI, neo4j.auth.basic(USER, PASSWORD));
+const driver = neo4j.driver(
+  URI,
+  neo4j.auth.basic(USER, PASSWORD),
+  {
+    // Time (in ms) to wait for a new connection to be established
+    connectionTimeout: 10000, // 10 seconds
 
+    // Maximum lifetime (in ms) a connection can stay open
+    maxConnectionLifetime: 3600000, // 1 hour
+
+    // Socket read timeout (in ms)
+    connectionAcquisitionTimeout: 3000000, // 30 seconds
+  }
+);
 
 // Function for converting Neo4j Integers
 // For handling Year and Gener attributes

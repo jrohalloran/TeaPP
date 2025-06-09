@@ -4,6 +4,7 @@ import Graph from 'graphology';
 import Sigma from 'sigma';
 import { firstValueFrom } from 'rxjs';
 import { VisualisationService } from '../services/visualisation.service';
+import { CommonModule } from '@angular/common';
 
 
 
@@ -37,6 +38,8 @@ interface GraphJSON {
 
 @Component({
   selector: 'app-display',
+  standalone: true,
+  imports: [CommonModule],  // Import CommonModule here to use *ngIf, etc.
   templateUrl: './display.html',
   styleUrls: ['./display.css']
 })
@@ -44,7 +47,14 @@ interface GraphJSON {
 
 
 export class DisplayComponent implements AfterViewInit {
-  @ViewChild('sigmaContainer', { static: false }) container!: ElementRef;
+  @ViewChild('sigmaContainerTop', { static: false }) containerTop!: ElementRef;
+  @ViewChild('sigmaContainerBottom', { static: false }) containerBottom!: ElementRef;
+  
+  topLoadingMessage: string = '';
+  bottomLoadingMessage: string = '';
+  isTopLoading: boolean = true;
+  isBottomLoading: boolean = true;
+
 
   stats = {
     nodes: 0,
@@ -56,21 +66,37 @@ export class DisplayComponent implements AfterViewInit {
     edges: []
   };
 
+  groupedFamilyData: GraphJSON = {
+    nodes: [],
+    edges: []
+  };
 
-  graph = new Graph({ multi: true });
-  renderer!: Sigma;
+  nuclearFamilyData: GraphJSON = {
+      nodes: [],
+      edges: []
+    };
+
+  cloneList : any[] = []; // Stores list of the clones in the Postgres DB for searching
+
+
+  graphTop = new Graph({ multi: true });
+  graphBottom = new Graph({ multi: true });
+  rendererTop!: Sigma;
+  rendererBottom!: Sigma;
 
   constructor(private backendApiService: backendApiService,
     private visualisationService: VisualisationService
   ) {}
 
   async ngAfterViewInit(): Promise<void> {
+    this.isTopLoading = true;
+    this.isBottomLoading = false;
     console.log('Initialize Sigma in #sigma-container');
     await this.getJSON();
     await this.getGroupedData();
     await this.getAllPlants();
 
-    if (!this.container) {
+    if (!this.containerTop) {
       console.error('Container is undefined in ngAfterViewInit');
     } else {
       this.loadGraph();
@@ -93,7 +119,7 @@ export class DisplayComponent implements AfterViewInit {
     try {
       const response = await firstValueFrom(this.backendApiService.getAllNodesEdges());
       console.log('Response from backend:', response);
-      this.jsonData = response;
+      this.groupedFamilyData = response;
     } catch (error) {
       console.error('Error:', error);
     }
@@ -104,7 +130,7 @@ export class DisplayComponent implements AfterViewInit {
     try {
       const response = await firstValueFrom(this.backendApiService.getAllPlants());
       console.log('Postgres Response from getAllPlants:', response);
-      //this.jsonData = response;
+      this.cloneList = response;
     } catch (error) {
       console.error('Error:', error);
     }
@@ -123,16 +149,17 @@ export class DisplayComponent implements AfterViewInit {
   }
 
 loadGraph(): void {
-  if (this.renderer) {
-    this.renderer.kill();
+  if (this.rendererTop) {
+    this.rendererTop.kill();
   }
   
   const graph = this.visualisationService.loadGraph(
-    this.jsonData,
-    this.container.nativeElement
+    this.groupedFamilyData,
+    this.containerTop.nativeElement
   );
-  this.graph = graph.graph;
-  this.renderer = graph.renderer
+  this.graphTop = graph.graph;
+  this.rendererTop = graph.renderer
+  this.isTopLoading = false;
 
 
   this.setupHighlighting();
@@ -141,79 +168,30 @@ loadGraph(): void {
 }
 
 loadNewGraph(): void {
-  if (this.renderer) {
-    this.renderer.kill();
+  this.isBottomLoading = true;
+
+
+  if (this.rendererBottom) {
+    this.rendererBottom.kill();
   }
 
-  const graph = this.visualisationService.loadGraph(
-    this.jsonData,
-    this.container.nativeElement
+  const graph = this.visualisationService.loadNewGraph(
+    this.nuclearFamilyData,
+    this.containerBottom.nativeElement
   );
-  this.graph = graph.graph;
-  this.renderer = graph.renderer
+  this.graphBottom = graph.graph;
+  this.rendererBottom = graph.renderer
+  this.isBottomLoading = false;
+
+  this.getNodeData();
+
 
 
 }
 
-/*
-  loadNewGraph(): void {
-  const data = this.jsonData;
-  const graph = this.graph;
-
-  // Dispose of the old Sigma renderer if it exists
-  if (this.renderer) {
-    this.renderer.kill();
-    this.container.nativeElement.innerHTML = '';
-    //this.renderer = []; // optional but recommended to avoid reuse
-  }
-
-  // 2. Clear container DOM (to remove old canvases)
-  if (this.container?.nativeElement) {
-    this.container.nativeElement.innerHTML = '';
-  }
-
-  // 3. Clear old graph data
-  if (graph.order > 0) {
-    graph.clear();
-  }
-
-  // Add nodes
-  data.nodes.forEach(node => {
-    graph.addNode(node.id, {
-      name: node.label,
-      label: node.label,
-      x: node.x,
-      y: node.y,
-      size: node.size,
-      color: node.color,
-      year: node.year,
-      siblings: node.siblings,
-      parents: node.parents,
-      originalColor: node.color
-    });
-  });
-
-  // Add edges
-  data.edges.forEach(edge => {
-    graph.addEdge(edge.source, edge.target, {
-      id: edge.id,
-      size: edge.size,
-      color: edge.color,
-      originalColor: edge.color
-    });
-  });
-
-  // Create new Sigma renderer
-  this.renderer = new Sigma(graph, this.container.nativeElement);
-
-  // Setup interactivity again
-  //this.setupHighlighting();
-  //this.getSelectedNode();
-}*/
-
 
   private getAncestors(nodeId: string, ancestors: Set<string> = new Set()): Set<string> {
-    this.graph.inNeighbors(nodeId).forEach(parentId => {
+    this.graphTop.inNeighbors(nodeId).forEach(parentId => {
       if (!ancestors.has(parentId)) {
         ancestors.add(parentId);
         this.getAncestors(parentId, ancestors);
@@ -222,20 +200,32 @@ loadNewGraph(): void {
     return ancestors;
   }
 
+  private getNodeData(): void{
+    this.rendererBottom.on('clickNode', ({ node }) => {
+      console.log(node);
+      const nodeData = this.nuclearFamilyData.nodes.find(nd => nd.id === node);
+      console.log(nodeData);
+      this.getSelectPlantPG([node]);
+
+    });
+
+
+  }
+
   private setupHighlighting(): void {
 
-    this.renderer.on('clickNode', ({ node }) => {
+    this.rendererTop.on('clickNode', ({ node }) => {
       // Reset nodes and edges to original color/size
-      this.graph.forEachNode(n => {
-        this.graph.setNodeAttribute(n, 'color', this.graph.getNodeAttribute(n, 'originalColor'));
-        const originalSize = this.jsonData.nodes.find(nd => nd.id === n)?.size || 8;
-        this.graph.setNodeAttribute(n, 'size', originalSize);
+      this.graphTop.forEachNode(n => {
+        this.graphTop.setNodeAttribute(n, 'color', this.graphTop.getNodeAttribute(n, 'originalColor'));
+        const originalSize = this.groupedFamilyData.nodes.find(nd => nd.id === n)?.size || 8;
+        this.graphTop.setNodeAttribute(n, 'size', originalSize);
       });
 
-      this.graph.forEachEdge(e => {
-        this.graph.setEdgeAttribute(e, 'color', this.graph.getEdgeAttribute(e, 'originalColor'));
-        const originalSize = this.jsonData.edges.find(ed => ed.id === e)?.size || 1;
-        this.graph.setEdgeAttribute(e, 'size', originalSize);
+      this.graphTop.forEachEdge(e => {
+        this.graphTop.setEdgeAttribute(e, 'color', this.graphTop.getEdgeAttribute(e, 'originalColor'));
+        const originalSize = this.groupedFamilyData.edges.find(ed => ed.id === e)?.size || 1;
+        this.graphTop.setEdgeAttribute(e, 'size', originalSize);
       });
 
       // Get ancestors including clicked node
@@ -245,50 +235,51 @@ loadNewGraph(): void {
 
       // Highlight ancestor nodes
       ancestors.forEach(ancestorId => {
-        this.graph.setNodeAttribute(ancestorId, 'color', '#90EE90'); // light green
-        this.graph.setNodeAttribute(ancestorId, 'size', 20);
+        this.graphTop.setNodeAttribute(ancestorId, 'color', '#90EE90'); // light green
+        this.graphTop.setNodeAttribute(ancestorId, 'size', 20);
       });
 
       // Highlight clicked node differently
-      this.graph.setNodeAttribute(node, 'color', '#0074D9'); // blue
-      this.graph.setNodeAttribute(node, 'size', 25);
+      this.graphTop.setNodeAttribute(node, 'color', '#0074D9'); // blue
+      this.graphTop.setNodeAttribute(node, 'size', 25);
 
       // Highlight edges connecting ancestors
-      this.graph.forEachEdge((edgeId, attr, source, target) => {
+      this.graphTop.forEachEdge((edgeId, attr, source, target) => {
         if (ancestors.has(source) && ancestors.has(target)) {
-          this.graph.setEdgeAttribute(edgeId, 'color', '#87CEEB'); // sky blue
-          this.graph.setEdgeAttribute(edgeId, 'size', 4);
+          this.graphTop.setEdgeAttribute(edgeId, 'color', '#87CEEB'); // sky blue
+          this.graphTop.setEdgeAttribute(edgeId, 'size', 4);
         }
       });
 
-      this.renderer.refresh();
+      this.rendererTop.refresh();
     });
 
     // Reset highlights when clicking background
-    this.renderer.on('clickStage', () => {
-      this.graph.forEachNode(n => {
-        this.graph.setNodeAttribute(n, 'color', this.graph.getNodeAttribute(n, 'originalColor'));
-        const originalSize = this.jsonData.nodes.find(nd => nd.id === n)?.size || 8;
-        this.graph.setNodeAttribute(n, 'size', originalSize);
+    this.rendererTop.on('clickStage', () => {
+      this.graphTop.forEachNode(n => {
+        this.graphTop.setNodeAttribute(n, 'color', this.graphTop.getNodeAttribute(n, 'originalColor'));
+        const originalSize = this.groupedFamilyData.nodes.find(nd => nd.id === n)?.size || 8;
+        this.graphTop.setNodeAttribute(n, 'size', originalSize);
       });
 
-      this.graph.forEachEdge(e => {
-        this.graph.setEdgeAttribute(e, 'color', this.graph.getEdgeAttribute(e, 'originalColor'));
-        const originalSize = this.jsonData.edges.find(ed => ed.id === e)?.size || 1;
-        this.graph.setEdgeAttribute(e, 'size', originalSize);
+      this.graphTop.forEachEdge(e => {
+        this.graphTop.setEdgeAttribute(e, 'color', this.graphTop.getEdgeAttribute(e, 'originalColor'));
+        const originalSize = this.groupedFamilyData.edges.find(ed => ed.id === e)?.size || 1;
+        this.graphTop.setEdgeAttribute(e, 'size', originalSize);
       });
 
-      this.renderer.refresh();
+      this.rendererTop.refresh();
     });
   }
 
 
 
 
+
   async getSelectedNode():Promise<void>{
-      this.renderer.on('clickNode', async ({ node }) => {
+      this.rendererTop.on('clickNode', async ({ node }) => {
       // Reset nodes and edges to original color/size
-      let data = this.graph.getNodeAttributes(node);
+      let data = this.graphTop.getNodeAttributes(node);
       console.log(data)
       console.log("Siblings: "+data['siblings']);
       console.log("Parents: "+data['parents']);
@@ -311,7 +302,7 @@ loadNewGraph(): void {
         this.getSelectPlantPG(nodeID);
         const response = await firstValueFrom(this.backendApiService.getPedigree(nodeID));
         console.log('Response from backend:', response);
-        this.jsonData = response;
+        this.nuclearFamilyData = response;
         this.loadNewGraph();
     } catch (error) {
       console.error('Error:', error);
