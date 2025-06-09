@@ -278,35 +278,36 @@ loadNewGraph(): void {
 
   async getSelectedNode():Promise<void>{
       this.rendererTop.on('clickNode', async ({ node }) => {
-      // Reset nodes and edges to original color/size
-      let data = this.graphTop.getNodeAttributes(node);
-      console.log(data)
-      console.log("Siblings: "+data['siblings']);
-      console.log("Parents: "+data['parents']);
-      let nodeID;
+        this.isBottomLoading = true;
+        // Reset nodes and edges to original color/size
+        let data = this.graphTop.getNodeAttributes(node);
+        console.log(data)
+        console.log("Siblings: "+data['siblings']);
+        console.log("Parents: "+data['parents']);
+        let nodeID;
 
 
-      // If node if singular node (no siblings) - assign its ID for query as its node label
-      if (data['siblings']== undefined){
-        nodeID = [node];
-        console.log(nodeID);
+        // If node if singular node (no siblings) - assign its ID for query as its node label
+        if (data['siblings']== undefined){
+          nodeID = [node];
+          console.log(nodeID);
+        }
+        else{
+          // Else Assign the ID for querying as the list of siblings for looping through 
+          nodeID = data['siblings'];
+          console.log(nodeID);
+        }
+
+        try {
+          console.log("Retrieving Data...");
+          this.getSelectPlantPG(nodeID);
+          const response = await firstValueFrom(this.backendApiService.getPedigree(nodeID));
+          console.log('Response from backend:', response);
+          this.nuclearFamilyData = response;
+          this.loadNewGraph();
+      } catch (error) {
+        console.error('Error:', error);
       }
-      else{
-        // Else Assign the ID for querying as the list of siblings for looping through 
-        nodeID = data['siblings'];
-        console.log(nodeID);
-      }
-
-      try {
-        console.log("Retrieving Data...");
-        this.getSelectPlantPG(nodeID);
-        const response = await firstValueFrom(this.backendApiService.getPedigree(nodeID));
-        console.log('Response from backend:', response);
-        this.nuclearFamilyData = response;
-        this.loadNewGraph();
-    } catch (error) {
-      console.error('Error:', error);
-    }
   });
   };
 
