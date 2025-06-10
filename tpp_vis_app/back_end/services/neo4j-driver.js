@@ -302,7 +302,8 @@ export async function fetchAllNodesEdges() {
 
 
 
-// Querying for PartnerOF NodeIDs Sent 
+// Querying PartnerOF 
+// Returns Family nodes 
 export async function fetchPartnerOf(names) {
   console.log("--------------------");
   console.log("Getting Partners of "+names);

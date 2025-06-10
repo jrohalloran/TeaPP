@@ -92,7 +92,8 @@ export class DisplayComponent implements AfterViewInit {
     { label: 'Founders', color: '#1B9E77' },
     { label: 'Generation 1', color: '#E7298A' },
     { label: 'Generation 2', color: '#7570B3' },
-    { label: 'Generation 3', color: '#66A61E' }
+    { label: 'Generation 3', color: '#66A61E' },
+    { label: 'Selected Plant(s)', color: '#fe6100'}
   ];
 
   // Setting Up Graphs & Sigma for containers 
@@ -213,6 +214,7 @@ loadNewGraph(): void {
   const graph = this.visualisationService.loadNewGraph(
     this.nuclearFamilyData,
     this.containerBottom.nativeElement
+
   );
   this.graphBottom = graph.graph;
   this.rendererBottom = graph.renderer
@@ -225,6 +227,31 @@ loadNewGraph(): void {
 
 }
 
+private getDescendants(nodeId: string): Set<any>{
+  let name: string | any[] = [];
+  name = [nodeId];
+  console.log(nodeId);
+  const descendants = new Set();
+  this.groupedFamilyData.nodes.forEach(node => {
+    if (node.id == nodeId){
+
+      if (node.siblings){
+        name = node.siblings;
+      }
+    }
+    if (node.parents){
+        for (let i=0;i<node.parents.length;i++){
+          for (let j=0;j<name.length;j++){
+            if (node.parents[i]==name[j]){
+              console.log(node)
+              descendants.add(node.id);
+            }
+      }
+      }}})
+      //console.log(descendants);
+      return descendants;
+}
+
 
   private getAncestors(nodeId: string, ancestors: Set<string> = new Set()): Set<string> {
     this.graphTop.inNeighbors(nodeId).forEach(parentId => {
@@ -233,8 +260,11 @@ loadNewGraph(): void {
         this.getAncestors(parentId, ancestors);
       }
     });
+    //console.log(ancestors);
     return ancestors;
   }
+
+
 
   private getNodeData(): void{
     this.rendererBottom.on('clickNode', ({ node }) => {
@@ -267,8 +297,14 @@ loadNewGraph(): void {
 
       // Get ancestors including clicked node
       const ancestors = this.getAncestors(node);
+      const descendants = this.getDescendants(node);
+      console.log(descendants);
+      console.log(ancestors);
       //console.log(node);
+
       ancestors.add(node);
+      descendants.forEach(node =>{ancestors.add(node)});
+
 
       // Highlight ancestor nodes
       ancestors.forEach(ancestorId => {
@@ -310,6 +346,24 @@ loadNewGraph(): void {
   }
 
 
+  updateSelectedNodeColour(nodeID: string | any[]):void{
+
+    console.log(nodeID);
+    this.nuclearFamilyData.nodes.forEach(element =>{
+      for (let i=0;i<nodeID.length;i++){
+        if (element.id == nodeID[i]){
+          console.log("match")
+          console.log(element);
+          element.color = '#fe6100';
+
+        }
+    }})
+
+
+
+  }
+    
+
 
 
   async getSelectedNode():Promise<void>{
@@ -344,6 +398,7 @@ loadNewGraph(): void {
           console.log('Response from backend:', response);
           this.nuclearFamilyData = response;
           this.setStatistics();
+          this.updateSelectedNodeColour(nodeID);
           this.loadNewGraph();
       } catch (error) {
         console.error('Error:', error);
