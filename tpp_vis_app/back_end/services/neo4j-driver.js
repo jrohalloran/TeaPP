@@ -299,3 +299,39 @@ export async function fetchAllNodesEdges() {
     await session.close();
   }
 }
+
+
+
+// Querying for PartnerOF NodeIDs Sent 
+export async function fetchPartnerOf(names) {
+  console.log("--------------------");
+  console.log("Getting Partners of "+names);
+  const session = driver.session();
+  const allResults = [];
+
+  try {
+    for (const name of names) {
+      const result = await session.run(
+        `
+        MATCH (p:Person {name: $personName})-[r:PARTNER_OF]-(partner:Person)
+        RETURN partner.name AS partnerName, r.years AS years
+        `,
+        { personName: name }
+      );
+
+      const partners = result.records.map(record => ({
+        partnerName: record.get('partnerName'),
+        years: record.get('years'),
+      }));
+
+      allResults.push({ name, partners });
+    }
+  } catch (error) {
+    console.error('Error fetching partners:', error);
+    throw error; // or handle as needed
+  } finally {
+    await session.close();
+  }
+
+  return allResults;
+}

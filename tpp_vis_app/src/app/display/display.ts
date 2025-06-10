@@ -5,6 +5,7 @@ import Sigma from 'sigma';
 import { firstValueFrom } from 'rxjs';
 import { VisualisationService } from '../services/visualisation.service';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 
 
@@ -39,7 +40,7 @@ interface GraphJSON {
 @Component({
   selector: 'app-display',
   standalone: true,
-  imports: [CommonModule],  // Import CommonModule here to use *ngIf, etc.
+  imports: [CommonModule, FormsModule],  // Import CommonModule here to use *ngIf, etc.
   templateUrl: './display.html',
   styleUrls: ['./display.css']
 })
@@ -50,16 +51,14 @@ export class DisplayComponent implements AfterViewInit {
   @ViewChild('sigmaContainerTop', { static: false }) containerTop!: ElementRef;
   @ViewChild('sigmaContainerBottom', { static: false }) containerBottom!: ElementRef;
   
+
+  // Declaring and intialising Attributes 
   topLoadingMessage: string = '';
   bottomLoadingMessage: string = '';
   isTopLoading: boolean = true;
-  isBottomLoading: boolean = true;
+  isBottomLoading: boolean = false;
+  showBottomOverlay: boolean = true;
 
-
-  stats = {
-    nodes: 0,
-    edges: 0,
-  };
 
   jsonData: GraphJSON = {
     nodes: [],
@@ -76,21 +75,44 @@ export class DisplayComponent implements AfterViewInit {
       edges: []
     };
 
+  stats = {
+    nodes: 0,
+    edges: 0,
+  };
+
   cloneList : any[] = []; // Stores list of the clones in the Postgres DB for searching
+  
+  // Searching Function Variables 
+  searchTerm = '';
+  filteredData = [...this.cloneList];
+  selectedItem: any = null;
 
 
+  legendItems = [
+    { label: 'Founders', color: '#1B9E77' },
+    { label: 'Generation 1', color: '#E7298A' },
+    { label: 'Generation 2', color: '#7570B3' },
+    { label: 'Generation 3', color: '#66A61E' }
+  ];
+
+  // Setting Up Graphs & Sigma for containers 
   graphTop = new Graph({ multi: true });
   graphBottom = new Graph({ multi: true });
   rendererTop!: Sigma;
   rendererBottom!: Sigma;
 
+
+  // Constructing Services 
   constructor(private backendApiService: backendApiService,
     private visualisationService: VisualisationService
   ) {}
 
+
+
   async ngAfterViewInit(): Promise<void> {
-    this.isTopLoading = true;
-    this.isBottomLoading = false;
+    //this.isTopLoading = true;
+    //this.isBottomLoading = false;
+    //this.showBottomOverlay = true;
     console.log('Initialize Sigma in #sigma-container');
     await this.getJSON();
     await this.getGroupedData();
@@ -148,6 +170,18 @@ export class DisplayComponent implements AfterViewInit {
     }
   }
 
+  async getPartnerOf(nodeID: any): Promise<void> {
+    console.log('Retrieving Selected:');
+    console.log(nodeID);
+    try {
+      const response = await firstValueFrom(this.backendApiService.getPartnerOf(nodeID));
+      console.log('Postgres Response from getPartnerOf:', response);
+      //this.jsonData = response;
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }
+
 loadGraph(): void {
   if (this.rendererTop) {
     this.rendererTop.kill();
@@ -168,6 +202,7 @@ loadGraph(): void {
 }
 
 loadNewGraph(): void {
+  this.showBottomOverlay = false;
   this.isBottomLoading = true;
 
 
@@ -181,6 +216,7 @@ loadNewGraph(): void {
   );
   this.graphBottom = graph.graph;
   this.rendererBottom = graph.renderer
+  this.showBottomOverlay = false;
   this.isBottomLoading = false;
 
   this.getNodeData();
@@ -206,6 +242,7 @@ loadNewGraph(): void {
       const nodeData = this.nuclearFamilyData.nodes.find(nd => nd.id === node);
       console.log(nodeData);
       this.getSelectPlantPG([node]);
+      this.getPartnerOf([node]);
 
     });
 
@@ -235,18 +272,18 @@ loadNewGraph(): void {
 
       // Highlight ancestor nodes
       ancestors.forEach(ancestorId => {
-        this.graphTop.setNodeAttribute(ancestorId, 'color', '#90EE90'); // light green
+        this.graphTop.setNodeAttribute(ancestorId, 'color', '#fe6100');
         this.graphTop.setNodeAttribute(ancestorId, 'size', 20);
       });
 
       // Highlight clicked node differently
-      this.graphTop.setNodeAttribute(node, 'color', '#0074D9'); // blue
+      this.graphTop.setNodeAttribute(node, 'color', '#fe6100');
       this.graphTop.setNodeAttribute(node, 'size', 25);
 
       // Highlight edges connecting ancestors
       this.graphTop.forEachEdge((edgeId, attr, source, target) => {
         if (ancestors.has(source) && ancestors.has(target)) {
-          this.graphTop.setEdgeAttribute(edgeId, 'color', '#87CEEB'); // sky blue
+          this.graphTop.setEdgeAttribute(edgeId, 'color', '#fe6100');
           this.graphTop.setEdgeAttribute(edgeId, 'size', 4);
         }
       });
@@ -275,9 +312,9 @@ loadNewGraph(): void {
 
 
 
-
   async getSelectedNode():Promise<void>{
       this.rendererTop.on('clickNode', async ({ node }) => {
+        this.showBottomOverlay = false;
         this.isBottomLoading = true;
         // Reset nodes and edges to original color/size
         let data = this.graphTop.getNodeAttributes(node);
@@ -300,16 +337,39 @@ loadNewGraph(): void {
 
         try {
           console.log("Retrieving Data...");
-          this.getSelectPlantPG(nodeID);
+          this.getSelectPlantPG(nodeID); // Get entry for select clones
+          this.getPartnerOf(nodeID);// Get partners of selected clones
+
           const response = await firstValueFrom(this.backendApiService.getPedigree(nodeID));
           console.log('Response from backend:', response);
           this.nuclearFamilyData = response;
+          this.setStatistics();
           this.loadNewGraph();
       } catch (error) {
         console.error('Error:', error);
       }
   });
   };
+
+
+
+
+
+
+
+
+
+  /// SIDE BAR FUNCTIONS
+
+  setStatistics(){
+    const noEdges = this.nuclearFamilyData.edges.length;
+    const noNodes = this.nuclearFamilyData.nodes.length;
+    console.log(noEdges);
+    console.log(noNodes);
+    this.stats.edges = noEdges;
+    this.stats.nodes = noNodes;
+
+  }
 
   zoomIn() {
     console.log('Zoom in clicked');
@@ -318,4 +378,22 @@ loadNewGraph(): void {
   zoomOut() {
     console.log('Zoom out clicked');
   }
+
+
+  selectItem(item: any): void {
+  this.selectedItem = item;
+  //this.searchTerm = item.id;
+  this.filteredData = []; // Optional: hide dropdown after selection
+}
+
+  onSearch(): void {
+  const term = this.searchTerm?.toString().toLowerCase() || '';
+
+  this.filteredData = this.cloneList.filter(item =>
+    item.clone_id?.toString().toLowerCase().includes(term)
+    //item.role?.toString().toLowerCase().includes(term)
+  );
+}
+
+
 }

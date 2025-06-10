@@ -22,6 +22,7 @@ import pedigreeRoutes from './routes/pedigree.js';
 import allNodesEdgesRoutes from "./routes/allNodesEdges.js"
 import allPlantsRoutes from "./routes/allPlantsPG.js"
 import selectedPlantRoutes from "./routes/selectedPlant.js"
+import getPartnerOfRoutes from "./routes/getPartnerOf.js"
 
 const app = express();
 
@@ -54,6 +55,8 @@ app.use('/api', pedigreeRoutes);// Gets Pedigree of a selected node
 
 app.use('/api', allNodesEdgesRoutes); // Getting all nodes and edges for first visualisation 
 // Executes Filtering, Grouping and Sigma Conversion
+
+app.use('/api', getPartnerOfRoutes);
 
 
 // POSTGRESQL Routes

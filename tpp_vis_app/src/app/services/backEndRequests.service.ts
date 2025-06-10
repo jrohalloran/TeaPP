@@ -32,17 +32,13 @@ export class backendApiService {
 
   /// NEO4J API REQUESTS 
 
+  // GET REQUESTS 
   getAllNodesEdges(): Observable<any> {
     console.log("Retrieving all Nodes and Edges");
     return this.http.get(`${this.apiUrl}/getAllNodesEdges`);
   }
 
-  /*
-  getNuclearFamily(nodeID: string):Observable<any> {
-    return this.http.post(`${this.apiUrl}/getNuclearFamily`,nodeID);
-  }
-  */
-
+  // POST REQUESTS 
   getNuclearFamily2(nodeID: string):Observable<any> {
     console.log("Sending Data to /api/getNuclearFamily");
     return this.http.post(`${this.apiUrl}/getNuclearFamily2`,nodeID);
@@ -58,7 +54,10 @@ export class backendApiService {
     return this.http.post(`${this.apiUrl}/getPedigree`,nodeID);
   }
 
-
+  getPartnerOf(nodeID: string):Observable<any> {
+    console.log("Sending Data to /api/getPartnerOf");
+    return this.http.post(`${this.apiUrl}/getPartnerOf`,nodeID);
+  }
 
 
 

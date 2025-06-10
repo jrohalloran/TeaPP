@@ -4,7 +4,7 @@
   <!-- Top bar -->
   <header class="top-bar">
     <div class="top-bar-content">
-      <h1>TPP Vis</h1>
+      <h1>TeaPP Vis</h1>
     </div>
   </header>
 
@@ -18,7 +18,7 @@
       <div class="half-container sigma-top">
         <div class="loading-overlay" *ngIf="isTopLoading">
           <div class="spinner"></div>
-          <p>Loading top visualization...</p>
+          <p>Loading Visualisation...</p>
         </div>
         <div id="sigma-top-container" #sigmaContainerTop></div>
       </div>
@@ -27,7 +27,12 @@
       <div class="half-container sigma-bottom">
         <div class="loading-overlay" *ngIf="isBottomLoading">
           <div class="spinner"></div>
-          <p>Loading bottom visualization...</p>
+          <p>Loading Visualisation...</p>
+        </div>
+        <div class="overlay" *ngIf="showBottomOverlay">
+          <div class="overlay-content">
+            Please select a clone to view...
+          </div>
         </div>
         <div id="sigma-bottom-container" #sigmaContainerBottom></div>
       </div>
@@ -44,7 +49,39 @@
         <button (click)="zoomOut()">Zoom Out</button>
       </div>
 
-      <!-- Stats section -->
+      <div class='my-legend'>
+        <div class='legend-title'>Legend</div>
+        <div class='legend-scale'>
+          <ul class='legend-labels'>
+            <li *ngFor="let item of legendItems">
+              <span [ngStyle]="{'background': item.color}"></span>{{ item.label }}
+            </li>
+          </ul>
+        </div>
+        </div>
+      <div class="search-panel">
+          <!-- Search Input -->
+          <input
+            type="text"
+            placeholder="Search..."
+            [(ngModel)]="searchTerm"
+            (input)="onSearch()"
+            class="search-input"
+          />
+
+          <!-- Dropdown of matching items -->
+          <ul class="dropdown" *ngIf="filteredData.length > 0">
+            <li *ngFor="let item of filteredData" (click)="selectItem(item)">
+              {{ item.name }} – {{ item.role }}
+            </li>
+          </ul>
+
+          <!-- Optional: show selected item -->
+          <div *ngIf="selectedItem" class="selected-item">
+            <p>Selected: <strong>{{ selectedItem.name }}</strong> ({{ selectedItem.role }})</p>
+          </div>
+        </div>
+              <!-- Stats section -->
       <div class="bottom-half">
         <h3>Statistics</h3>
         <p>Nodes: {{ stats.nodes }}</p>
