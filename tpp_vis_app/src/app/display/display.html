@@ -70,15 +70,14 @@
           />
 
           <!-- Dropdown of matching items -->
-          <ul class="dropdown" *ngIf="filteredData.length > 0">
-            <li *ngFor="let item of filteredData" (click)="selectItem(item)">
-              {{ item.name }} – {{ item.role }}
+          <ul class="dropdown" *ngIf="filteredData.length < 20">
+            <li *ngFor="let item of filteredData" (click)="selectItem(item)">{{ item.clone_id }} 
             </li>
           </ul>
 
           <!-- Optional: show selected item -->
           <div *ngIf="selectedItem" class="selected-item">
-            <p>Selected: <strong>{{ selectedItem.name }}</strong> ({{ selectedItem.role }})</p>
+            <p>Selected: <strong>{{ selectedItem.clone_id}}</strong> </p>
           </div>
         </div>
               <!-- Stats section -->

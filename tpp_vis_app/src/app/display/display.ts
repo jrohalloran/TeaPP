@@ -111,9 +111,7 @@ export class DisplayComponent implements AfterViewInit {
 
 
   async ngAfterViewInit(): Promise<void> {
-    //this.isTopLoading = true;
-    //this.isBottomLoading = false;
-    //this.showBottomOverlay = true;
+
     console.log('Initialize Sigma in #sigma-container');
     await this.getJSON();
     await this.getGroupedData();
@@ -216,9 +214,9 @@ loadNewGraph(): void {
     this.containerBottom.nativeElement
 
   );
-  this.graphBottom = graph.graph;
-  this.rendererBottom = graph.renderer
-  this.showBottomOverlay = false;
+  this.graphBottom = graph.graph; // Adding Graph to the bottom container
+  this.rendererBottom = graph.renderer 
+  this.showBottomOverlay = false; // Removing Loading screen 
   this.isBottomLoading = false;
 
   this.getNodeData();
@@ -346,9 +344,12 @@ private getDescendants(nodeId: string): Set<any>{
   }
 
 
-  updateSelectedNodeColour(nodeID: string | any[]):void{
 
+ // Highlighting the selected node in the pedigree (bottom graph) -- organge 
+  updateSelectedNodeColour(nodeID: string | any[]):void{
+    console.log("Matching Selected Nodes -- Changing colour.....")
     console.log(nodeID);
+    console.log(this.nuclearFamilyData.nodes);
     this.nuclearFamilyData.nodes.forEach(element =>{
       for (let i=0;i<nodeID.length;i++){
         if (element.id == nodeID[i]){
@@ -407,10 +408,30 @@ private getDescendants(nodeId: string): Set<any>{
   };
 
 
+  
+  async getSearchedNode(item: { clone_id: any; }):Promise<void>{
 
+        console.log('Getting Pedigree for searched clone...')
+        const nodeID = item.clone_id;
+        this.showBottomOverlay = false;
+        this.isBottomLoading = true;
 
+        try {
+          console.log("Retrieving Data...");
+          this.getSelectPlantPG([nodeID]); // Get entry for select clones
+          this.getPartnerOf([nodeID]);// Get partners of selected clones
 
-
+          const response = await firstValueFrom(this.backendApiService.getPedigree(nodeID));
+          console.log('Response from backend:', response);
+          this.nuclearFamilyData = response;
+          console.log(this.nuclearFamilyData);
+          this.setStatistics();
+          this.updateSelectedNodeColour([nodeID]);
+          this.loadNewGraph();
+      } catch (error) {
+        console.error('Error:', error);
+      }
+  };
 
 
 
@@ -436,18 +457,29 @@ private getDescendants(nodeId: string): Set<any>{
 
 
   selectItem(item: any): void {
-  this.selectedItem = item;
-  //this.searchTerm = item.id;
-  this.filteredData = []; // Optional: hide dropdown after selection
+    this.selectedItem = item;
+    console.log(item.clone_id);
+    console.log(item)
+    //this.searchTerm = item.id;
+    this.filteredData = [];
+    this.getSearchedNode(item);
+
+
+
 }
 
   onSearch(): void {
-  const term = this.searchTerm?.toString().toLowerCase() || '';
+    console.log(this.cloneList);
+    const term = this.searchTerm?.toString().toLowerCase() || '';
+    
 
-  this.filteredData = this.cloneList.filter(item =>
-    item.clone_id?.toString().toLowerCase().includes(term)
-    //item.role?.toString().toLowerCase().includes(term)
-  );
+    this.filteredData = this.cloneList.filter(item =>
+      //console.log(item.clone_id?.toString().toLowerCase().includes(term));
+      item.clone_id?.toString().toLowerCase().includes(term)
+      //item.role?.toString().toLowerCase().includes(term)
+    );
+    console.log(this.filteredData);
+
 }
 
 

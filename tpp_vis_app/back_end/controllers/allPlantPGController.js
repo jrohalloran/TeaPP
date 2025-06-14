@@ -8,10 +8,9 @@ import db from '../services/postgres_db.js';
 
 
 export async function getPlants(req, res) {
-    console.log("Getting First 100 rows of Plants table")
+    console.log("Getting all of Plants table")
   try {
-    const result = await db.query('SELECT * FROM plants LIMIT 100');
-    //console.log(result.rows);
+    const result = await db.query('SELECT * FROM plants');
     res.json(result.rows);
   } catch (error) {
     console.error(error);
