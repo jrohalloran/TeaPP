@@ -28,6 +28,7 @@
     "graphology": "^0.26.0",
     "graphology-layout": "^0.6.1",
     "graphology-layout-forceatlas2": "^0.10.1",
+    "multer": "^2.0.1",
     "neo4j-driver": "^5.28.1",
     "pg": "^8.16.0",
     "rxjs": "~7.8.0",

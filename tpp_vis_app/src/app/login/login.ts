@@ -20,7 +20,7 @@ export class LoginComponent {
 
   onSubmit() {
     if (this.password === this.correctPassword) {
-      this.router.navigate(['/display']);
+      this.router.navigate(['/home']);
     } else {
       this.error = 'Incorrect password. Try again.';
     }

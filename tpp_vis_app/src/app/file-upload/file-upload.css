@@ -1,0 +1,84 @@
+/* Wrapper */
+.upload-wrapper {
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* File input */
+.upload-input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  cursor: pointer;
+  transition: border-color 0.3s;
+}
+
+.upload-input:hover {
+  border-color: #33923f;
+}
+
+/* File details */
+.file-details {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background-color: #f1f5f9;
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+
+.file-details h3 {
+  margin-bottom: 0.5rem;
+}
+
+.file-details ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.file-details li {
+  margin-bottom: 0.5rem;
+}
+
+/* Upload button */
+button {
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  background-color: #33923f;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #33923f;
+}
+
+/* Upload status */
+section[ngSwitch] {
+  margin-top: 1rem;
+  font-style: italic;
+  color: #555;
+}
+
+section[ngSwitch] p {
+  margin: 0;
+}
+
+section[ngSwitchCase='completed'] {
+  color: green;
+}
+
+section[ngSwitchCase='error'] {
+  color: red;
+}

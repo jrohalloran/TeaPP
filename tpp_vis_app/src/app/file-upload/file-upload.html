@@ -1,0 +1,29 @@
+<h2>Upload Your File</h2>
+
+<div class="upload-wrapper">
+<!-- File input field -->
+<input type="file" class="upload-input" (change)="handleFileSelection($event)" #fileInput />
+
+<div *ngIf="selectedFile">
+<!-- Display file details -->
+<section class="file-details">
+  <h3>Selected File Details:</h3>
+  <ul>
+    <li><strong>Filename:</strong> {{selectedFile?.name}}</li>
+    <li><strong>File Type:</strong> {{selectedFile?.type}}</li>
+    <li><strong>File Size:</strong> {{selectedFile?.size}} bytes</li>
+  </ul>
+</section>
+
+<!-- Upload button -->
+<button (click)="uploadFile()">Start Upload</button>
+
+<!-- Display upload status -->
+<section [ngSwitch]="uploadStatus">
+  <p *ngSwitchCase="'inProgress'">Uploading, please wait...</p>
+  <p *ngSwitchCase="'completed'">File uploaded successfully!</p>
+  <p *ngSwitchCase="'error'">An error occurred during upload.</p>
+  <p *ngSwitchDefault>Ready to upload your file.</p>
+</section>
+</div>
+</div>

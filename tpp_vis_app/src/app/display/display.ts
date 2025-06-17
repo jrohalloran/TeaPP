@@ -263,7 +263,6 @@ private getDescendants(nodeId: string): Set<any>{
   }
 
 
-
   private getNodeData(): void{
     this.rendererBottom.on('clickNode', ({ node }) => {
       console.log(node);

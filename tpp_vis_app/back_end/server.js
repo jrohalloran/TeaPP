@@ -16,6 +16,10 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import fs from 'fs';
 import neo4j from 'neo4j-driver';
+import multer from 'multer';
+import path from 'path';
+
+
 import nuclearFamilyRoutes from './routes/nuclearFamily.js';
 import wholeFamilyRoutes from './routes/wholeFamily.js';
 import pedigreeRoutes from './routes/pedigree.js';
@@ -44,6 +48,89 @@ app.get('/api/getJSON', (req, res) => {
   const data = fs.readFileSync('./plant_clone_sigma_size_by_children_gencol.json', 'utf-8');
   res.json(JSON.parse(data));
 });  
+
+
+
+/// ------------ FILE UPLOAD --------------
+
+// Setting up Upload Directory in Back-end 
+const uploadDir = 'uploads';
+if (fs.existsSync(uploadDir)){
+  console.log("/uploads directory exists");
+  console.log("---- Removing Directory ----");
+  fs.rmSync(uploadDir, { recursive: true, force: true })
+}
+if (!fs.existsSync(uploadDir)) {
+  console.log("---- Making Directory ----");
+  fs.mkdirSync(uploadDir);
+}
+
+
+const EXPECTED_HEADERS = ['ID', 'Female_parent', 'Male_parent']; // Customize as needed
+
+
+// Set up multer for file upload
+const storage = multer.diskStorage({
+ destination: function (req, file, cb) {
+   cb(null, 'uploads/'); // Upload directory
+ },
+ filename: function (req, file, cb) {
+   cb(null, file.originalname); // Keep the original file name
+ }
+});
+const upload = multer({ storage: storage });
+
+// Upload route
+app.post('/uploadfile', (req, res) => {
+  console.log('Starting File Upload...');
+
+  upload.single('file')(req, res, function (err) {
+    if (err instanceof multer.MulterError) {
+      return res.status(500).json({ message: 'Multer error occurred during upload.', error: err.message });
+    } else if (err) {
+      return res.status(500).json({ message: 'An unknown error occurred during upload.', error: err.message });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({ message: 'No file uploaded.' });
+    }
+
+    const filePath = path.join('uploads', req.file.originalname);
+
+    // Read file contents
+    fs.readFile(filePath, 'utf8', (readErr, data) => {
+      if (readErr) {
+        return res.status(500).json({ message: 'Error reading uploaded file.' });
+      }
+
+      const lines = data.split('\n');
+      const headers = lines[0].trim().split('\t');
+
+      const headersMatch = EXPECTED_HEADERS.every((h, i) => h === headers[i]);
+
+      if (!headersMatch) {
+        // Delete the file if headers don't match
+        fs.unlink(filePath, () => {
+          return res.status(400).json({
+            message: `Invalid file headers. Expected: ${EXPECTED_HEADERS.join(', ')}`
+          });
+        });
+      } else {
+        console.log('File uploaded successfully with valid headers:', req.file);
+        return res.status(200).json({ message: 'File uploaded and validated successfully.' });
+      }
+    });
+  });
+});
+
+
+// Serve uploaded files
+app.use('/uploads', express.static('uploads'));
+
+
+
+
+
 
 
 // NEO4J Routes

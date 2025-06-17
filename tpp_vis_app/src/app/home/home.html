@@ -1,0 +1,43 @@
+<div class="app-wrapper">
+
+  <!-- Top bar -->
+  <header class="top-bar">
+    <div class="top-bar-content">
+      <h1>TeaPP Vis</h1>
+    </div>
+  </header>
+
+  <!-- Main content area: vertical split -->
+  <div class="main-split">
+
+    <!-- Left panel -->
+    <section class="left-panel">
+
+      <!-- Upload container in top-left -->
+      <div class="upload-container">
+        <app-file-upload></app-file-upload>
+      </div>
+
+      <!-- Placeholder for future bottom-left features -->
+      <div class="left-bottom-container">
+        <!-- Add future components here -->
+      </div>
+    </section>
+
+    <!-- Right panel -->
+    <aside class="right-panel">
+      <div class="button-panel">
+        <button (click)="openDisplay()">Visualise Pedigree</button>
+        <button (click)="openDirectory()">Upload Data</button>
+      </div>
+
+      <div class="bottom-half">
+        <!-- Add right panel future content here -->
+      </div>
+    </aside>
+
+  </div>
+
+</div>
+
+

@@ -318,8 +318,24 @@ loadGraph(data: any, container: HTMLElement): { renderer: Sigma, graph: Graph } 
     );
 
     
+    
     return { renderer, graph };
   }
+
+
+  private customLabelRenderer = (context: { font: string; fillStyle: any; textAlign: string; fillText: (arg0: any, arg1: any, arg2: any) => void; }, node: { label: any; x: any; y: any; }, settings: { graph: { getNodeAttribute: (arg0: any, arg1: string) => any; }; labelSize: (arg0: any) => any; labelColor: (arg0: any) => any; }) => {
+  const labelVisible = settings.graph.getNodeAttribute(node, 'labelVisible');
+
+  if (labelVisible && node.label) {
+    const size = settings.labelSize(node); // font size
+    context.font = `${size}px Sans-Serif`;
+    context.fillStyle = settings.labelColor(node);
+    context.textAlign = 'center';
+    // Use node.x and node.y directly for coordinates
+    context.fillText(node.label, node.x, node.y + size);
+  }
+};
+
 }
 
 
