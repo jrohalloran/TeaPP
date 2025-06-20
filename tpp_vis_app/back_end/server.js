@@ -28,7 +28,7 @@ import allPlantsRoutes from "./routes/allPlantsPG.js"
 import selectedPlantRoutes from "./routes/selectedPlant.js"
 import getPartnerOfRoutes from "./routes/getPartnerOf.js"
 import processDataRoutes from "./routes/processData.js"
-
+import compareDataRoutes from "./routes/compareData.js"
 
 const app = express();
 
@@ -132,10 +132,9 @@ app.use('/uploads', express.static('uploads'));
 
 // File Processing Routes
 
-
 app.use('/api', processDataRoutes); 
 
-
+app.use('/api', compareDataRoutes); 
 
 
 // NEO4J Routes
@@ -165,6 +164,7 @@ app.use('/api', selectedPlantRoutes); // Get data for one selected plant
 
 
 // Checking Database Cloud Server is running 
+/*
 (async () => {
   // URI examples: 'neo4j://localhost', 'neo4j+s://xxx.databases.neo4j.io'
   const URI = 'neo4j+s://a71c11d2.databases.neo4j.io'
@@ -185,7 +185,7 @@ app.use('/api', selectedPlantRoutes); // Get data for one selected plant
   // Make queries
 
   await driver.close();
-})();
+})();*/
 
 // Setting up port 
 const PORT = process.env.PORT || 3333;

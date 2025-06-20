@@ -122,7 +122,7 @@ async function readUploadedFile() {
             }
         }
 
-        console.log("All combined entries:", allEntries);
+        //console.log("All combined entries:", allEntries);
         return allEntries;
 
     } catch (err) {
@@ -134,8 +134,10 @@ async function readUploadedFile() {
 // Parse them 
 // Create JSON OBJECT "entries"
 // {ID: ___, female_parent:___, male_parent:__, correct_ID:_, correct_Female:__, correct_male:__}
+/*
 async function readProcessedFile() {
-    const tempDir = path.join(__dirname, 'temp');
+    const filename = "preprocessed_data.txt"
+    const tempDir = path.join(__dirname, 'temp',filename);
     console.log("temp Directory:", tempDir);
 
     try {
@@ -163,16 +165,34 @@ async function readProcessedFile() {
             }
         }
 
-        console.log("All combined entries:", allEntries);
+        //console.log("All combined entries:", allEntries);
         return allEntries;
 
     } catch (err) {
         console.error("Error reading uploads directory:", err);
     }
+}*/
+
+async function readProcessedFile() {
+  const filename = "preprocessed_data.txt";
+  const filePath = path.join(__dirname, 'temp', filename);
+  console.log("Reading file:", filePath);
+
+  try {
+    const content = await fs.readFile(filePath, 'utf8');
+    const parsedData = parseProcessedFile(content);
+
+    if (Array.isArray(parsedData)) {
+      return parsedData;
+    } else {
+      console.warn("Parsed data is not an array. Returning empty array.");
+      return [];
+    }
+  } catch (err) {
+    console.error("Error reading the file:", err);
+    return [];
+  }
 }
-
-
-
 
 // Calling R Script to format and proprocess Raw data uploaded 
 function preProcessData(){
@@ -246,18 +266,20 @@ async function insertData(rawEntries,processedEntries) {
 }
 
 
-
 async function main() {
+
+  let rawEntries = [];
+  let processedEntries = [];
   try {
     // Run R script to preprocess data
     console.log("Calling Pre-processing Function...");
     await preProcessData();
     console.log("-------------------------------------");
     console.log("Calling Raw Data Loading Function...");
-    const rawEntries = await readUploadedFile();  // Await here if async
+    rawEntries = await readUploadedFile();  // Await here if async
     console.log("-------------------------------------");
     console.log("Calling Processed Data Loading Function...");
-    const processedEntries = await readProcessedFile();  // Await here if async
+    processedEntries = await readProcessedFile();  // Await here if async
 
     try {
         console.log("-------------------------------------");
@@ -289,17 +311,25 @@ async function main() {
     console.log("-------------------------------------");
     console.log("Main function complete! ")
   }
+
+  return [rawEntries, processedEntries]
 }
+
 
 export const processData= async (req, res) => {
 
   console.log("Attempting to process data...")
   try{
     console.log("Attempting to process data...")
-    await main();
+    const result = await main();
+    console.log("Result:")
+    //console.log(result)
     const complete = true;
     console.log("Processing Complete - Updating Flag")
-    res.json(complete);
+    const processedEntries = result[1]
+    //console.log(processedEntries);
+    console.log("Sending Processed Data to front-end for display")
+    res.json(processedEntries);
 
   } catch (err) {
     console.error('Controller error:', err);

@@ -1,7 +1,7 @@
 
 
 
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UploadService } from '../services/upload.service';
 import { backendApiService } from '../services/backEndRequests.service';
@@ -17,15 +17,19 @@ import { firstValueFrom } from 'rxjs';
 
 
 export class FileUploadComponent {
+
+@Output() uploadResponse = new EventEmitter<any>();
+
+
  selectedFile: File | null = null;
  uploadStatus: string = 'waiting';
 
+ 
+ processedData : any[] = [];
 
  uploaded: boolean = false;
  clicked: boolean = false;
  processed: boolean = false;
-
-
 
 
  constructor(private uploadService: UploadService,
@@ -91,11 +95,21 @@ export class FileUploadComponent {
     try {
       const response = await firstValueFrom(this.backendApiService.processUploadFile());
       console.log('Response from backend:', response);
+
+      this.processedData = response; // Saving to global attribute
       this.processed = true
+      this.onUploadComplete(response);
       } catch (error) {
       console.error('Error:', error);
       this.processed=false;
     }
+  }
+
+
+  onUploadComplete(response: any) {
+
+    console.log("Emitting response to Parent component")
+    this.uploadResponse.emit(response);
   }
 
 

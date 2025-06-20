@@ -41,6 +41,12 @@ export class backendApiService {
 
   }
 
+  compareData(data:any[]): Observable<any>{
+        console.log("Sending Processing Request to back-end");
+        return this.http.post(`${this.apiUrl}/compareData`,data);
+
+  }
+
 
 
   /// NEO4J API REQUESTS 

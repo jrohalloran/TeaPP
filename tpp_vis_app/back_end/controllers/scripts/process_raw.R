@@ -273,14 +273,11 @@ nrow(valid_clones_6)
 invalid_clones <- correct_df[!grepl("^\\d{6,7}([a-zA-Z]\\d?)?$", correct_df$correct_ID), ]
 nrow(invalid_clones)
 
-
-invalid_clones <- correct_df[!grepl("^\\d{6}([a-zA-Z]\\d?)?$", correct_df$correct_ID), ]
-nrow(invalid_clones)
-
-
 ### AFTER processing invalid clone IDs
 invalid_IDs<-invalid_clones$ID
-#print(invalid_IDs)
+##print(invalid_IDs)
+
+
 
 
 
@@ -294,7 +291,11 @@ parents <- c(df$Female_parent,df$Male_parent)
 #setdiff(unique(parents),correct_df$correct_ID)
 #length(setdiff(unique(parents),correct_df$correct_ID))
 
+### AFTER processing Parents that dont match corrected IDs
+setdiff(unique(parents),correct_df$correct_ID)
+length(setdiff(unique(parents),correct_df$correct_ID))
 
+non_match_parents <- setdiff(unique(parents),correct_df$correct_ID)
 
 
 # Parents that dont match Processed Clone IDs
@@ -312,7 +313,7 @@ length(unique(invalid_M$Male_parent))
 
 # Checking for duplicates 
 
-message("Cheching for duplicates....")
+message("Checking for duplicates....")
 unique(correct_df$correct_ID[duplicated(correct_df$correct_ID)])
 
 correct_df[duplicated(correct_df$correct_ID) | duplicated(correct_df$correct_ID, fromLast = TRUE), ]
@@ -330,5 +331,15 @@ file<- paste0(temp_dir,"/preprocessed_data.txt")
 message("Saving file: ", file)
 write.table(correct_df,file= file,col.names = TRUE, row.names = FALSE,
             sep="\t", quote= F)
+
+file<- paste0(temp_dir,"/non_match_parents.txt")
+message("Saving file: ", file)
+
+write(non_match_parents, file=file, sep="\n")
+
+file<- paste0(temp_dir,"/invalid_IDs.txt")
+message("Saving file: ", file)
+
+write(invalid_IDs, file=file, sep="\n")
 
 

@@ -15,7 +15,8 @@
 
       <!-- Upload container in top-left -->
       <div class="upload-container">
-        <app-file-upload></app-file-upload>
+        <app-file-upload (uploadResponse)="handleUploadResponse($event)"></app-file-upload>
+
       </div>
 
       <!-- Placeholder for future bottom-left features -->
@@ -25,10 +26,12 @@
     </section>
 
     <!-- Right panel -->
+
     <aside class="right-panel">
-        <div class="table-container">
-        <!-- Add future components here -->
-      </div>
+        <div *ngIf="apiResult">
+        <h3>Upload Response:</h3>
+        <pre>{{ apiResult | json }}</pre>
+        </div>
 
     </aside>
 

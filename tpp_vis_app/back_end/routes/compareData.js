@@ -1,15 +1,15 @@
 /*** 
- * // Date: 19/06/2025
+ * // Date: 20/06/2025
  * // Jennifer O'Halloran
  * // IBIX Thesis Project - TPP Visualisation
 ***/
 
 import express from 'express';
-import {processData} from '../controllers/processDataController.js';
+import {compareData} from '../controllers/compareDataController.js';
 
 const router = express.Router();
 
-router.get('/processData', processData);
 
+router.post('/compareData', compareData)
 
 export default router;
