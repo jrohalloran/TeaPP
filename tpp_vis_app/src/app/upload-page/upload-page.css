@@ -1,0 +1,80 @@
+.app-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  font-family: Arial, sans-serif;
+}
+
+/* Top bar styling */
+.top-bar {
+  background-color: #24588c;
+  color: white;
+  padding: 1rem 2rem;
+  flex-shrink: 0;
+}
+
+.top-bar-content h1 {
+  margin: 0;
+  font-weight: 700;
+}
+
+/* Main split: left and right side panels */
+.main-split {
+  display: flex;
+  flex: 1;
+  height: calc(50vh - 60px);
+  /* Optional: to avoid content overflow */
+  overflow: hidden;
+}
+
+/* Left pane - smaller width */
+.main-split > .left {
+  flex: 1; /* smaller portion */
+  /* or a fixed width, e.g. */
+  /* width: 200px; */
+  background-color: #f0f0f0; /* just for demo */
+  overflow-y: auto; /* scroll if content is tall */
+}
+
+/* Right pane - larger width */
+.main-split > .right {
+  flex: 3; /* larger portion (3 times the left) */
+  background-color: #fff; /* demo */
+  overflow-y: auto;
+}
+
+/* Left panel takes 50% width, stacked vertically */
+
+
+/* Upload container top left */
+.upload-container {
+  flex: 0 0 auto; /* fixed height if needed */
+  max-width: 600px;
+  min-height: 250px;
+  background-color: #f9f9f9;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgb(0 0 0 / 0.1);
+}
+
+/* Bottom left for future components */
+.left-bottom-container {
+  flex: 1;
+  margin-top: 1rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgb(0 0 0 / 0.05);
+  /* Add padding or grid for future content */
+}
+
+
+
+
+/* Placeholder bottom half on right */
+.bottom-half {
+  flex: 1;
+  background-color: #fafafa;
+  border-radius: 8px;
+  box-shadow: 0 0 6px rgb(0 0 0 / 0.05);
+  /* Add padding or grid for future content */
+}

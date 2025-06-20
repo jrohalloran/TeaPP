@@ -135,7 +135,7 @@ export class DisplayComponent implements AfterViewInit {
     }
   }
 
-    async getGroupedData(): Promise<void> {
+  async getGroupedData(): Promise<void> {
     console.log('Retrieving JSON for all Data');
     try {
       const response = await firstValueFrom(this.backendApiService.getAllNodesEdges());

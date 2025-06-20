@@ -27,6 +27,8 @@ import allNodesEdgesRoutes from "./routes/allNodesEdges.js"
 import allPlantsRoutes from "./routes/allPlantsPG.js"
 import selectedPlantRoutes from "./routes/selectedPlant.js"
 import getPartnerOfRoutes from "./routes/getPartnerOf.js"
+import processDataRoutes from "./routes/processData.js"
+
 
 const app = express();
 
@@ -128,15 +130,20 @@ app.post('/uploadfile', (req, res) => {
 app.use('/uploads', express.static('uploads'));
 
 
+// File Processing Routes
 
+
+app.use('/api', processDataRoutes); 
 
 
 
 
 // NEO4J Routes
-app.use('/api', nuclearFamilyRoutes); 
+app.use('/api', nuclearFamilyRoutes); // depricated?
 
-app.use('/api', wholeFamilyRoutes);
+app.use('/api', wholeFamilyRoutes); // depricated?
+
+
 
 app.use('/api', pedigreeRoutes);// Gets Pedigree of a selected node 
 

@@ -30,6 +30,19 @@ export class backendApiService {
     return this.http.get(`${this.apiUrl}/getJSON`);
   }
 
+
+  
+
+  /// File processing requests 
+
+  processUploadFile(): Observable<any>{
+        console.log("Sending Processing Request to back-end");
+        return this.http.get(`${this.apiUrl}/processData`);
+
+  }
+
+
+
   /// NEO4J API REQUESTS 
 
   // GET REQUESTS 

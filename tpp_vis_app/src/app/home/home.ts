@@ -3,7 +3,7 @@ import { FileUploadComponent } from '../file-upload/file-upload';
 
 @Component({
   selector: 'app-home',
-  imports: [FileUploadComponent],
+  imports:[],
   templateUrl: './home.html',
   styleUrl: './home.css'
 })
@@ -19,7 +19,4 @@ export class HomeComponent {
 
 
   }
-
-
-
 }

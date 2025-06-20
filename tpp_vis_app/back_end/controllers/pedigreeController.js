@@ -8,7 +8,7 @@
 
 import { fetchPedigreeData } from '../services/neo4j-driver.js';
 import { formatForSigma2,convertToSigmaFormat,layerByYearBoundedSpacing } from '../utils/sigmaFormatter.js';
-import { saveJsonToFile } from '../utils/fileWriter.js';
+//import { saveJsonToFile } from '../utils/fileWriter.js';
 
 
 export const getPedigree= async (req, res) => {
