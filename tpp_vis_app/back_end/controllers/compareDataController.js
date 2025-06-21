@@ -14,6 +14,7 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import fs from 'fs/promises';
 import { InvalidFileSystem } from '@angular/compiler-cli';
+import { identifierName } from '@angular/compiler';
 
 
 
@@ -73,6 +74,30 @@ async function readInvalidIDs() {
 }
 
 
+async function readInvalidSoloIDs() {
+
+    let cleaned = [];
+
+    console.log("Getting Invalvid Clones info");
+    const filename = "invalid_solo_IDs.txt";
+    const filePath = path.join(__dirname, 'temp', filename);
+    console.log("Reading file:", filePath);
+
+    try {
+        let content = await fs.readFile(filePath, 'utf8');
+        content = content.split("\n");
+        //console.log(content);
+        cleaned = content.filter(item => item !== '');
+        console.log(cleaned);
+
+    } catch (err) {
+        console.error("Error reading the file:", err);
+        return [];
+    }
+    return cleaned;
+}
+
+
 
 function getInvalidIDEntries(invalidIDs, processedData){
     console.log(invalidIDs);
@@ -84,9 +109,12 @@ function getInvalidIDEntries(invalidIDs, processedData){
         invalidIDs.includes(entry.correct_ID));
 
     //console.log(matchedEntries);   
-    console.log(matchedEntries.length);
+    //console.log(matchedEntries.length);
+    return matchedEntries;
 
 }
+
+
 
 
 
@@ -104,10 +132,27 @@ function getInvalidParentEntries(nonMatchParents, processedData){
     //console.log(matchedEntries_F);
     console.log(matchedEntries_F.length);
     //console.log(matchedEntries_M); 
-    console.log(matchedEntries_M.length);   
+    //console.log(matchedEntries_M.length); 
+    matchedEntries_F.push(matchedEntries_M);
+    console.log("combined matched entries");
+    console.log(matchedEntries_F.length);
+    return matchedEntries_F;
 }
 
 
+function findUnusedEntries(idEntries, soloIds){
+    //console.log(idEntries);
+    console.log("Finding Entries used as parents")
+    idEntries.forEach(item => {
+        if (soloIds.includes(item.correct_ID)) {
+                item.used = 'N';
+        }else{
+            item.used = 'Y'
+    }
+    });
+    //console.log(idEntries);
+    return idEntries;
+}
 
 async function main(processedData){
     console.log("Main Activated -- compareDataController")
@@ -117,11 +162,19 @@ async function main(processedData){
     //console.log(invalidIDs);
 
     const nonMatchParents = await readParents();
-    //console.log(nonMatchParents);
-    getInvalidParentEntries(nonMatchParents,processedData);
-    getInvalidIDEntries(invalidIDs ,processedData);
 
-    return [invalidIDs,nonMatchParents];
+    const soloIds = await readInvalidSoloIDs()
+    console.log(soloIds);
+    //console.log(nonMatchParents);
+    const parentEntries = getInvalidParentEntries(nonMatchParents,processedData);
+    const idEntries = getInvalidIDEntries(invalidIDs ,processedData);
+
+    const finalidEntries = findUnusedEntries(idEntries, soloIds)
+
+    console.log(finalidEntries);
+    console.log(parentEntries);
+
+    return [finalidEntries,parentEntries,nonMatchParents,invalidIDs];
 }
 
 

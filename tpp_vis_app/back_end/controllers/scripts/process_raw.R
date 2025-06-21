@@ -277,11 +277,9 @@ nrow(invalid_clones)
 invalid_IDs<-invalid_clones$ID
 ##print(invalid_IDs)
 
-
-
-
-
 parents <- c(df$Female_parent,df$Male_parent)
+
+invalid_solo_IDs<-setdiff(invalid_IDs,parents)
 
 #setdiff(unique(parents),df$ID)
 #length(setdiff(unique(parents),df$ID))
@@ -342,4 +340,7 @@ message("Saving file: ", file)
 
 write(invalid_IDs, file=file, sep="\n")
 
+file<- paste0(temp_dir,"/invalid_solo_IDs.txt")
+message("Saving file: ", file)
 
+write(invalid_solo_IDs, file=file, sep="\n")

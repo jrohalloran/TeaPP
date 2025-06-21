@@ -14,7 +14,7 @@
     <section class="left-panel">
 
       <!-- Upload container in top-left -->
-      <div class="upload-container">
+      <div *ngIf="showUploader" class="upload-container">
         <app-file-upload (uploadResponse)="handleUploadResponse($event)"></app-file-upload>
 
       </div>
@@ -28,11 +28,53 @@
     <!-- Right panel -->
 
     <aside class="right-panel">
-        <div *ngIf="apiResult">
-        <h3>Upload Response:</h3>
-        <pre>{{ apiResult | json }}</pre>
-        </div>
+    <div class="table-container" *ngIf="apiResult?.length">
+        <h3>Invalid Clones Identified</h3>
 
+        <table mat-table [dataSource]="apiResult" class="mat-elevation-z8">
+
+        <!-- ID Column -->
+        <ng-container matColumnDef="ID">
+            <th mat-header-cell *matHeaderCellDef> ID </th>
+            <td mat-cell *matCellDef="let element"> {{ element.ID }} </td>
+        </ng-container>
+
+        <!-- Female Parent Column -->
+        <ng-container matColumnDef="female_parent">
+            <th mat-header-cell *matHeaderCellDef> Female Parent </th>
+            <td mat-cell *matCellDef="let element"> {{ element.female_parent }} </td>
+            </ng-container>
+
+         <ng-container matColumnDef="male_parent">
+            <th mat-header-cell *matHeaderCellDef> Male Parent </th>
+            <td mat-cell *matCellDef="let element"> {{ element.male_parent }} </td>
+            </ng-container>
+
+        <ng-container matColumnDef="correct_ID">
+            <th mat-header-cell *matHeaderCellDef> Correct ID </th>
+            <td mat-cell *matCellDef="let element"> {{ element.correct_ID }} </td>
+            </ng-container>
+
+        <ng-container matColumnDef="used">
+            <th mat-header-cell *matHeaderCellDef> Matches Parent ID</th>
+            <td mat-cell *matCellDef="let element"> {{ element.used }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="removed">
+        <th mat-header-cell *matHeaderCellDef> Remove </th>
+        <td mat-cell *matCellDef="let element">
+            <mat-checkbox [(ngModel)]="element.removed"></mat-checkbox>
+        </td>
+        </ng-container>
+
+        <!-- Header and Row Definitions -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" [class.removed-row]="row.removed"></tr>
+
+     </table>
+
+    </div>
+        
     </aside>
 
   </div>

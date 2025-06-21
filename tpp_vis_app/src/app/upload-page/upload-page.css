@@ -67,8 +67,25 @@
   /* Add padding or grid for future content */
 }
 
+.table-container {
+  height: 800px;    
+  width: 800px;  
+  padding: 1rem;    /* fixed height, change as needed */
+  overflow-y: auto;       /* enable vertical scrollbar */
+  overflow-x: hidden;     /* hide horizontal scrollbar, or set auto if needed */
+  display: block;         /* required for scroll */
+  border: 1px solid #ccc; /* optional, for visual debugging */
+}
 
 
+table {
+  width: 100%;           /* or fixed width if you want */
+  table-layout: fixed;   /* optional: for fixed column widths */
+}
+
+.removed-row {
+  background-color: #ffcccc; /* light red highlight */
+}
 
 /* Placeholder bottom half on right */
 .bottom-half {
