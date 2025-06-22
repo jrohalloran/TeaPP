@@ -11,6 +11,9 @@ import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 
 
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
+
 interface ApiData {
     ID: String,
     female_parent:String,
@@ -18,8 +21,8 @@ interface ApiData {
     correct_ID: String,
     correct_female: String,
     correct_male: String,
-    removed: String,
-    used:String,
+    removed: boolean,
+    used:boolean,
   }
 
 @Component({
@@ -31,7 +34,8 @@ interface ApiData {
     MatTableModule,
     FormsModule,
     ReactiveFormsModule,
-    MatCheckboxModule],
+    MatCheckboxModule,
+    MatProgressSpinnerModule],
   templateUrl: './upload-page.html',
   styleUrl: './upload-page.css'
 })
@@ -48,6 +52,8 @@ export class UploadComponent {
   nonMatchParents : any[] = [];
   invalidIDs : any[] = [];
 
+  loading: boolean = false;
+
 
   constructor(private backendApiService: backendApiService){}
 
@@ -55,12 +61,13 @@ export class UploadComponent {
   getCleanDataFormat(){
       const updatedData = this.processedData.map(item => ({
     ...item,
-    removed: 0,
+    removed: false,
   }));
     this.cleanData = updatedData;
   }
 
   async handleUploadResponse(event: any): Promise<void> {
+    this.loading = true;
     console.log('Upload response received:', event);
     this.processedData = event;
     this.getCleanDataFormat()
@@ -79,8 +86,10 @@ export class UploadComponent {
           console.log(this.invalidIDs);
 
           this.apiResult=this.idEntries;
+          this.secondPhaseData = this.nonMatchParents;
 
           this.showUploader = false;
+          this.loading = false;
 
           } catch (error) {
           console.error('Error:', error);
@@ -92,8 +101,18 @@ export class UploadComponent {
 
 displayedColumns: string[] = ['ID', 'female_parent', 'male_parent','correct_ID', 'used', 'removed'];
 
+currentPhase = 1;  // 1 = first table + instructions, 2 = second table + instructions
+// You probably already have apiResult as the first table's data
+// Prepare second phase data:
+secondPhaseData: any[] = [];
 
-  addRow(): void {
+secondTableData: any[]=[];
+
+// Optional: columns for the second table if different
+secondDisplayedColumns = ['ID','correct_ID','removed'];
+
+
+addRow(): void {
     const nextId = this.apiResult.length
       ? Math.max(...this.apiResult.map(d => Number(d.ID) || 0)) + 1
       : 1;
@@ -105,8 +124,8 @@ displayedColumns: string[] = ['ID', 'female_parent', 'male_parent','correct_ID',
       correct_ID: '',
       correct_female: '',
       correct_male: '',
-      removed: '',
-      used: '',
+      removed: false,
+      used: false,
     };
 
     this.apiResult.push(newRow);
@@ -114,9 +133,117 @@ displayedColumns: string[] = ['ID', 'female_parent', 'male_parent','correct_ID',
   }
 
 
-deleteRow(index: number) {
-  this.apiResult.splice(index, 1);
-  this.apiResult = [...this.apiResult];
-}
+  selectAllToRemove() {
+  this.apiResult = this.apiResult.map(row => ({
+    ...row,
+    removed: true
+    }));
+
+
+  }
+
+  toggleSelectAllToRemove() {
+  const allSelected = this.apiResult.every(row => row.removed === true);
+
+  this.apiResult = this.apiResult.map(row => ({
+    ...row,
+    removed: !allSelected
+  }));
+  }
+
+  areAllRemoved(): boolean {
+    return this.apiResult?.every(row => row.removed === true);
+  }
+
+  selectUnusedToRemove() {
+    this.apiResult = this.apiResult.map(row => ({
+      ...row,
+      removed: row.used === false // or !row.used
+    }));
+  }
+
+  toggleSelectUnusedToRemove() {
+    const allUnusedSelected = this.apiResult
+      .filter(row => !row.used) // only rows where used === false
+      .every(row => row.removed);
+
+    this.apiResult = this.apiResult.map(row => {
+      if (!row.used) {
+        return { ...row, removed: !allUnusedSelected };
+      }
+      return row; // don't change rows that are used === true
+    });
+  }
+
+  areAllUnusedRemoved(): boolean {
+    return this.apiResult
+      ?.filter(row => !row.used)
+      .every(row => row.removed === true);
+  }
+
+  onProceed() {
+
+    console.log(this.apiResult);
+
+    console.log("Getting Lone Parental ID Data")
+    console.log(this.secondPhaseData);
+    this.secondTableData = this.secondPhaseData.map(name => ({
+    ID: name,            // the original string
+    correct_ID: name,       // user-editable field
+    removed: false  // example extra field
+    }));
+    console.log(this.secondTableData)
+
+    this.secondTableData = [...this.secondTableData];
+    this.currentPhase = 2;
+  }
+
+
+
+
+  async finalise() {
+  // Handle final submission or next steps here
+    console.log('Getting Clean Data Entries');
+
+    console.log(this.apiResult);
+    console.log(this.secondTableData);
+    console.log(this.processedData);
+
+    const data = [this.apiResult,this.secondTableData,this.processedData]
+
+    try {
+      console.log('Sending Data to backend for Processing');
+      const response = await firstValueFrom(this.backendApiService.getCleanData(data));
+      console.log('Response from backend:', response);
+      } catch (error) {
+      console.error('Error:', error);
+    }
+
+  }
+
+
+  
+  searchInput: string = '';
+  searchResults: any[] = [];
+  searchPerformed = false;
+
+  performSearch() {
+    const term = this.searchInput?.toLowerCase().trim();
+    this.searchPerformed = true;
+
+    if (!term) {
+      this.searchResults = [];
+      return;
+    }
+
+    this.searchResults = this.processedData.filter(row =>
+      Object.values(row).some(value =>
+        String(value).toLowerCase().includes(term)
+      )
+    );
+  }
 
 }
+
+
+

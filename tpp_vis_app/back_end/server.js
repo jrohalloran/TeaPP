@@ -29,6 +29,7 @@ import selectedPlantRoutes from "./routes/selectedPlant.js"
 import getPartnerOfRoutes from "./routes/getPartnerOf.js"
 import processDataRoutes from "./routes/processData.js"
 import compareDataRoutes from "./routes/compareData.js"
+import getCleanDataroutes from "./routes/getCleanData.js"
 
 const app = express();
 
@@ -135,6 +136,8 @@ app.use('/uploads', express.static('uploads'));
 app.use('/api', processDataRoutes); 
 
 app.use('/api', compareDataRoutes); 
+
+app.use('/api', getCleanDataroutes); 
 
 
 // NEO4J Routes

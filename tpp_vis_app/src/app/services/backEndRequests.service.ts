@@ -48,6 +48,13 @@ export class backendApiService {
   }
 
 
+  getCleanData(data:any[]): Observable<any>{
+        console.log("Sending Processing Request to back-end");
+        return this.http.post(`${this.apiUrl}/getCleanData`,data);
+
+  }
+
+
 
   /// NEO4J API REQUESTS 
 

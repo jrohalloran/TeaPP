@@ -13,8 +13,8 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import fs from 'fs/promises';
-import { InvalidFileSystem } from '@angular/compiler-cli';
-import { identifierName } from '@angular/compiler';
+//import { InvalidFileSystem } from '@angular/compiler-cli';
+//import { identifierName } from '@angular/compiler';
 
 
 
@@ -145,9 +145,9 @@ function findUnusedEntries(idEntries, soloIds){
     console.log("Finding Entries used as parents")
     idEntries.forEach(item => {
         if (soloIds.includes(item.correct_ID)) {
-                item.used = 'N';
+                item.used = false;
         }else{
-            item.used = 'Y'
+            item.used = true;
     }
     });
     //console.log(idEntries);
