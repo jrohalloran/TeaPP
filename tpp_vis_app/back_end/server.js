@@ -29,7 +29,9 @@ import selectedPlantRoutes from "./routes/selectedPlant.js"
 import getPartnerOfRoutes from "./routes/getPartnerOf.js"
 import processDataRoutes from "./routes/processData.js"
 import compareDataRoutes from "./routes/compareData.js"
-import getCleanDataroutes from "./routes/getCleanData.js"
+import getCleanDataRoutes from "./routes/getCleanData.js"
+import processPedigreeRoutes from "./routes/processPedigree.js"
+import insertNeo4jDBRoutes from './routes/insertNeo4j.js';
 
 const app = express();
 
@@ -137,7 +139,13 @@ app.use('/api', processDataRoutes);
 
 app.use('/api', compareDataRoutes); 
 
-app.use('/api', getCleanDataroutes); 
+app.use('/api', getCleanDataRoutes); 
+
+app.use('/api', insertNeo4jDBRoutes); 
+
+app.use('/api', processPedigreeRoutes); 
+
+
 
 
 // NEO4J Routes

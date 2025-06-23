@@ -54,6 +54,20 @@ export class backendApiService {
 
   }
 
+  processPedigree(data:any[]): Observable<any>{
+        console.log("Sending Synbreed Pedigree Processing Request to back-end");
+        return this.http.post(`${this.apiUrl}/processPedigree`,data);
+
+  }
+
+  insertNeo4j(): Observable<any>{
+        console.log("Sending Neo4j insertion Request to back-end");
+        return this.http.get(`${this.apiUrl}/insertNeo4j`);
+
+  }
+
+
+
 
 
   /// NEO4J API REQUESTS 

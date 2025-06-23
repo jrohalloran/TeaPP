@@ -286,8 +286,8 @@ async function main() {
         console.log("Trying to Insert Function...");
 
 
-        console.log("rawEntries is:", rawEntries);
-        console.log("processedEntries is:", processedEntries);
+        //console.log("rawEntries is:", rawEntries);
+        //console.log("processedEntries is:", processedEntries);
 
         if (!Array.isArray(rawEntries)) {
           console.error("rawEntries is not an array");
@@ -322,7 +322,7 @@ export const processData= async (req, res) => {
   try{
     console.log("Attempting to process data...")
     const result = await main();
-    console.log("Result:")
+    //console.log("Result:")
     //console.log(result)
     const complete = true;
     console.log("Processing Complete - Updating Flag")

@@ -13,7 +13,9 @@ library(dplyr)
 
 message("Starting Processing of Raw Uploaded Data.....")
 
+
 args <- commandArgs(trailingOnly = FALSE)
+
 script_path <- sub("--file=", "", args[grep("--file=", args)])
 script_dir <- dirname(normalizePath(script_path))
 

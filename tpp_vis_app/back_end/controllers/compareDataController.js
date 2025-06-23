@@ -5,24 +5,14 @@
 
 // Thesis Project 
 
-
-
 import path from 'path';
-//import { exec } from 'child_process';
-//import { Client } from 'pg';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import fs from 'fs/promises';
-//import { InvalidFileSystem } from '@angular/compiler-cli';
-//import { identifierName } from '@angular/compiler';
-
-
-
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 //const backend_dir = path.dirname(__dirname);
-
 
 
 
@@ -49,7 +39,6 @@ async function readParents() {
   return cleaned;
 }
 
-
 async function readInvalidIDs() {
 
     let cleaned = [];
@@ -72,7 +61,6 @@ async function readInvalidIDs() {
     }
     return cleaned;
 }
-
 
 async function readInvalidSoloIDs() {
 
@@ -97,8 +85,6 @@ async function readInvalidSoloIDs() {
     return cleaned;
 }
 
-
-
 function getInvalidIDEntries(invalidIDs, processedData){
     console.log(invalidIDs);
     //console.log(processedData);
@@ -113,10 +99,6 @@ function getInvalidIDEntries(invalidIDs, processedData){
     return matchedEntries;
 
 }
-
-
-
-
 
 function getInvalidParentEntries(nonMatchParents, processedData){
 
@@ -138,7 +120,6 @@ function getInvalidParentEntries(nonMatchParents, processedData){
     console.log(matchedEntries_F.length);
     return matchedEntries_F;
 }
-
 
 function findUnusedEntries(idEntries, soloIds){
     //console.log(idEntries);
@@ -171,14 +152,11 @@ async function main(processedData){
 
     const finalidEntries = findUnusedEntries(idEntries, soloIds)
 
-    console.log(finalidEntries);
-    console.log(parentEntries);
+    //console.log(finalidEntries);
+    //console.log(parentEntries);
 
     return [finalidEntries,parentEntries,nonMatchParents,invalidIDs];
 }
-
-
-
 
 export const compareData= async (req, res) => {
 

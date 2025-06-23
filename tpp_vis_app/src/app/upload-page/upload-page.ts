@@ -9,10 +9,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
-
-
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-
+import { Router } from '@angular/router';
+import { DataTransferService } from '../services/dataTransferService';
 
 interface ApiData {
     ID: String,
@@ -55,7 +54,10 @@ export class UploadComponent {
   loading: boolean = false;
 
 
-  constructor(private backendApiService: backendApiService){}
+  constructor(private backendApiService: backendApiService,
+              private router: Router,
+              private dataTransferService: DataTransferService
+  ){}
 
 
   getCleanDataFormat(){
@@ -204,19 +206,27 @@ addRow(): void {
   async finalise() {
   // Handle final submission or next steps here
     console.log('Getting Clean Data Entries');
+    this.loading = true;
 
     console.log(this.apiResult);
     console.log(this.secondTableData);
     console.log(this.processedData);
+    console.log(this.cleanData);
 
-    const data = [this.apiResult,this.secondTableData,this.processedData]
+    const data = [this.apiResult,this.secondTableData,this.cleanData]
 
     try {
       console.log('Sending Data to backend for Processing');
       const response = await firstValueFrom(this.backendApiService.getCleanData(data));
       console.log('Response from backend:', response);
+      console.log("Navigating to Home Page");
+
+
+      this.dataTransferService.setResponse(response);
+      this.router.navigate(['/home']);
       } catch (error) {
       console.error('Error:', error);
+
     }
 
   }

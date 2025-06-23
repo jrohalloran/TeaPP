@@ -181,74 +181,74 @@ export class DisplayComponent implements AfterViewInit {
     }
   }
 
-loadGraph(): void {
-  if (this.rendererTop) {
-    this.rendererTop.kill();
-  }
-  
-  const graph = this.visualisationService.loadGraph(
-    this.groupedFamilyData,
-    this.containerTop.nativeElement
-  );
-  this.graphTop = graph.graph;
-  this.rendererTop = graph.renderer
-  this.isTopLoading = false;
-
-
-  this.setupHighlighting();
-  this.getSelectedNode();
-
-}
-
-loadNewGraph(): void {
-  this.showBottomOverlay = false;
-  this.isBottomLoading = true;
-
-
-  if (this.rendererBottom) {
-    this.rendererBottom.kill();
-  }
-
-  const graph = this.visualisationService.loadNewGraph(
-    this.nuclearFamilyData,
-    this.containerBottom.nativeElement
-
-  );
-  this.graphBottom = graph.graph; // Adding Graph to the bottom container
-  this.rendererBottom = graph.renderer 
-  this.showBottomOverlay = false; // Removing Loading screen 
-  this.isBottomLoading = false;
-
-  this.getNodeData();
-
-
-
-}
-
-private getDescendants(nodeId: string): Set<any>{
-  let name: string | any[] = [];
-  name = [nodeId];
-  console.log(nodeId);
-  const descendants = new Set();
-  this.groupedFamilyData.nodes.forEach(node => {
-    if (node.id == nodeId){
-
-      if (node.siblings){
-        name = node.siblings;
-      }
+  loadGraph(): void {
+    if (this.rendererTop) {
+      this.rendererTop.kill();
     }
-    if (node.parents){
-        for (let i=0;i<node.parents.length;i++){
-          for (let j=0;j<name.length;j++){
-            if (node.parents[i]==name[j]){
-              console.log(node)
-              descendants.add(node.id);
-            }
+    
+    const graph = this.visualisationService.loadGraph(
+      this.groupedFamilyData,
+      this.containerTop.nativeElement
+    );
+    this.graphTop = graph.graph;
+    this.rendererTop = graph.renderer
+    this.isTopLoading = false;
+
+
+    this.setupHighlighting();
+    this.getSelectedNode();
+
+  }
+
+  loadNewGraph(): void {
+    this.showBottomOverlay = false;
+    this.isBottomLoading = true;
+
+
+    if (this.rendererBottom) {
+      this.rendererBottom.kill();
+    }
+
+    const graph = this.visualisationService.loadNewGraph(
+      this.nuclearFamilyData,
+      this.containerBottom.nativeElement
+
+    );
+    this.graphBottom = graph.graph; // Adding Graph to the bottom container
+    this.rendererBottom = graph.renderer 
+    this.showBottomOverlay = false; // Removing Loading screen 
+    this.isBottomLoading = false;
+
+    this.getNodeData();
+
+
+
+  }
+
+  private getDescendants(nodeId: string): Set<any>{
+    let name: string | any[] = [];
+    name = [nodeId];
+    console.log(nodeId);
+    const descendants = new Set();
+    this.groupedFamilyData.nodes.forEach(node => {
+      if (node.id == nodeId){
+
+        if (node.siblings){
+          name = node.siblings;
+        }
       }
-      }}})
-      //console.log(descendants);
-      return descendants;
-}
+      if (node.parents){
+          for (let i=0;i<node.parents.length;i++){
+            for (let j=0;j<name.length;j++){
+              if (node.parents[i]==name[j]){
+                console.log(node)
+                descendants.add(node.id);
+              }
+        }
+        }}})
+        //console.log(descendants);
+        return descendants;
+  }
 
 
   private getAncestors(nodeId: string, ancestors: Set<string> = new Set()): Set<string> {
