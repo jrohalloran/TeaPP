@@ -2,10 +2,10 @@
 
 import fs from 'fs/promises';
 import neo4j from 'neo4j-driver'
-
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import { exec } from 'child_process';
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -20,6 +20,78 @@ const password = 'tAqsiv-tivfif-bomhe9'; // Replace with your actual password
 
 // Create a driver instance
 const driver = neo4j.driver(uri, neo4j.auth.basic(user, password));
+
+
+async function writeCsvFiles(graphData) {
+  // Define CSV headers exactly as neo4j-admin import expects
+  const nodeHeaders = ['id:ID(Plant)', 'gener', 'par1', 'par2', 'year:int'];
+  const relHeaders = [':START_ID(Plant)', ':END_ID(Plant)', ':TYPE'];
+
+  // Build CSV content for nodes
+  const nodeRows = graphData.nodes.map(node => [
+    node.id,
+    node.gener || '',
+    node.par1 || '',
+    node.par2 || '',
+    node.year !== null && node.year !== undefined ? node.year : ''
+  ]);
+
+  const nodesCsv = [
+    nodeHeaders.join(','),              // header row
+    ...nodeRows.map(row => row.map(val => `"${val}"`).join(','))  // escape all fields with quotes
+  ].join('\n');
+
+  // Build CSV content for relationships
+  const relRows = graphData.edges.map(edge => [
+    edge.source,
+    edge.target,
+    'PARENT_OF' // fixed relationship type
+  ]);
+
+  const relsCsv = [
+    relHeaders.join(','),               // header row
+    ...relRows.map(row => row.map(val => `"${val}"`).join(','))
+  ].join('\n');
+
+  // Save to disk, for example in temp folder relative to current file
+  const tempDir = path.join(__dirname, 'temp');
+  await fs.mkdir(tempDir, { recursive: true });
+
+  const nodesFile = path.join(tempDir, 'plants.csv');
+  const relsFile = path.join(tempDir, 'parent_of.csv');
+
+  await fs.writeFile(nodesFile, nodesCsv, 'utf8');
+  await fs.writeFile(relsFile, relsCsv, 'utf8');
+
+  console.log(`CSV files written:`);
+  console.log(`  Nodes: ${nodesFile}`);
+  console.log(`  Relationships: ${relsFile}`);
+
+  return { nodesFile, relsFile };
+}
+
+
+async function importWithNeo4jAdmin(graphData) {
+  // Step 1: write CSV files
+  const { nodesFile, relsFile } = await writeCsvFiles(graphData);
+
+  // Step 2: build neo4j-admin import command
+  const cmd = `neo4j-admin import --database=neo4j --nodes="${nodesFile}" --relationships="${relsFile}" --force=true`;
+
+  console.log('Running neo4j-admin import...');
+
+  exec(cmd, (error, stdout, stderr) => {
+    if (error) {
+      console.error('neo4j-admin import failed:', error);
+      return;
+    }
+    if (stderr) {
+      console.warn('neo4j-admin import warnings:', stderr);
+    }
+    console.log('neo4j-admin import output:', stdout);
+  });
+}
+
 
 
 async function readFile(){
@@ -96,7 +168,6 @@ function parseGraphData(text) {
   };
 }
 
-
 function getYear(graphData) {
 
   const idPattern = /^\d{6,7}([a-zA-Z]\d?)?$/;
@@ -135,120 +206,9 @@ function printNodesWith6Digits(graphData) {
   });
 }
 
+//const BATCH_SIZE = 500;
+
 /*
-async function insertData(data){
-
-    console.log("Starting Data Upload to Neo4js");
-
-
-    //console.log(data)
-    console.log("Attempting to connect to Neo4j");
-    try {
-    
-    const session = driver.session();
-    console.log("----- Successfully Connected ----");
-
-    
-    for (const node of data.nodes) {
-        if (node.year == null) {
-            console.warn(`Warning: node with id ${node.id} has a null year.`);
-            }
-      await session.run(
-        `MERGE (p:Plant {id: $id})
-         SET p.gener = $gener, p.par1 = $par1, p.par2 = $par2, p.year = $year`,
-        {
-          id: node.id,
-          gener: node.gener,
-          par1: node.par1,
-          par2: node.par2,
-          year: node.year != null ? neo4j.int(node.year) : null
-        }
-      );
-    }
-
-    // Insert edges
-    for (const edge of data.edges) {
-      await session.run(
-        `MATCH (a:Plant {id: $source}), (b:Plant {id: $target})
-         MERGE (a)-[:PARENT_OF]->(b)`,
-        {
-          source: edge.source,
-          target: edge.target
-        }
-      );
-    }
-
-    console.log('Data import complete!');
-  } catch (error) {
-    console.error('Error importing data:', error);
-  } finally {
-    await session.close();
-    await driver.close();
-  }
-    
-}*/
-/*
-async function insertData(data) {
-  console.log("Starting Data Upload to Neo4j");
-
-  console.log("Attempting to connect to Neo4j");
-  const session = driver.session();
-
-  try {
-    console.log("----- Successfully Connected ----");
-
-    // Prepare batched nodes with year as neo4j.int or null
-    const nodesBatch = data.nodes.map(node => {
-      if (node.year == null) {
-        console.warn(`Warning: node with id ${node.id} has a null year.`);
-      }
-      return {
-        id: node.id,
-        gener: node.gener,
-        par1: node.par1,
-        par2: node.par2,
-        year: node.year != null ? neo4j.int(node.year) : null
-      };
-    });
-
-    // Batch insert nodes
-    await session.run(
-      `
-      UNWIND $nodes AS node
-      MERGE (p:Plant {id: node.id})
-      SET p.gener = node.gener, p.par1 = node.par1, p.par2 = node.par2, p.year = node.year
-      `,
-      { nodes: nodesBatch }
-    );
-
-    // Prepare batched edges
-    const edgesBatch = data.edges.map(edge => ({
-      source: edge.source,
-      target: edge.target
-    }));
-
-    // Batch insert edges
-    await session.run(
-      `
-      UNWIND $edges AS edge
-      MATCH (a:Plant {id: edge.source}), (b:Plant {id: edge.target})
-      MERGE (a)-[:PARENT_OF]->(b)
-      `,
-      { edges: edgesBatch }
-    );
-
-    console.log('Data import complete!');
-  } catch (error) {
-    console.error('Error importing data:', error);
-  } finally {
-    await session.close();
-    await driver.close();
-  }
-}
-*/
-
-const BATCH_SIZE = 500;
-
 async function insertDataInBatches(data) {
   console.log("Starting batched data upload to Neo4j");
   const session = driver.session();
@@ -326,29 +286,18 @@ async function insertDataInBatches(data) {
     await session.close();
     await driver.close();
   }
-}
+}*/
 
 
-
-export const insertNeo4jDB= async (req, res) => {
-
+export const insertADMINNeo4jDB= async (req, res) => {
   console.log("----Attempting to Run insertion script---")
 
   const data = await readFile();
   getYear(data);
   printNodesWith6Digits(data);
-  console.log(data)
-  //await insertDataInBatches(data)
+  
+  // Instead of inserting with Cypher, create CSVs & import with neo4j-admin:
+    await importWithNeo4jAdmin(data);
 
-  res.json("Path to function works");
-
+  res.json("CSV generation and neo4j-admin import started");
 }
-
-
-
-
-
-
-
-
-

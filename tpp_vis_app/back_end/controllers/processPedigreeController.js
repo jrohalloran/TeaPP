@@ -71,20 +71,17 @@ function removeParentEntries(data){
 }
 
 
-
-export const processPedigree= async (req, res) => {
-
-    console.log("Attempting to process Pedigree...")
-    res.json("Path to function works");
+export const processPedigree = async (req, res) => {
+    console.log("Attempting to process Pedigree...");
     const data = req.body;
     const cleanedData = removeParentEntries(data);
-    try{
+
+    try {
         await writeData(cleanedData);
         await performSynbreed();
         res.json(true);
-    }catch (error) {
+    } catch (error) {
         console.error('Error:', error);
-        res.JSON(false)
+        res.json(false);
     }
-
 }

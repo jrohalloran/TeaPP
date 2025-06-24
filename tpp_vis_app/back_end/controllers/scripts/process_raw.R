@@ -206,6 +206,9 @@ message("Checking against Clone ID format....")
 digit_clones <- df[grepl("^0\\d{5}([a-zA-Z])?$", df$ID), ]
 nrow(digit_clones)
 
+digit_clones_1to9 <- df[grepl("^[1-8]\\d{5}([a-zA-Z])?$", df$ID), ]
+nrow(digit_clones_1to9)
+
 ### Updating these in correct_df  -- Add 0 
 pattern <- "^0\\d{5}([a-zA-Z])?$"
 matching_rows <- grepl(pattern, correct_df$correct_ID)
@@ -217,6 +220,14 @@ nrow(digit_clones)
 digit_clones <- correct_df[grepl("^0\\d{5}([a-zA-Z])?$",correct_df$correct_ID), ]
 nrow(digit_clones)
 
+pattern <- "^[1-8]\\d{5}([a-zA-Z])?$"
+matching_rows <- grepl(pattern, correct_df$correct_ID)
+correct_df$correct_ID[matching_rows] <- paste0("0", correct_df$correct_ID[matching_rows])
+
+digit_clones <- correct_df[grepl("^[1-8]\\d{5}([a-zA-Z])?$",correct_df$ID), ]
+nrow(digit_clones)
+digit_clones <- correct_df[grepl("^[1-8]\\d{5}([a-zA-Z])?$",correct_df$correct_ID), ]
+nrow(digit_clones)
 
 
 
@@ -250,7 +261,7 @@ nrow(clone_without_sibling)
 nrow(clone_without_sibling_correct)
 
 
-# Step 1: Define the pattern
+
 pattern <- "^\\d{6,7}/\\d$"
 matching_rows <- grepl(pattern, correct_df$correct_ID)
 correct_df$correct_ID[matching_rows] <- gsub("/", "A", correct_df$correct_ID[matching_rows])
@@ -260,6 +271,15 @@ clone_without_sibling <- correct_df[grepl("^\\d{6,7}/\\d$",correct_df$ID), ]
 clone_without_sibling_correct <- correct_df[grepl("^\\d{6,7}/\\d$",correct_df$correct_ID), ]
 nrow(clone_without_sibling)
 nrow(clone_without_sibling_correct)
+
+
+
+invalid_IDS_6 <- correct_df[
+  grepl("^\\d{6}([a-zA-Z]\\d?)?$", correct_df$correct_ID) & 
+    !grepl("^00", correct_df$correct_ID), 
+]
+length(unique(invalid_IDS_6$ID))
+
 
 
 
@@ -283,13 +303,72 @@ parents <- c(df$Female_parent,df$Male_parent)
 
 invalid_solo_IDs<-setdiff(invalid_IDs,parents)
 
-#setdiff(unique(parents),df$ID)
-#length(setdiff(unique(parents),df$ID))
-#length(setdiff(df$ID,unique(parents)))
 
 
-#setdiff(unique(parents),correct_df$correct_ID)
-#length(setdiff(unique(parents),correct_df$correct_ID))
+
+
+# Checking Parents
+
+digit_clones <- df[grepl("^0\\d{5}([a-zA-Z])?$", df$Female_parent), ]
+nrow(digit_clones)
+
+digit_clones <- df[grepl("^0\\d{5}([a-zA-Z])?$", df$Male_parent), ]
+nrow(digit_clones)
+
+
+## Getting those that are years 01-09 that have lost an "0"
+
+digit_clones_1to9_f <- df[grepl("^[1-8]\\d{5}([a-zA-Z])?$", df$Female_parent), ]
+nrow(digit_clones_1to9_f)
+unique(digit_clones_1to9_f$Female_parent)
+
+digit_clones_1to9_m <- df[grepl("^[1-8]\\d{5}([a-zA-Z])?$", df$Male_parent), ]
+nrow(digit_clones_1to9_m)
+unique(digit_clones_1to9_m$Male_parent)
+
+
+pattern <- "^[1-8]\\d{5}([a-zA-Z])?$"
+matching_rows <- grepl(pattern, correct_df$Male_parent)
+correct_df$correct_Male[matching_rows] <- paste0("0", correct_df$Male_parent[matching_rows])
+
+digit_clones <- correct_df[grepl("^[1-8]\\d{5}([a-zA-Z])?$",correct_df$Male_parent), ]
+nrow(digit_clones)
+
+pattern <- "^[1-8]\\d{5}([a-zA-Z])?$"
+matching_rows <- grepl(pattern, correct_df$Female_parent)
+correct_df$correct_Female[matching_rows] <- paste0("0", correct_df$Female_parent[matching_rows])
+
+digit_clones <- correct_df[grepl("^[1-8]\\d{5}([a-zA-Z])?$",correct_df$Female_parent), ]
+nrow(digit_clones)
+
+
+### Checking for 09 Entries
+
+digit_clones <- correct_df[grepl("^[9]\\d{5}([a-zA-Z])?$",correct_df$Female_parent), ]
+nrow(digit_clones)
+
+pattern <- "^[9]\\d{5}([a-zA-Z])?$"
+matching_rows <- grepl(pattern, correct_df$Female_parent)
+correct_df$correct_Female[matching_rows] <- paste0("0", correct_df$Female_parent[matching_rows])
+
+digit_clones <- correct_df[grepl("^[9]\\d{5}([a-zA-Z])?$",correct_df$Female_parent), ]
+nrow(digit_clones)
+
+digit_clones <- correct_df[grepl("^[9]\\d{5}([a-zA-Z])?$",correct_df$Male_parent), ]
+nrow(digit_clones)
+unique(digit_clones$Male_parent)
+
+pattern <- "^[9]\\d{5}([a-zA-Z])?$"
+matching_rows <- grepl(pattern, correct_df$Male_parent)
+correct_df$correct_Male[matching_rows] <- paste0("0", correct_df$Male_parent[matching_rows])
+
+digit_clones <- correct_df[grepl("^[9]\\d{5}([a-zA-Z])?$",correct_df$Male_parent), ]
+nrow(digit_clones)
+unique(digit_clones$Male_parent)
+
+
+
+
 
 ### AFTER processing Parents that dont match corrected IDs
 setdiff(unique(parents),correct_df$correct_ID)
@@ -308,6 +387,7 @@ length(unique(invalid_F$Female_parent))
 ## Male parents that dont match code format
 invalid_M <- correct_df[!grepl("^\\d{6,7}([a-zA-Z]\\d?)?$", correct_df$Male_parent), ]
 length(unique(invalid_M$Male_parent))
+
 
 
 

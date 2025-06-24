@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 import { backendApiService } from '../services/backEndRequests.service';
 import { catchError, firstValueFrom } from 'rxjs';
-//import { FileUploadComponent } from '../file-upload/file-upload';
 import { DataTransferService } from '../services/dataTransferService';
+import { Router } from '@angular/router';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-home',
-  imports:[],
+  imports:[MatTabsModule],
   templateUrl: './home.html',
   styleUrl: './home.css'
 })
@@ -19,7 +20,8 @@ export class HomeComponent {
   data: any[]=[];
 
   constructor(private backendApiService: backendApiService,
-              private dataTransferService: DataTransferService) {}
+              private dataTransferService: DataTransferService,
+              private router: Router) {}
 
 
   async ngOnInit() {
@@ -78,8 +80,7 @@ export class HomeComponent {
 
   async sendNeo4jUpload(){
 
-    // Updated Graph DB loading component 
-
+    // TO DO:      Updated Graph DB loading component 
     console.log("Uploading Neo4j Data");
     try {
       const response = await firstValueFrom(this.backendApiService.insertNeo4j());
@@ -97,14 +98,20 @@ export class HomeComponent {
       window.open('/display', '_blank');
     }else{
       console.log("Graphing Data is not loaded yet.....");
+      
+      
       //// ADD POP OUT MESSAGE
+
+
+
     }
 }
 
   openDirectory() {
     console.log("Opening Local Directory");
 
+    
+      this.router.navigate(['/upload-page']);
+    }
 
-
-  }
 }
