@@ -1,0 +1,25 @@
+.app-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  font-family: Arial, sans-serif;
+}
+
+/* Top bar styling */
+.top-bar {
+  background-color: #24588c;
+  color: white;
+  padding: 1rem 2rem;
+  flex-shrink: 0;
+}
+
+.top-bar-content h1 {
+  margin: 0;
+  font-weight: 700;
+}
+
+.button-container {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}

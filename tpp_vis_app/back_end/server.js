@@ -31,7 +31,8 @@ import processDataRoutes from "./routes/processData.js"
 import compareDataRoutes from "./routes/compareData.js"
 import getCleanDataRoutes from "./routes/getCleanData.js"
 import processPedigreeRoutes from "./routes/processPedigree.js"
-import insertNeo4jDBRoutes from './routes/insertNeo4j.js';
+import insertNeo4jDBRoutes from './routes/insertNeo4j.js'
+import updateParentsRoutes from './routes/updateParentsID.js'
 
 const app = express();
 
@@ -133,6 +134,7 @@ app.post('/uploadfile', (req, res) => {
 app.use('/uploads', express.static('uploads'));
 
 
+
 // File Processing Routes
 
 app.use('/api', processDataRoutes); 
@@ -144,6 +146,9 @@ app.use('/api', getCleanDataRoutes);
 app.use('/api', insertNeo4jDBRoutes); 
 
 app.use('/api', processPedigreeRoutes); 
+
+app.use('/api', updateParentsRoutes); 
+
 
 
 

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgIf } from '@angular/common';
 import { Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -16,11 +17,15 @@ export class LoginComponent {
   error = '';
   readonly correctPassword = 'liptontea';  // ← set your password here
 
-  constructor(private router: Router) {}
+  constructor(private router: Router,
+              private authService: AuthService
+  ) {}
 
   onSubmit() {
     if (this.password === this.correctPassword) {
-      this.router.navigate(['/upload-page']);
+      console.log("Setting User")
+      this.authService.setCurrentUser(this.username);
+      this.router.navigate(['/landing-page']);
     } else {
       this.error = 'Incorrect password. Try again.';
     }

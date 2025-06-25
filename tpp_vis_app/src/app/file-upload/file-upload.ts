@@ -1,44 +1,47 @@
-import { Component, EventEmitter, Output } from '@angular/core';
-import { firstValueFrom } from 'rxjs';
+
+import { Component, Output, EventEmitter } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { UploadService } from '../services/upload.service';
 import { backendApiService } from '../services/backEndRequests.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-file-upload',
-  templateUrl: './file-upload.component.html'
+  imports: [CommonModule],
+  templateUrl: './file-upload.html',
+  styleUrl: './file-upload.css'
 })
+
+
 export class FileUploadComponent {
 
-  @Output() uploadResponse = new EventEmitter<any>();
-
-  selectedFile: File | null = null;
-  uploadStatus: string = 'waiting';
-
-  processedData : any[] = [];
-  uploaded: boolean = false;
-  clicked: boolean = false;
-  processed: boolean = false;
+@Output() uploadResponse = new EventEmitter<any>();
+@Output() loadingChange = new EventEmitter<boolean>();
 
 
-  constructor(private uploadService: UploadService,
-              private backendApiService: backendApiService) {}
+ selectedFile: File | null = null;
+ uploadStatus: string = 'waiting';
 
-  handleFileSelection(event: any) {
-    this.selectedFile = event.target.files[0];
-    console.log('Selected file:', this.selectedFile);
-    console.log("clicked?: "+this.clicked);
-  }
+ 
+ processedData : any[] = [];
 
-  // New method: Check if file is tab-delimited by reading first chunk
+ uploaded: boolean = false;
+ clicked: boolean = false;
+ processed: boolean = false;
+
+
+ constructor(private uploadService: UploadService,
+    private backendApiService: backendApiService) {}
+
+
   checkIfTabDelimited(file: File): Promise<boolean> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       const chunkSize = 1024;
       const blob = file.slice(0, chunkSize);
       const reader = new FileReader();
 
       reader.onload = (e) => {
         const text = e.target?.result as string;
-
         const lines = text.split(/\r?\n/).filter(line => line.trim().length > 0);
 
         if (lines.length === 0) {
@@ -48,18 +51,52 @@ export class FileUploadComponent {
 
         const tabDelimitedLines = lines.slice(0, 5).filter(line => line.includes('\t'));
         const isTabDelimited = tabDelimitedLines.length / Math.min(lines.length, 5) > 0.6;
+
         resolve(isTabDelimited);
       };
 
-      reader.onerror = () => {
-        resolve(false);
-      };
+      reader.onerror = () => resolve(false);
 
       reader.readAsText(blob);
     });
   }
 
+
+
+
+
+
+
+  async handleFileSelection(event: any) {
+    const file: File = event.target.files[0];
+
+    if (!file) {
+      return;
+    }
+
+    const isTextFile = file.name.endsWith('.txt');
+    if (!isTextFile) {
+      alert("Please select a .txt file.");
+      this.selectedFile = null;
+      return;
+    }
+
+    const isTabDelimited = await this.checkIfTabDelimited(file);
+    if (!isTabDelimited) {
+      alert("The selected file is not tab-delimited.");
+      this.selectedFile = null;
+      return;
+    }
+
+    // ✅ All checks passed — safe to assign and show info
+    this.selectedFile = file;
+    console.log('Selected file:', this.selectedFile.name);
+    console.log("clicked?: " + this.clicked);
+  }
+
+
   async uploadFile() {
+    this.loadingChange.emit(true);
     if (!this.selectedFile) {
       alert("Please select a file before uploading.");
       return;
@@ -80,55 +117,58 @@ export class FileUploadComponent {
       return;
     }
 
-    // New: Check if file is tab-delimited
-    const isTabDelimited = await this.checkIfTabDelimited(this.selectedFile);
-    if (!isTabDelimited) {
-      alert("The selected file does not appear to be tab-delimited.");
-      this.uploadStatus = 'error';
-      return;
-    }
-    console.log("File is correct format -- Text file and tab-delimited");
-
+    console.log("File is correct format -- Text file");
+    
     this.uploadService.uploadFile(this.selectedFile).subscribe({
       next: (response) => {
         console.log('Upload response:', response);
+
         this.uploadStatus = 'completed';
-        try {
+        try{
           this.processFile();
-        } catch (error) {
+        }catch (error) {
           console.error('Error:', error);
-          this.processed = false;
+          this.processed=false;
         }
+
       },
       error: (error) => {
         console.error('Upload error:', error);
         this.uploadStatus = 'error';
       }
     });
+    this.loadingChange.emit(false);
   }
 
   actionMethod(event: any) {
     event.target.disabled = true;
   }
 
-  async processFile() {
+
+  async processFile(){
+    this.loadingChange.emit(true);
+
     console.log("Requesting File Process....");
     try {
       const response = await firstValueFrom(this.backendApiService.processUploadFile());
       console.log('Response from backend:', response);
 
       this.processedData = response; // Saving to global attribute
-      this.processed = true;
+      this.processed = true
       this.onUploadComplete(response);
-    } catch (error) {
+      } catch (error) {
       console.error('Error:', error);
-      this.processed = false;
+      this.processed=false;
     }
   }
 
+
   onUploadComplete(response: any) {
-    console.log("Emitting response to Parent component");
+    this.loadingChange.emit(true);
+
+    console.log("Emitting response to Parent component")
     this.uploadResponse.emit(response);
   }
+
 
 }

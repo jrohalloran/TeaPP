@@ -66,7 +66,10 @@ export class backendApiService {
 
   }
 
-
+  updateParents(data:any[]):Observable<any> {
+    console.log("Sending Data to /api/updateParents");
+    return this.http.post(`${this.apiUrl}/updateParents`,data);
+  }
 
 
 
@@ -98,6 +101,7 @@ export class backendApiService {
     console.log("Sending Data to /api/getPartnerOf");
     return this.http.post(`${this.apiUrl}/getPartnerOf`,nodeID);
   }
+
 
 
 

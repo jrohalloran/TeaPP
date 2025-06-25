@@ -1,4 +1,3 @@
-
 <div class="app-wrapper">
 
   <!-- Top bar -->
@@ -6,6 +5,13 @@
     <div class="top-bar-content">
       <h1>TeaPP Vis</h1>
     </div>
+    <div class="left">
+    <ng-container *ngIf="user">
+      <span class="user-info">
+        Welcome, {{ user }}
+      </span>
+    </ng-container>
+  </div>
   </header>
 
   <!-- Loading overlay -->
@@ -19,224 +25,185 @@
     <div class="upload-content">
       <h2>Upload Your Data</h2>
       <p>Please upload the file to begin the analysis.</p>
-      <app-file-upload (uploadResponse)="handleUploadResponse($event)"></app-file-upload>
+      <app-file-upload (uploadResponse)="handleUploadResponse($event)"(loadingChange)="loading = $event"></app-file-upload>
     </div>
   </div>
 
-  
-  <!-- Phase 1: initial table and instructions -->
-<div *ngIf="apiResult?.length && currentPhase === 1" class="main-split">
+  <!-- Main container split left and right -->
+  <div *ngIf="apiResult?.length" class="main-split">
 
-  <!-- Left Panel: Instructions -->
-  <section class="left-panel">
-    <div class="instruction-box">
-      <h3>Instructions</h3>
-      <p>Review and modify IDs on the right. Use checkboxes to mark items for removal.</p>
-    </div>
+    <!-- LEFT PANEL: Instructions + Search (constant) -->
+    <section class="left-panel">
       <div class="instruction-box">
-    <h3>Search and Compare</h3>
+        <h3>Instructions</h3>
+        <p *ngIf="currentPhaseIndex === 0">
+          Review and modify IDs on the right. Use checkboxes to mark items for removal.
+        </p>
+        <p *ngIf="currentPhaseIndex === 1">
+          Use the search below to compare IDs with the full dataset. Results will appear after clicking "Search".
+        </p>
+      </div>
 
-    <!-- Controlled Search Input -->
-    <mat-form-field appearance="outline" class="search-box">
-      <mat-label>Search by any field</mat-label>
-      <input matInput [(ngModel)]="searchInput" placeholder="Type any ID or parent..." />
-    </mat-form-field>
+      <div class="instruction-box">
+        <h3>Search</h3>
 
-    <!-- Search Button -->
-    <button mat-stroked-button color="primary" (click)="performSearch()">
-      Search
-    </button>
+        <!-- Controlled Search Input -->
+        <mat-form-field appearance="outline" class="search-box">
+          <mat-label>Search by any field</mat-label>
+          <input matInput [(ngModel)]="searchInput" placeholder="Type any ID or parent..." />
+        </mat-form-field>
 
-    <!-- Search results -->
-    <div *ngIf="searchResults?.length" class="search-results">
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Female Parent</th>
-            <th>Male Parent</th>
-            <th>Correct ID</th>
-            <th>Correct Female</th>
-            <th>Correct Male</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let row of searchResults">
-            <td>{{ row.ID }}</td>
-            <td>{{ row.female_parent }}</td>
-            <td>{{ row.male_parent }}</td>
-            <td>{{ row.correct_ID }}</td>
-            <td>{{ row.correct_female }}</td>
-            <td>{{ row.correct_male }}</td>
-          </tr>
-        </tbody>
-      </table>
+        <!-- Search Button -->
+        <button mat-stroked-button color="primary" (click)="performSearch()">
+          Search
+        </button>
+
+        <!-- Search results -->
+        <div *ngIf="searchResults?.length" class="search-results">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th *ngIf="currentPhaseIndex === 0">Correct ID</th>
+                <th>Correct Female</th>
+                <th>Correct Male</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of searchResults">
+                <td>{{ row.ID }}</td>
+                <td *ngIf="currentPhaseIndex === 0">{{ row.correct_ID }}</td>
+                <td>{{ row.correct_female }}</td>
+                <td>{{ row.correct_male }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div *ngIf="searchPerformed && !searchResults.length">
+          <p>No matches found.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- RIGHT PANEL: Tabs only for the tables -->
+    <section class="right-panel">
+      <mat-tab-group [(selectedIndex)]="currentPhaseIndex">
+
+        <!-- Phase 1 Table -->
+        <mat-tab label="Invalid Records">
+          <div class="table-container">
+            <h3>Invalid Offspring Records Identified</h3>
+
+            <!-- Scrollable table wrapper -->
+            <div class="table-scroll-container">
+              <table mat-table [dataSource]="apiResult" class="mat-elevation-z8">
+                <!-- Columns -->
+                <ng-container matColumnDef="ID">
+                  <th mat-header-cell *matHeaderCellDef> Original ID </th>
+                  <td mat-cell *matCellDef="let element"> {{ element.ID }} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="used">
+                  <th mat-header-cell *matHeaderCellDef> Present in parent records </th>
+                  <td mat-cell *matCellDef="let element"> {{ element.used }} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="female_parent">
+                  <th mat-header-cell *matHeaderCellDef> Female Parent </th>
+                  <td mat-cell *matCellDef="let element"> {{ element.female_parent }} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="male_parent">
+                  <th mat-header-cell *matHeaderCellDef> Male Parent </th>
+                  <td mat-cell *matCellDef="let element"> {{ element.male_parent }} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="correct_ID">
+                  <th mat-header-cell *matHeaderCellDef> Corrected ID </th>
+                  <td mat-cell *matCellDef="let element">
+                    <input matInput [(ngModel)]="element.correct_ID" placeholder="Enter ID" style="width: 85%;" />
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="removed">
+                  <th mat-header-cell *matHeaderCellDef> Remove </th>
+                  <td mat-cell *matCellDef="let element">
+                    <mat-checkbox [(ngModel)]="element.removed"></mat-checkbox>
+                  </td>
+                </ng-container>
+
+                <!-- Header and Row Definitions -->
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;" [class.removed-row]="row.removed"></tr>
+              </table>
+            </div>
+
+            <!-- Buttons stay visible below table -->
+            <div class="button-container">
+              <button mat-stroked-button color="primary" (click)="toggleSelectAllToRemove()">
+                {{ areAllRemoved() ? 'Deselect All' : 'Select All to Remove' }}
+              </button>
+              <button mat-stroked-button color="accent" (click)="toggleSelectUnusedToRemove()" style="margin-left: 8px;">
+                {{ areAllUnusedRemoved() ? 'Deselect Unused' : 'Select All Unused' }}
+              </button>
+              <button mat-raised-button color="primary" (click)="onProceed()">
+                Proceed
+              </button>
+            </div>
+          </div>
+        </mat-tab>
+
+        <!-- Phase 2 Table -->
+  <mat-tab label="Invalid Parents">
+  <div class="table-container" style="position: relative;">
+    <!-- Overlay goes here, inside the container -->
+    <div
+      class="loading-overlay-table"
+      *ngIf="loadingTable"
+    >
+      <mat-progress-spinner mode="indeterminate" diameter="60" color="primary"></mat-progress-spinner>
+      <div style="margin-top: 10px; font-size: 1.2rem; color: #333;">Updating Parents...</div>
     </div>
 
-    <div *ngIf="searchPerformed && !searchResults.length">
-      <p>No matches found.</p>
-    </div>
-  </div>
-  </section>
+    <h3>Invalid Parents Identified</h3>
 
-  <!-- Right Panel: Table + buttons -->
-  <section class="right-panel">
-    <div class="table-container">
-      <h3>Invalid Clones Identified</h3>
-      <table mat-table [dataSource]="apiResult" class="mat-elevation-z8">
-            <!-- Columns -->
-          <ng-container matColumnDef="ID">
-            <th mat-header-cell *matHeaderCellDef> ID </th>
-            <td mat-cell *matCellDef="let element"> {{ element.ID }} </td>
-          </ng-container>
-
-          <ng-container matColumnDef="female_parent">
-            <th mat-header-cell *matHeaderCellDef> Female Parent </th>
-            <td mat-cell *matCellDef="let element"> {{ element.female_parent }} </td>
-          </ng-container>
-
-          <ng-container matColumnDef="male_parent">
-            <th mat-header-cell *matHeaderCellDef> Male Parent </th>
-            <td mat-cell *matCellDef="let element"> {{ element.male_parent }} </td>
-          </ng-container>
-
-          <ng-container matColumnDef="correct_ID">
-            <th mat-header-cell *matHeaderCellDef> Correct ID </th>
-            <td mat-cell *matCellDef="let element">
-              <input matInput [(ngModel)]="element.correct_ID" placeholder="Enter ID" style="width: 85%;" />
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="used">
-            <th mat-header-cell *matHeaderCellDef> Matches Parent ID </th>
-            <td mat-cell *matCellDef="let element"> {{ element.used }} </td>
-          </ng-container>
-
-          <ng-container matColumnDef="removed">
-            <th mat-header-cell *matHeaderCellDef> Remove </th>
-            <td mat-cell *matCellDef="let element">
-              <mat-checkbox [(ngModel)]="element.removed"></mat-checkbox>
-            </td>
-          </ng-container>
-
-          <!-- Header and Row Definitions -->
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;" [class.removed-row]="row.removed"></tr>
-
-      </table>
-    </div>
-
-    <div class="button-container">
-      <button mat-stroked-button color="primary" (click)="toggleSelectAllToRemove()">
-        {{ areAllRemoved() ? 'Deselect All' : 'Select All to Remove' }}
-      </button>
-      <button mat-stroked-button color="accent" (click)="toggleSelectUnusedToRemove()" style="margin-left: 8px;">
-        {{ areAllUnusedRemoved() ? 'Deselect Unused' : 'Select All Unused' }}
-      </button>
-      <button mat-raised-button color="primary" (click)="onProceed()">
-        Proceed
-      </button>
-    </div>
-  </section>
-
-</div>
-
-<!-- Phase 2: new table and updated instructions -->
-<div *ngIf="apiResult?.length && currentPhase === 2" class="main-split">
-
-
-<!-- Search results table -->
-<section class="left-panel">
-  <div class="instruction-box">
-    <h3>Instructions</h3>
-    <p>Use the search below to compare IDs with the full dataset. Results will appear after clicking "Search".</p>
-  </div>
-  <div class="instruction-box">
-    <h3>Search and Compare</h3>
-
-    <!-- Controlled Search Input -->
-    <mat-form-field appearance="outline" class="search-box">
-      <mat-label>Search by any field</mat-label>
-      <input matInput [(ngModel)]="searchInput" placeholder="Type any ID or parent..." />
-    </mat-form-field>
-
-    <!-- Search Button -->
-    <button mat-stroked-button color="primary" (click)="performSearch()">
-      Search
-    </button>
-
-    <!-- Search results -->
-    <div *ngIf="searchResults?.length" class="search-results">
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Female Parent</th>
-            <th>Male Parent</th>
-            <th>Correct ID</th>
-            <th>Correct Female</th>
-            <th>Correct Male</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let row of searchResults">
-            <td>{{ row.ID }}</td>
-            <td>{{ row.female_parent }}</td>
-            <td>{{ row.male_parent }}</td>
-            <td>{{ row.correct_ID }}</td>
-            <td>{{ row.correct_female }}</td>
-            <td>{{ row.correct_male }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div *ngIf="searchPerformed && !searchResults.length">
-      <p>No matches found.</p>
-    </div>
-  </div>
-</section>
-
-
-  <!-- Right Panel: New Table + buttons -->
-  <section class="right-panel">
-    <div class="table-container">
-      <h3>Review Table - Phase 2</h3>
-
+    <!-- Scrollable table wrapper -->
+    <div class="table-scroll-container">
       <table mat-table [dataSource]="secondTableData" class="mat-elevation-z8">
-      <ng-container matColumnDef="ID">
-        <th mat-header-cell *matHeaderCellDef> ID </th>
-        <td mat-cell *matCellDef="let element"> {{ element.ID }} </td>
-      </ng-container>
+        <ng-container matColumnDef="ID">
+          <th mat-header-cell *matHeaderCellDef> Original ID </th>
+          <td mat-cell *matCellDef="let element"> {{ element.ID }} </td>
+        </ng-container>
 
-      <ng-container matColumnDef="correct_ID">
-        <th mat-header-cell *matHeaderCellDef> Correct ID </th>
-        <td mat-cell *matCellDef="let element">
-          <input matInput [(ngModel)]="element.correct_ID" placeholder="Enter ID" />
-        </td>
-      </ng-container>
+        <ng-container matColumnDef="correct_ID">
+          <th mat-header-cell *matHeaderCellDef> Correct ID </th>
+          <td mat-cell *matCellDef="let element">
+            <input matInput [(ngModel)]="element.correct_ID" placeholder="Enter ID" />
+          </td>
+        </ng-container>
 
-      <ng-container matColumnDef="removed">
-        <th mat-header-cell *matHeaderCellDef> Remove </th>
-        <td mat-cell *matCellDef="let element">
-          <mat-checkbox [(ngModel)]="element.removed"></mat-checkbox>
-        </td>
-      </ng-container>
+        <ng-container matColumnDef="removed">
+          <th mat-header-cell *matHeaderCellDef> Remove </th>
+          <td mat-cell *matCellDef="let element">
+            <mat-checkbox [(ngModel)]="element.removed"></mat-checkbox>
+          </td>
+        </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="secondDisplayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: secondDisplayedColumns;"></tr>
-    </table>
+        <tr mat-header-row *matHeaderRowDef="secondDisplayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: secondDisplayedColumns;"></tr>
+      </table>
     </div>
 
+    <!-- Buttons stay visible below table -->
     <div class="button-container">
-      <!-- Example buttons for phase 2 -->
-      <button mat-raised-button color="primary" (click)="finalise()">
-        Finalize
-      </button>
+      <button mat-raised-button color="primary" (click)="finalise()">Next</button>
+      <button mat-raised-button color="primary" (click)="onUpdate()">Update</button>
     </div>
-  </section>
+  </div>
+  </mat-tab> 
+</mat-tab-group>
+</section> 
+</div> 
+</div> 
 
-</div>
-
-
-</div>
