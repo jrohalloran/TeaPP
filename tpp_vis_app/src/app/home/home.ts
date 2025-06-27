@@ -6,12 +6,18 @@ import { Router } from '@angular/router';
 import { MatTabsModule } from '@angular/material/tabs';
 import { DisplayComponent } from '../display/display';
 import { Kinship } from '../kinship/kinship';
+import { Overview } from '../overview/overview';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
   selector: 'app-home',
-  imports:[MatTabsModule, DisplayComponent,MatIconModule,MatMenuModule,Kinship],
+  imports:[MatTabsModule,
+            DisplayComponent,
+            MatIconModule,
+            MatMenuModule,
+            Kinship,
+            Overview ],
   templateUrl: './home.html',
   styleUrl: './home.css'
 })

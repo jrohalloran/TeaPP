@@ -1,0 +1,40 @@
+<div>
+    <h3>Search</h3>
+
+        <!-- Controlled Search Input -->
+        <mat-form-field appearance="outline" class="search-box">
+          <mat-label>Search by any field</mat-label>
+          <input matInput [(ngModel)]="searchInput" placeholder="Type any ID or parent..." />
+        </mat-form-field>
+
+        <!-- Search Button -->
+        <button mat-stroked-button color="primary" (click)="performSearch()">
+          Search
+        </button>
+
+        <!-- Search results -->
+        <div *ngIf="searchResults?.length" class="search-results">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Correct ID</th>
+                <th>Correct Female</th>
+                <th>Correct Male</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of searchResults">
+                <td>{{ row.ID }}</td>
+                <td >{{ row.correct_ID }}</td>
+                <td>{{ row.correct_female }}</td>
+                <td>{{ row.correct_male }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div *ngIf="searchPerformed && !searchResults.length">
+          <p>No matches found.</p>
+        </div>
+</div>

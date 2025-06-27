@@ -1,0 +1,26 @@
+.search-box {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.search-results {
+  overflow-x: auto;
+  max-height: 300px;
+  border: 1px solid #f0f0f0;
+  padding: 0.5rem;
+  background-color: #fff;
+  border-radius: 4px;
+}
+
+.search-results table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.search-results th,
+.search-results td {
+  padding: 0.3rem 0.5rem;
+  border: 1px solid #f0f0f0;
+  text-align: left;
+}
