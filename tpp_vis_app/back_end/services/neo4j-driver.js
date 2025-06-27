@@ -7,21 +7,26 @@
 import neo4j from 'neo4j-driver';
 
 // Neo4j connection setup
+
+/* // CLOUD HOST
 const URI = 'neo4j+s://a71c11d2.databases.neo4j.io';
 const USER = 'neo4j';
 const PASSWORD = 'KPoauq4gefxZaMGDId8t3lRtudtCCMJdM1gVDe84JiQ';
+*/
+
+// LOCAL DATABASE -- PRE AWS
+const URI = 'bolt://localhost:7687';
+const USER = 'neo4j';
+const PASSWORD = 'tAqsiv-tivfif-bomhe9'; // Replace with your actual password
+
+// Create a driver instance
 
 const driver = neo4j.driver(
   URI,
   neo4j.auth.basic(USER, PASSWORD),
   {
-    // Time (in ms) to wait for a new connection to be established
-    connectionTimeout: 10000, // 10 seconds
-
-    // Maximum lifetime (in ms) a connection can stay open
+    connectionTimeout: 10000, 
     maxConnectionLifetime: 3600000, // 1 hour
-
-    // Socket read timeout (in ms)
     connectionAcquisitionTimeout: 3000000, // 30 seconds
   }
 );

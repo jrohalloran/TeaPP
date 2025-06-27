@@ -23,6 +23,8 @@ export const getAllNodesEdges = async (req, res) => {
     // Fetch raw data from Neo4j
     const graphData = await fetchAllNodesEdges();
 
+    console.log(graphData);
+
     const filteredData = filterNodesWithoutHigherGenDescendants(graphData)
 
     const groupedData = groupSiblings(filteredData);
@@ -33,9 +35,11 @@ export const getAllNodesEdges = async (req, res) => {
 
     const cleanedData = removeIsolatedNodes(layeredData);
 
+    console.log(layeredData);
+
     const plotData = convertToSigmaFormat(cleanedData);
 
-
+    
     res.json(plotData);
 
   } catch (err) {

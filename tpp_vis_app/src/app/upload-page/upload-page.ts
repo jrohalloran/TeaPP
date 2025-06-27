@@ -15,6 +15,7 @@ import { Router } from '@angular/router';
 import { DataTransferService } from '../services/dataTransferService';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { AuthService } from '../services/auth.service';
+import { ModalComponent } from '../modal/modal';
 
 interface ApiData {
     ID: String,
@@ -38,52 +39,75 @@ interface ApiData {
     ReactiveFormsModule,
     MatCheckboxModule,
     MatProgressSpinnerModule,
-    MatTabsModule],
+    MatTabsModule,
+    ModalComponent],
   templateUrl: './upload-page.html',
   styleUrl: './upload-page.css'
 })
 export class UploadComponent {
 
-  showUploader = true;
 
+  // SETTING GLOBAL ATTRIBUTES 
+
+  // Boolean to show Upload Component
+  showUploader = true;
+  // Boolean to show Modal Pop-out Component 
+  showModal = false;
+
+  // Arrays to store Uploaded Data are different processing stages
   apiResult: ApiData[] = [];
   processedData : any[] = [];
   cleanData : any[] = [];
 
+  // Additional Arrays with highlighted records from processing pipeline
   idEntries : any[] = [];
   parentEntries : any[] = [];
   nonMatchParents : any[] = [];
   invalidIDs : any[] = [];
 
+  // Loading Overlay Flags 
   loading: boolean = false;
   loadingTable: boolean = false;
 
+  // Search Attributes 
   searchInput: string = '';
   searchResults: any[] = [];
   searchPerformed = false;
   
+
+  // Updating parents attributes
+  mismatches: any[] = [];
+  filterStats: any[] = [];
+
+  // Login State 
   user: any;
 
 
-  constructor(private backendApiService: backendApiService,
+  // Table Attrbutes 
+
+  // Assigning Columns 
+  displayedColumns: string[] = ['ID','used','female_parent', 'male_parent','correct_ID','removed'];
+  secondDisplayedColumns = ['ID','correct_ID','removed'];
+
+  // Phase counter for tabs
+  currentPhaseIndex: number = 0;
+
+  secondPhaseData: any[] = [];
+  secondTableData: any[]=[];
+
+
+    constructor(private backendApiService: backendApiService,
               private router: Router,
               private dataTransferService: DataTransferService,
               private authService: AuthService
   ){}
 
 
-  getCleanDataFormat(){
-      const updatedData = this.processedData.map(item => ({
-    ...item,
-    removed: false,
-  }));
-    this.cleanData = updatedData;
-  }
-
   ngOnInit() {
     this.user = this.authService.getCurrentUser();
   }
- 
+  
+  // Performs function after file has been uploaded from child component - file-upload 
   async handleUploadResponse(event: any): Promise<void> {
     this.loading = true;
     console.log('Upload response received:', event);
@@ -98,6 +122,14 @@ export class UploadComponent {
           this.nonMatchParents = response[2];
           this.invalidIDs = response[3];
 
+          this.showUploader = false;
+          this.loading = false;
+          //this.showModal = true;
+          this.apiResult=this.idEntries;
+          this.secondPhaseData = this.nonMatchParents;
+          this.populateSecondTable();
+          this.showModal = true;
+          /*
           console.log(this.idEntries);
           console.log(this.parentEntries);
           console.log(this.nonMatchParents);
@@ -108,7 +140,7 @@ export class UploadComponent {
           this.populateSecondTable();
 
           this.showUploader = false;
-          this.loading = false;
+          this.loading = false;*/
 
           } catch (error) {
           console.error('Error:', error);
@@ -116,23 +148,109 @@ export class UploadComponent {
 
   }
 
-//displayedColumns: string[] = ['ID', 'female_parent', 'male_parent', 'correct_ID', 'correct_female', 'correct_male', 'removed', 'actions'];
 
-displayedColumns: string[] = ['ID','used','female_parent', 'male_parent','correct_ID','removed'];
+  // FINAL PROCESSING FUNCTION -- Takes final entry versions to insert into databases
+  // Then navigates to come page 
+  // Called if user skips record reviewing or confirms they are happy with reviewed entries.
+  async finalise() {
 
-//currentPhase = 1;  // 1 = first table + instructions, 2 = second table + instructions
-// You probably already have apiResult as the first table's data
-// Prepare second phase data:
+    console.log('Getting Clean Data Entries');
 
-currentPhaseIndex: number = 0;
+    this.loading = true;
 
-secondPhaseData: any[] = [];
+    console.log(this.apiResult);
+    console.log(this.secondTableData);
+    console.log(this.cleanData);
 
-secondTableData: any[]=[];
+    const data = [this.apiResult,this.secondTableData,this.cleanData]
 
-// Optional: columns for the second table if different
-secondDisplayedColumns = ['ID','correct_ID','removed'];
 
+    try {
+      console.log('Sending Data to backend for Processing');
+      const response = await firstValueFrom(this.backendApiService.getCleanData(data));
+      console.log('Response from backend:', response);
+      console.log("Navigating to Home Page");
+      this.dataTransferService.setResponse(response);
+      this.router.navigate(['/home']);
+      } catch (error) {
+      console.error('Error:', error);
+
+    }
+
+  }
+
+
+  // UPDATE PARENT LIST 
+  // Post to back-end to re-evalutate list of parents based in changes made by user.
+  // Reloads second table 
+  async onUpdate(){
+    this.loadingTable = true;
+    console.log("Updating the list of Parents");
+    console.log(this.secondTableData);
+    console.log(this.cleanData);
+
+    const data = [this.secondTableData,this.cleanData]
+
+    try {
+      console.log('Sending Data to backend for Processing');
+      const response = await firstValueFrom(this.backendApiService.updateParents(data));
+      console.log('Response from backend:', response);
+      this.secondTableData = response[0];
+      this.filterStats = response[1];
+      this.mismatches = response[2];
+      this.cleanData = response[3];
+
+      console.log("Mismatches: ");
+      console.log(this.mismatches);
+      console.log("Stats: ")
+      console.log(this.filterStats);
+      console.log("Table Data: ")
+      console.log(this.secondTableData);
+
+      // TO DO ------ ADD POP UP 
+
+      this.loadingTable = false;
+      } catch (error) {
+      console.error('Error:', error);
+      this.loadingTable = false;
+    }
+  }
+
+  // Formatting Functions 
+
+  getCleanDataFormat(){
+      const updatedData = this.processedData.map(item => ({
+    ...item,
+    removed: false,
+  }));
+    this.cleanData = updatedData;
+  }
+
+  //// MODAL FUNCTION ----- REVIEW RECORDS OR SKIP RECORDS
+
+  onModalConfirm() {
+    console.log("onModal confirmation activated")
+    this.showModal = false;
+    this.onConfirmation(); // Define this method to proceed
+  }
+
+  onConfirmation(){
+
+      this.apiResult=this.idEntries;
+      this.secondPhaseData = this.nonMatchParents;
+      this.populateSecondTable();
+
+  }
+
+  onModalCancel() {
+    console.log("onModal cancel activated")
+    this.finalise();
+    this.showModal = false;
+  }
+
+
+
+  // TABLE FUNCTIONS 
 
   addRow(): void {
       const nextId = this.apiResult.length
@@ -153,7 +271,6 @@ secondDisplayedColumns = ['ID','correct_ID','removed'];
       this.apiResult.push(newRow);
       this.apiResult = [...this.apiResult]; // Trigger change detection
     }
-
 
   selectAllToRemove() {
   this.apiResult = this.apiResult.map(row => ({
@@ -218,32 +335,18 @@ secondDisplayedColumns = ['ID','correct_ID','removed'];
     this.secondTableData = [...this.secondTableData];
   }
 
+
   onProceed(){
     this.currentPhaseIndex = 1;
   }
 
-  async finalise() {
 
-    console.log('Getting Clean Data Entries');
 
-    this.loading = true;
+  onTabChanged(event: MatTabChangeEvent) {
+  this.currentPhaseIndex = event.index;
+}
 
-    const data = [this.apiResult,this.secondTableData,this.cleanData]
-
-    try {
-      console.log('Sending Data to backend for Processing');
-      const response = await firstValueFrom(this.backendApiService.getCleanData(data));
-      console.log('Response from backend:', response);
-      console.log("Navigating to Home Page");
-      this.dataTransferService.setResponse(response);
-      this.router.navigate(['/home']);
-      } catch (error) {
-      console.error('Error:', error);
-
-    }
-
-  }
-
+  // SEARCH FUNCTIONS
 
   performSearch() {
     const term = this.searchInput?.toLowerCase().trim();
@@ -261,28 +364,6 @@ secondDisplayedColumns = ['ID','correct_ID','removed'];
     );
   }
 
-
-  onTabChanged(event: MatTabChangeEvent) {
-  this.currentPhaseIndex = event.index;
-}
-
-  async onUpdate(){
-    this.loadingTable = true;
-    console.log("Updating the list of Parents");
-    console.log(this.secondTableData);
-    console.log(this.cleanData);
-
-    const data = [this.secondTableData,this.cleanData]
-
-    try {
-      console.log('Sending Data to backend for Processing');
-      const response = await firstValueFrom(this.backendApiService.updateParents(data));
-      console.log('Response from backend:', response);
-      this.loadingTable = false;
-      } catch (error) {
-      console.error('Error:', error);
-    }
-  }
 }
 
 

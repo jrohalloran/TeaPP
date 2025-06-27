@@ -27,9 +27,6 @@ export const getNuclearFamily = async (req, res) => {
     // Format raw data to Sigma.js format
     const sigmaData = await formatForSigma(rawData);
 
-    // Saving the file to local directory -- for finding optimal layout
-    //await saveJsonToFile(sigmaData, 'nuclearFamilyGraph.json');
-
     let plotData = layerByYearReverse(sigmaData);
     plotData = convertToSigmaFormat(plotData);
 

@@ -7,7 +7,6 @@ import { LandingPage } from './landing-page/landing-page';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
-  //{ path: '**', redirectTo: 'login' }, 
   { path: 'login', component: LoginComponent },
   { path: 'upload-page', component: UploadComponent },
   { path: 'landing-page', component: LandingPage },

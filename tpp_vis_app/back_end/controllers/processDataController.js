@@ -322,8 +322,6 @@ export const processData= async (req, res) => {
   try{
     console.log("Attempting to process data...")
     const result = await main();
-    //console.log("Result:")
-    //console.log(result)
     const complete = true;
     console.log("Processing Complete - Updating Flag")
     const processedEntries = result[1]

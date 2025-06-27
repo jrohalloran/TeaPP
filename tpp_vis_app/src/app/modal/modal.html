@@ -1,0 +1,11 @@
+<div class="modal-backdrop" *ngIf="show">
+  <div class="modal">
+    <p>Processing complete.</p>
+    <p>---- ADD STATS ------</p>
+     <p>Would you like to review invalid records?</p>
+    <div class="buttons">
+      <button (click)="confirm()">Yes</button>
+      <button (click)="cancel()">Skip</button>
+    </div>
+  </div>
+</div>

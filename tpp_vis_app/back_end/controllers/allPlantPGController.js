@@ -10,7 +10,8 @@ import db from '../services/postgres_db.js';
 export async function getPlants(req, res) {
     console.log("Getting all of Plants table")
   try {
-    const result = await db.query('SELECT * FROM plants');
+    const result = await db.query('SELECT * FROM cleanData');
+    console.log(result.rows)
     res.json(result.rows);
   } catch (error) {
     console.error(error);

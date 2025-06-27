@@ -4,17 +4,18 @@ import { catchError, firstValueFrom } from 'rxjs';
 import { DataTransferService } from '../services/dataTransferService';
 import { Router } from '@angular/router';
 import { MatTabsModule } from '@angular/material/tabs';
+import { DisplayComponent } from '../display/display';
 
 @Component({
   selector: 'app-home',
-  imports:[MatTabsModule],
+  imports:[MatTabsModule, DisplayComponent],
   templateUrl: './home.html',
   styleUrl: './home.css'
 })
 export class HomeComponent {
 
   dataFlag = false;
-  graphDBloaded = false;
+  graphDBloaded = true;
   synbreedFlag = false;
 
   data: any[]=[];

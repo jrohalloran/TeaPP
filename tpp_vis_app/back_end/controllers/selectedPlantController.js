@@ -21,15 +21,15 @@ export async function getSelectedPlant(req, res) {
     }
 
     if (!Array.isArray(clone_id) || clone_id.length === 0) {
-        return res.status(400).json({ message: 'Request body must include a non-empty array "clone_id".' });
+        return res.status(400).json({ message: 'Request body must include a non-empty array "correct_id".' });
     }
 
     try {
         const result = await db.query(
-        'SELECT * FROM plants WHERE clone_id = ANY($1)',
+        'SELECT * FROM cleanData WHERE correct_ID = ANY($1)',
         [clone_id]
         );
-
+        console.log(res.rows);
         res.json(result.rows);
     } catch (error) {
         console.error(error);

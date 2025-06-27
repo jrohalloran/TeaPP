@@ -8,7 +8,7 @@
 
 import { fetchWholeFamilyData } from '../services/neo4j-driver.js';
 import { formatForSigma,convertToSigmaFormat,layerByYearReverse } from '../utils/sigmaFormatter.js';
-import { saveJsonToFile } from '../utils/fileWriter.js';
+
 
 
 export const getWholeFamily = async (req, res) => {
@@ -26,9 +26,6 @@ export const getWholeFamily = async (req, res) => {
 
     // Format raw data to Sigma.js format
     const sigmaData = await formatForSigma(rawData);
-
-    // Saving the file to local directory -- for finding optimal layout
-    //await saveJsonToFile(sigmaData, 'wholeFamilyGraph.json');
 
     let plotData = layerByYearReverse(sigmaData);
     plotData = convertToSigmaFormat(plotData);

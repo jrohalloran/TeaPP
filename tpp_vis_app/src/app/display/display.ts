@@ -38,7 +38,7 @@ interface GraphJSON {
 
 
 @Component({
-  selector: 'app-display',
+  selector: 'app-visualisation',
   standalone: true,
   imports: [CommonModule, FormsModule],  // Import CommonModule here to use *ngIf, etc.
   templateUrl: './display.html',
@@ -113,7 +113,7 @@ export class DisplayComponent implements AfterViewInit {
   async ngAfterViewInit(): Promise<void> {
 
     console.log('Initialize Sigma in #sigma-container');
-    await this.getJSON();
+    //await this.getJSON();
     await this.getGroupedData();
     await this.getAllPlants();
 
@@ -124,16 +124,6 @@ export class DisplayComponent implements AfterViewInit {
     }
   }
   
-  async getJSON(): Promise<void> {
-    console.log('Getting JSON Data');
-    try {
-      const response = await firstValueFrom(this.backendApiService.getJSON());
-      console.log('Response from backend:', response);
-      //this.jsonData = response;
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  }
 
   async getGroupedData(): Promise<void> {
     console.log('Retrieving JSON for all Data');
@@ -224,6 +214,8 @@ export class DisplayComponent implements AfterViewInit {
 
 
   }
+
+  
 
   private getDescendants(nodeId: string): Set<any>{
     let name: string | any[] = [];

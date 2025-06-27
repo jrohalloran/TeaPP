@@ -8,45 +8,21 @@
   </header>
   
   <mat-tab-group>
-  <mat-tab label="Display 1">
-    <!-- Your first display content -->
-    <p>This is display 1 content.</p>
-  </mat-tab>
-  <mat-tab label="Display 2">
+  <mat-tab label="Statistics">
     <!-- Your second display content -->
     <p>This is display 2 content.</p>
   </mat-tab>
-  <mat-tab label="Display 3">
+  <mat-tab label="Pedigree Visualisation">
+    <!-- Your first display content -->
+    <app-visualisation></app-visualisation>
+  </mat-tab>
+  <mat-tab label="Kinship Analysis">
     <!-- Your third display content -->
     <p>This is display 3 content.</p>
   </mat-tab>
 </mat-tab-group>
 
-  <!-- Main content area: vertical split -->
-  <div class="main-split">
 
-    <!-- Left panel -->
-    <section class="left-panel">
-
-      <!-- Placeholder for future bottom-left features -->
-      <div class="left-bottom-container">
-        <!-- Add future components here -->
-      </div>
-    </section>
-
-    <!-- Right panel -->
-    <aside class="right-panel">
-      <div class="button-panel">
-        <button (click)="openDisplay()">Visualise Pedigree</button>
-        <button (click)="openDirectory()">Upload Data</button>
-      </div>
-
-      <div class="bottom-half">
-        <!-- Add right panel future content here -->
-      </div>
-    </aside>
-
-  </div>
 
 </div>
 

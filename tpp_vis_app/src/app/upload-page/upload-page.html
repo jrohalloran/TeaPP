@@ -29,6 +29,12 @@
     </div>
   </div>
 
+  <app-modal
+  [show]="showModal"
+  (onConfirm)="onModalConfirm()"
+  (onCancel)="onModalCancel()"
+  ></app-modal>
+
   <!-- Main container split left and right -->
   <div *ngIf="apiResult?.length" class="main-split">
 
@@ -148,7 +154,7 @@
                 {{ areAllUnusedRemoved() ? 'Deselect Unused' : 'Select All Unused' }}
               </button>
               <button mat-raised-button color="primary" (click)="onProceed()">
-                Proceed
+                Next
               </button>
             </div>
           </div>

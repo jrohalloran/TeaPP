@@ -36,25 +36,11 @@ import updateParentsRoutes from './routes/updateParentsID.js'
 
 const app = express();
 
-
-const URI = 'neo4j+s://a71c11d2.databases.neo4j.io';
-const USER = 'neo4j';
-const PASSWORD = 'KPoauq4gefxZaMGDId8t3lRtudtCCMJdM1gVDe84JiQ';
-//const driver = neo4j.driver(URI, neo4j.auth.basic(USER, PASSWORD));
-
 // Middleware
 app.use(cors());
 app.use(bodyParser.json({ limit: '10mb' }));
 app.use(express.text({ limit: '10mb' })); 
 app.use(express.json({ limit: '10mb' })); 
-
-
-app.get('/api/getJSON', (req, res) => {
-  console.log("Reading JSON Data")
-  const data = fs.readFileSync('./plant_clone_sigma_size_by_children_gencol.json', 'utf-8');
-  res.json(JSON.parse(data));
-});  
-
 
 
 /// ------------ FILE UPLOAD --------------
@@ -182,10 +168,10 @@ app.use('/api', selectedPlantRoutes); // Get data for one selected plant
 // Checking Database Cloud Server is running 
 /*
 (async () => {
-  // URI examples: 'neo4j://localhost', 'neo4j+s://xxx.databases.neo4j.io'
-  const URI = 'neo4j+s://a71c11d2.databases.neo4j.io'
-  const USER = 'neo4j'
-  const PASSWORD = 'KPoauq4gefxZaMGDId8t3lRtudtCCMJdM1gVDe84JiQ'
+  const URI = 'bolt://localhost:7687';
+  const USER = 'neo4j';
+  const PASSWORD = 'tAqsiv-tivfif-bomhe9'; // Replace with your actual password
+
   let driver
 
   try {
@@ -202,6 +188,15 @@ app.use('/api', selectedPlantRoutes); // Get data for one selected plant
 
   await driver.close();
 })();*/
+
+process.on('unhandledRejection', (reason) => {
+  console.error('Unhandled Rejection:', reason);
+});
+
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught Exception:', err);
+});
+
 
 // Setting up port 
 const PORT = process.env.PORT || 3333;
