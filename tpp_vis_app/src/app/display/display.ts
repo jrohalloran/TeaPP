@@ -93,6 +93,7 @@ export class DisplayComponent implements AfterViewInit {
     { label: 'Generation 1', color: '#E7298A' },
     { label: 'Generation 2', color: '#7570B3' },
     { label: 'Generation 3', color: '#66A61E' },
+    { label: 'Generation 4', color: '#D95F02'},
     { label: 'Selected Plant(s)', color: '#fe6100'}
   ];
 
@@ -137,7 +138,7 @@ export class DisplayComponent implements AfterViewInit {
   }
 
   async getAllPlants(): Promise<void> {
-    console.log('Retrieving Postgres 100 Plants:');
+    console.log('Retrieving all plants in PostGres Database:');
     try {
       const response = await firstValueFrom(this.backendApiService.getAllPlants());
       console.log('Postgres Response from getAllPlants:', response);
@@ -259,9 +260,10 @@ export class DisplayComponent implements AfterViewInit {
     this.rendererBottom.on('clickNode', ({ node }) => {
       console.log(node);
       const nodeData = this.nuclearFamilyData.nodes.find(nd => nd.id === node);
+      console.log("Gettig node value:")
       console.log(nodeData);
       this.getSelectPlantPG([node]);
-      this.getPartnerOf([node]);
+      //this.getPartnerOf([node]);
 
     });
 
@@ -383,8 +385,9 @@ export class DisplayComponent implements AfterViewInit {
 
         try {
           console.log("Retrieving Data...");
+          console.log(nodeID)
           this.getSelectPlantPG(nodeID); // Get entry for select clones
-          this.getPartnerOf(nodeID);// Get partners of selected clones
+          //this.getPartnerOf(nodeID);// Get partners of selected clones
 
           const response = await firstValueFrom(this.backendApiService.getPedigree(nodeID));
           console.log('Response from backend:', response);
@@ -400,17 +403,17 @@ export class DisplayComponent implements AfterViewInit {
 
 
   
-  async getSearchedNode(item: { clone_id: any; }):Promise<void>{
+  async getSearchedNode(item: { correct_id: any; }):Promise<void>{
 
         console.log('Getting Pedigree for searched clone...')
-        const nodeID = item.clone_id;
+        const nodeID = item.correct_id;
         this.showBottomOverlay = false;
         this.isBottomLoading = true;
 
         try {
           console.log("Retrieving Data...");
           this.getSelectPlantPG([nodeID]); // Get entry for select clones
-          this.getPartnerOf([nodeID]);// Get partners of selected clones
+          //this.getPartnerOf([nodeID]);// Get partners of selected clones
 
           const response = await firstValueFrom(this.backendApiService.getPedigree(nodeID));
           console.log('Response from backend:', response);
@@ -449,7 +452,7 @@ export class DisplayComponent implements AfterViewInit {
 
   selectItem(item: any): void {
     this.selectedItem = item;
-    console.log(item.clone_id);
+    console.log(item.correct_id);
     console.log(item)
     //this.searchTerm = item.id;
     this.filteredData = [];
@@ -466,7 +469,7 @@ export class DisplayComponent implements AfterViewInit {
 
     this.filteredData = this.cloneList.filter(item =>
       //console.log(item.clone_id?.toString().toLowerCase().includes(term));
-      item.clone_id?.toString().toLowerCase().includes(term)
+      item.correct_id?.toString().toLowerCase().includes(term)
       //item.role?.toString().toLowerCase().includes(term)
     );
     console.log(this.filteredData);

@@ -1,6 +1,8 @@
-// Jennifer O'Halloran
-// 23/06/2025
-
+/*** 
+ * // Date: 23/06/2025
+ * // Jennifer O'Halloran
+ * // IBIX Thesis Project - TPP Visualisation
+***/
 
 // Thesis Project 
 // Running R Script to convert clean data to synbreed pedigree for visulisation 

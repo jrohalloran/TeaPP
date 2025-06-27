@@ -17,10 +17,10 @@
 import neo4j from 'neo4j-driver';
 
 
-// Setting up Driver to access Neo4js
-const URI = 'neo4j+s://a71c11d2.databases.neo4j.io';
+// Setting up Driver to access Neo4js- intial Local
+const URI = 'bolt://localhost:7687';
 const USER = 'neo4j';
-const PASSWORD = 'KPoauq4gefxZaMGDId8t3lRtudtCCMJdM1gVDe84JiQ';
+const PASSWORD = 'tAqsiv-tivfif-bomhe9'; // Replace with your actual password
 
 const driver = neo4j.driver(URI, neo4j.auth.basic(USER, PASSWORD));
 

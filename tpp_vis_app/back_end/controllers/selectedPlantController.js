@@ -15,6 +15,7 @@ export async function getSelectedPlant(req, res) {
     console.log("Starting getSelectedPlants function for:")
     console.log(req.body);
     const clone_id = req.body; 
+    console.log(clone_id)
 
     if (!clone_id) {
         return res.status(400).json({ message: 'Missing clone_id in request body.' });

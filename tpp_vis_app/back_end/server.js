@@ -18,6 +18,8 @@ import fs from 'fs';
 import neo4j from 'neo4j-driver';
 import multer from 'multer';
 import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
 
 import nuclearFamilyRoutes from './routes/nuclearFamily.js';
@@ -33,6 +35,8 @@ import getCleanDataRoutes from "./routes/getCleanData.js"
 import processPedigreeRoutes from "./routes/processPedigree.js"
 import insertNeo4jDBRoutes from './routes/insertNeo4j.js'
 import updateParentsRoutes from './routes/updateParentsID.js'
+import getKinshipRoutes  from './routes/getKinship.js';
+import performKinshipfromRoutes from './routes/performKinship.js';
 
 const app = express();
 
@@ -41,6 +45,11 @@ app.use(cors());
 app.use(bodyParser.json({ limit: '10mb' }));
 app.use(express.text({ limit: '10mb' })); 
 app.use(express.json({ limit: '10mb' })); 
+
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const backend_dir = path.dirname(__dirname);
 
 
 /// ------------ FILE UPLOAD --------------
@@ -58,7 +67,7 @@ if (!fs.existsSync(uploadDir)) {
 }
 
 
-const EXPECTED_HEADERS = ['ID', 'Female_parent', 'Male_parent']; // Customize as needed
+const EXPECTED_HEADERS = ['ID', 'Female_parent', 'Male_parent'];
 
 
 // Set up multer for file upload
@@ -162,11 +171,28 @@ app.use('/api', selectedPlantRoutes); // Get data for one selected plant
 
 
 
+// KINSHIP ROUTES 
+
+app.use('/api', getKinshipRoutes); // Get existing stored Kinship data 
+
+app.use('/api', performKinshipfromRoutes); // Performing New Kinship 
+
+app.use('/kinshipImages', express.static(path.join(__dirname, '/kinship')));
+
+app.get('/api/images', (req, res) => {
+  const imagesPath = path.join(__dirname, '/kinship');
+  console.log(imagesPath);
+  fs.readdir(imagesPath, (err, files) => {
+    if (err) return res.status(500).json({ error: 'Error reading images directory' });
+    const imageFiles = files.filter(f => /\.(png|jpg|jpeg|gif)$/i.test(f));
+    res.json(imageFiles);
+  });
+});
 
 
 
+// NEO4J CONNECTION TEST
 // Checking Database Cloud Server is running 
-/*
 (async () => {
   const URI = 'bolt://localhost:7687';
   const USER = 'neo4j';
@@ -187,7 +213,7 @@ app.use('/api', selectedPlantRoutes); // Get data for one selected plant
   // Make queries
 
   await driver.close();
-})();*/
+})();
 
 process.on('unhandledRejection', (reason) => {
   console.error('Unhandled Rejection:', reason);

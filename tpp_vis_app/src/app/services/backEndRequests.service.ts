@@ -23,6 +23,8 @@ import { Observable } from 'rxjs';
 })
 export class backendApiService {
   private apiUrl = 'http://localhost:3333/api';
+  private imageListUrl = 'http://localhost:3333/api/images';
+  private imageBaseUrl = 'http://localhost:3333/kinshipImages';
 
   constructor(private http: HttpClient) {}
 
@@ -117,5 +119,28 @@ export class backendApiService {
     return this.http.post(`${this.apiUrl}/getSelectedPlant`, nodeID);
   }
 
+
+
+  // KINSHIP ANALYSIS 
+
+  getKinship(): Observable<any> {
+    console.log("Retrieving Existing Kinship Data");
+    return this.http.get(`${this.apiUrl}/getKinship`);
+  }
+
+
+  performKinship(): Observable<any> {
+    console.log("Requesting Kinhsip Analysis");
+    return this.http.get(`${this.apiUrl}/performKinship`);
+  }
+
+
+  getImages(): Observable<string[]> {
+    return this.http.get<string[]>(this.imageListUrl);
+  }
+
+  getImageUrl(fileName: string): string {
+    return `${this.imageBaseUrl}/${fileName}`;
+  }
   
 }

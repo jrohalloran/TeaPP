@@ -5,10 +5,13 @@ import { DataTransferService } from '../services/dataTransferService';
 import { Router } from '@angular/router';
 import { MatTabsModule } from '@angular/material/tabs';
 import { DisplayComponent } from '../display/display';
+import { Kinship } from '../kinship/kinship';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
   selector: 'app-home',
-  imports:[MatTabsModule, DisplayComponent],
+  imports:[MatTabsModule, DisplayComponent,MatIconModule,MatMenuModule,Kinship],
   templateUrl: './home.html',
   styleUrl: './home.css'
 })
@@ -17,6 +20,7 @@ export class HomeComponent {
   dataFlag = false;
   graphDBloaded = true;
   synbreedFlag = false;
+  isHelpOpen = false;
 
   data: any[]=[];
 
@@ -114,5 +118,24 @@ export class HomeComponent {
     
       this.router.navigate(['/upload-page']);
     }
+
+  toggleHelpPanel() {
+    this.isHelpOpen = !this.isHelpOpen;
+  }
+
+  onProfile() {
+    // navigate or show profile
+    console.log('Profile clicked');
+  }
+
+  onSettings() {
+    // navigate or show settings
+    console.log('Settings clicked');
+  }
+
+  onLogout() {
+    // logout logic here
+    console.log('Logout clicked');
+  }
 
 }

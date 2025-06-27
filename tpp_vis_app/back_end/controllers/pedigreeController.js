@@ -14,6 +14,7 @@ import { formatForSigma2,convertToSigmaFormat,layerByYearBoundedSpacing } from '
 export const getPedigree= async (req, res) => {
   try {
     let nodeIDs = req.body.nodeID || req.body;
+    console.log(nodeIDs);
     if (!nodeIDs) {
       return res.status(400).json({ error: 'Missing nodeID(s) in request body' });
     }
@@ -26,7 +27,7 @@ export const getPedigree= async (req, res) => {
 
     // Format raw data to Sigma.js format
     const sigmaData = await formatForSigma2(rawData);
-
+    console.log(sigmaData);
     // Saving the file to local directory -- for finding optimal layout
     //await saveJsonToFile(sigmaData, 'PedigreeGraph.json');
 

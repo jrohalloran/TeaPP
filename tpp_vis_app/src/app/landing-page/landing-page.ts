@@ -11,6 +11,9 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+
 
 
 
@@ -25,14 +28,16 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     ReactiveFormsModule,
     MatCheckboxModule,
     MatProgressSpinnerModule,
-    MatTabsModule],
+    MatTabsModule,
+    MatIconModule,
+    MatMenuModule ],
   templateUrl: './landing-page.html',
   styleUrl: './landing-page.css'
 })
 export class LandingPage {
 
   constructor(private router: Router){}
-
+  isHelpOpen = false;
   
   uploadNewData(){
 
@@ -48,6 +53,26 @@ export class LandingPage {
         console.log("Navigating to Upload Page");
         this.router.navigate(['/home']);
   }
-  
 
+
+  toggleHelpPanel() {
+    this.isHelpOpen = !this.isHelpOpen;
+  }
+
+  onProfile() {
+    // navigate or show profile
+    console.log('Profile clicked');
+  }
+
+  onSettings() {
+    // navigate or show settings
+    console.log('Settings clicked');
+  }
+
+  onLogout() {
+    // logout logic here
+    console.log('Logout clicked');
+  }
+
+  
 }

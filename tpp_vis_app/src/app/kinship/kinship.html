@@ -1,0 +1,39 @@
+  
+  
+<div class="main-content vertical-split">
+      <!-- Loading overlay -->
+  <div class="loading-overlay" *ngIf="loading">
+    <mat-progress-spinner mode="indeterminate" diameter="60" color="primary"></mat-progress-spinner>
+    <div style="margin-top: 10px; font-size: 1.2rem; color: #333;">Loading data...</div>
+  </div>
+    <!-- Bottom two side-by-side containers -->
+    <div class="bottom-section two-panels">
+      <!-- Upload New Dataset -->
+      <div class="panel">
+        <button mat-raised-button color="primary" (click)="getExistingKinship()" >Get Existing Kinship Analysis</button>
+      </div>
+
+      <!-- Analyse Existing Data -->
+      <div class="panel">
+        <button mat-raised-button color="primary"(click)="startNewAnalysis()">Analyse Kinship</button>
+      </div>
+</div>
+<div class="custom-grid">
+  <div
+    *ngFor="let item of images"
+    class="grid-item"
+    [ngStyle]="{ 'grid-area': item.gridArea }"
+  >
+    <img *ngIf="item.url" [src]="item.url" [alt]="item.name" [ngClass]="getImageClass(item.name)" (click)="openModal(item.url)" />
+    <div *ngIf="!item.url" class="stats-box">
+      <h3>Stats</h3>
+      <p>Views: 1234</p>
+      <p>Likes: 567</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="modal" *ngIf="selectedImageUrl" (click)="closeModal()">
+  <img [src]="selectedImageUrl" alt="Enlarged Image" />
+</div>

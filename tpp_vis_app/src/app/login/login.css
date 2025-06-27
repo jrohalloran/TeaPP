@@ -1,25 +1,109 @@
 .login-container {
-  max-width: 400px;
-  margin: 2rem auto;
+  max-width: 500px;
+  margin: 4rem auto;
   padding: 2rem;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
   font-family: Arial, sans-serif;
 }
 
-label {
+.welcome-section {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.auth-form label {
   display: block;
   margin-top: 1rem;
+  font-weight: bold;
 }
 
-input {
+.auth-form input {
   width: 100%;
-  padding: 0.5rem;
+  padding: 0.75rem;
   margin-top: 0.25rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
   box-sizing: border-box;
+  font-size: 1rem;
 }
 
-button {
-  margin-top: 1.5rem;
-  padding: 0.5rem 1rem;
+.auth-form button {
+  margin-top: 2rem;
+  padding: 0.75rem 1.5rem;
+  background-color: #24588c;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.auth-form button:hover {
+  background-color: #1e4a75;
+}
+
+
+.bottom-tab {
+  background-color: #f9f9f9;
+  border-top: 2px solid #ccc;
+  transition: height 0.4s ease;
+  overflow: hidden;
+  border-radius: 0 0 10px 10px;
+  box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.05);
+  height: 80px;
+}
+
+.bottom-tab.expanded {
+  height: 280px;
+}
+
+.tab-header {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #e7e7e7;
+  font-weight: bold;
+  font-size: 1rem;
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.tab-header:hover {
+  background-color: #dcdcdc;
+}
+
+.tab-header-text {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tab-header mat-icon {
+  font-size: 20px;
+}
+
+.tab-content {
+  padding: 1rem 2rem;
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+.tab-content h3 {
+  margin-top: 10;
+  color: #24588c;
+}
+
+.tab-content ul {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+
+.tab-content li {
+  margin-bottom: 0.5rem;
 }

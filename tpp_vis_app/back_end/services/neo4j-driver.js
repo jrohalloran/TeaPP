@@ -201,7 +201,7 @@ export async function fetchPedigreeData(nodeIDs) {
       }
     })
   );
-
+  console.log(combinedNodes);
   return { nodes: combinedNodes };
 }
 

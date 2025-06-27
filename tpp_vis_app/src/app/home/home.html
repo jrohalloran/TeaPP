@@ -1,29 +1,66 @@
 <div class="app-wrapper">
 
   <!-- Top bar -->
-  <header class="top-bar">
-    <div class="top-bar-content">
-      <h1>TeaPP Vis</h1>
-    </div>
-  </header>
-  
-  <mat-tab-group>
-  <mat-tab label="Statistics">
-    <!-- Your second display content -->
-    <p>This is display 2 content.</p>
-  </mat-tab>
-  <mat-tab label="Pedigree Visualisation">
-    <!-- Your first display content -->
-    <app-visualisation></app-visualisation>
-  </mat-tab>
-  <mat-tab label="Kinship Analysis">
-    <!-- Your third display content -->
-    <p>This is display 3 content.</p>
-  </mat-tab>
-</mat-tab-group>
+<header class="top-bar">
+  <div class="top-bar-content">
+    <h1>TeaPP Vis</h1>
 
+    <button mat-button [matMenuTriggerFor]="menu" class="menu-button">
+      Menu <mat-icon>arrow_drop_down</mat-icon>
+    </button>
 
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="onProfile()">Profile</button>
+      <button mat-menu-item (click)="onSettings()">Settings</button>
+      <button mat-menu-item (click)="onLogout()">Logout</button>
+    </mat-menu>
+
+    <button class="help-button" (click)="toggleHelpPanel()">
+      <mat-icon>question_mark</mat-icon>
+    </button>
+  </div>
+</header>
+
+  <div class="help-panel" [class.open]="isHelpOpen">
+  <div class="help-header">
+    <h3>Help</h3>
+    <button class="close-btn" (click)="toggleHelpPanel()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div class="help-content">
+    <p>This is the help section. Provide instructions or guidance here.</p>
+  </div>
+</div>  
+<div class = "content-wrapper">
+  <!-- New container above tabs -->
+  <div class="top-container">
+    <h2>Welcome to TeaPP Vis</h2>
+    <p>Some intro or controls here</p>
+  </div>
+
+  <!-- Container for mat-tab-group -->
+  <div class="tab-container">
+    <mat-tab-group>
+      <mat-tab label="Overview">
+        <p>Statistics etc</p>
+      </mat-tab>
+            <mat-tab label="Database Status">
+        <p>Databases etc.</p>
+      </mat-tab>
+    <mat-tab label="Pedigree Visualisation">
+      <ng-template matTabContent>
+        <app-visualisation></app-visualisation>
+      </ng-template>
+    </mat-tab>
+      <mat-tab label="Kinship Analysis">
+        <app-kinship></app-kinship>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+  </div>
 
 </div>
+
 
 

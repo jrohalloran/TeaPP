@@ -1,32 +1,64 @@
 <div class="app-wrapper">
+  <!-- Top bar -->
+<header class="top-bar">
+  <div class="top-bar-content">
+    <h1>TeaPP Vis</h1>
 
-    <!-- Top bar -->
-    <header class="top-bar">
-        <div class="top-bar-content">
-        <h1>TeaPP Vis</h1>
-        </div>
-    </header>
+    <button mat-button [matMenuTriggerFor]="menu" class="menu-button">
+      Menu <mat-icon>arrow_drop_down</mat-icon>
+    </button>
+
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="onProfile()">Profile</button>
+      <button mat-menu-item (click)="onSettings()">Settings</button>
+      <button mat-menu-item (click)="onLogout()">Logout</button>
+    </mat-menu>
+
+    <button class="help-button" (click)="toggleHelpPanel()">
+      <mat-icon>question_mark</mat-icon>
+    </button>
+  </div>
+</header>
+
+  <div class="help-panel" [class.open]="isHelpOpen">
+  <div class="help-header">
+    <h3>Help</h3>
+    <button class="close-btn" (click)="toggleHelpPanel()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div class="help-content">
+    <p>This is the help section. Provide instructions or guidance here.</p>
+  </div>
+</div>  
+
+  <!-- Main content vertically split -->
+  <div class="main-content vertical-split">
     
-    <mat-tab-group>
-    <mat-tab label="Display 1">
-        <!-- Your first display content -->
-        <p>This is display 1 content.</p>
+    <!-- Top welcome section -->
+    <div class="top-section">
+      <h2>Welcome to TeaPP</h2>
+      <p>This visualisation tool helps you upload and explore tea plant pedigree datasets.</p>
+    </div>
 
+    <!-- Bottom two side-by-side containers -->
+    <div class="bottom-section two-panels">
+      <!-- Upload New Dataset -->
+      <div class="panel">
+        <h3>Upload New Dataset</h3>
+        <p>Instructions</p>
+        <p>- Images</p>
+        <button mat-raised-button color="primary" (click)="uploadNewData()">Upload New Data</button>
+      </div>
 
-    </mat-tab>
-    <mat-tab label="Display 2">
-        <!-- Your second display content -->
-        <p>This is display 2 content.</p>
-    </mat-tab>
-    <mat-tab label="Display 3">
-        <!-- Your third display content -->
-        <p>This is display 3 content.</p>
- </mat-tab>
-</mat-tab-group>
-    
-<div class="button-container">
-    <button mat-raised-button color="primary" (click)="uploadNewData()">Upload New Data</button>
-    <button mat-raised-button color="primary" (click)="analyseExisting()">Analyse Existing Data</button>
-</div>
+      <!-- Analyse Existing Data -->
+      <div class="panel">
+        <h3>Analyse Existing Data</h3>
+        <p>Select from dropdown to analyse existing dataset</p>
+        <p>- Images</p>
+        <button mat-raised-button color="primary" (click)="analyseExisting()">Analyse Existing Data</button>
+      </div>
+    </div>
+  </div>
 
 </div>
