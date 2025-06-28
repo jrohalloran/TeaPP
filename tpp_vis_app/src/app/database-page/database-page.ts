@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
 import { DataTransferService } from '../services/dataTransferService';
 
 @Component({
-  selector: 'app-overview',
+  selector: 'app-database-page',
   imports: [CommonModule,
       MatButtonModule,
       MatInputModule,
@@ -25,12 +25,13 @@ import { DataTransferService } from '../services/dataTransferService';
       MatProgressSpinnerModule,
       MatTabsModule],
   standalone: true,
-  templateUrl: './overview.html',
-  styleUrls: ['./overview.css']
+  templateUrl: './database-page.html',
+  styleUrls: ['./database-page.css']
 })
-export class Overview {
 
-      // Search Attributes 
+export class DatabasePage {
+
+        // Search Attributes 
     searchInput: string = '';
     searchResults: any[] = [];
     searchPerformed = false;
@@ -95,5 +96,6 @@ export class Overview {
       )
     );*/
   }
+
 
 }

@@ -7,6 +7,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { DisplayComponent } from '../display/display';
 import { Kinship } from '../kinship/kinship';
 import { Overview } from '../overview/overview';
+import { DatabasePage } from '../database-page/database-page';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 
@@ -17,7 +18,8 @@ import { MatMenuModule } from '@angular/material/menu';
             MatIconModule,
             MatMenuModule,
             Kinship,
-            Overview ],
+            Overview,
+            DatabasePage ],
   templateUrl: './home.html',
   styleUrl: './home.css'
 })
@@ -53,7 +55,7 @@ export class HomeComponent {
   async ngAfterViewInit(): Promise<void> {
 
     console.log('Welcome to the home page');
-
+    /*
     if (this.dataFlag){
       try{
       await this.getSynbreedPedigree()
@@ -67,10 +69,11 @@ export class HomeComponent {
 
     }else{
       console.log("No Data recieved -- functions cannot be executed");
-    }
+    }*/
 
   }
 
+  /*
   async getSynbreedPedigree(){
 
     // Updated Graph DB loading component 
@@ -94,36 +97,15 @@ export class HomeComponent {
     // TO DO:      Updated Graph DB loading component 
     console.log("Uploading Neo4j Data");
     try {
-      const response = await firstValueFrom(this.backendApiService.insertNeo4j());
+      //const response = await firstValueFrom(this.backendApiService.insertNeo4j());
+      const response = await firstValueFrom(this.backendApiService.insertAdminNeo4j());
       console.log('Response from backend:', response);
       this.graphDBloaded = response;
     } catch (error) {
           console.error('Error:', error);
     }
-  }
+  }*/
 
-
-  openDisplay() {
-    if (this.graphDBloaded){
-  
-      window.open('/display', '_blank');
-    }else{
-      console.log("Graphing Data is not loaded yet.....");
-      
-      
-      //// ADD POP OUT MESSAGE
-
-
-
-    }
-}
-
-  openDirectory() {
-    console.log("Opening Local Directory");
-
-    
-      this.router.navigate(['/upload-page']);
-    }
 
   toggleHelpPanel() {
     this.isHelpOpen = !this.isHelpOpen;

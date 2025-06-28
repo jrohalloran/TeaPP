@@ -233,7 +233,7 @@ export const getCleanData= async (req, res) => {
     console.log("Attempting to compare data...")
     const finalData = await main(userCleanedIDs,userCleanedParents,processedData);
 
-    res.json(finalData);
+    res.json([finalData,true]);
 
   } catch (err) {
     console.error('Controller error:', err);

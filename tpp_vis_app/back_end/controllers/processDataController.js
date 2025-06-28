@@ -240,6 +240,7 @@ async function insertData(rawEntries,processedEntries) {
     database: "teapp_app_db",
     port: "5432",
   });
+  
 
   try {
     await client.connect();
@@ -251,8 +252,8 @@ async function insertData(rawEntries,processedEntries) {
         
       for (const element of processedEntries){
         if (element.ID == entry.ID){
-            const query2 = 'INSERT INTO preprocessedData (clone_id, female_par, male_par, correct_id, correct_female, correct_male) VALUES ($1, $2, $3, $4, $5, $6)';
-            const values2 = [element.ID, element.female_parent, element.male_parent, element.correct_ID,element.correct_female, element.correct_male];
+            const query2 = 'INSERT INTO preprocessedData (clone_id, correct_id, correct_female, correct_male) VALUES ($1, $2, $3, $4)';
+            const values2 = [element.ID, element.correct_ID,element.correct_female, element.correct_male];
             await client.query(query2, values2);
         }
       }

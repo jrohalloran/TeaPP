@@ -68,13 +68,34 @@ export class backendApiService {
 
   }
 
+  insertAdminNeo4j(): Observable<any>{
+        console.log("Sending Neo4j insertion ADMIN Request to back-end");
+        return this.http.get(`${this.apiUrl}/insertAdminNeo4j`);
+
+  }
+
   updateParents(data:any[]):Observable<any> {
     console.log("Sending Data to /api/updateParents");
     return this.http.post(`${this.apiUrl}/updateParents`,data);
   }
 
 
+  // STATS + SEARCHING
 
+
+  getNeo4jStats(): Observable<any> {
+    console.log("Getting /getNeo4jStats");
+    return this.http.get(`${this.apiUrl}/getNeo4jStats`);
+  }
+
+  getPostgresStats(): Observable<any> {
+    console.log("Getting /getPostgresStats");
+    return this.http.get(`${this.apiUrl}/getPostgresStats`);
+
+  }
+
+
+  // ------------- VISUALISATION ------------------
   /// NEO4J API REQUESTS 
 
   // GET REQUESTS 

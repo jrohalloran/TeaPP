@@ -10,7 +10,9 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import { exec } from 'child_process';
+import { promisify } from 'util';
 
+const execAsync = promisify(exec);
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -20,7 +22,7 @@ const backend_dir = path.dirname(__dirname);
 
 const uri = 'bolt://localhost:7687';
 const user = 'neo4j';
-const password = 'tAqsiv-tivfif-bomhe9'; // Replace with your actual password
+const password = 'tAqsiv-tivfif-bomhe9'; 
 
 // Create a driver instance
 const driver = neo4j.driver(uri, neo4j.auth.basic(user, password));
@@ -28,8 +30,10 @@ const driver = neo4j.driver(uri, neo4j.auth.basic(user, password));
 
 async function writeCsvFiles(graphData) {
   // Define CSV headers exactly as neo4j-admin import expects
-  const nodeHeaders = ['id:ID(Plant)', 'gener', 'par1', 'par2', 'year:int'];
-  const relHeaders = [':START_ID(Plant)', ':END_ID(Plant)', ':TYPE'];
+  // Keep one unique ID column for node identification
+  // Rename 'id' property to 'nodeId' or similar to avoid duplicate column names
+  const nodeHeaders = ['id:ID', 'gener', 'par1', 'par2', 'year:int', ':LABEL'];
+  const relHeaders = [':START_ID', ':END_ID', ':TYPE'];
 
   // Build CSV content for nodes
   const nodeRows = graphData.nodes.map(node => [
@@ -37,27 +41,27 @@ async function writeCsvFiles(graphData) {
     node.gener || '',
     node.par1 || '',
     node.par2 || '',
-    node.year !== null && node.year !== undefined ? node.year : ''
+    node.year !== null && node.year !== undefined ? node.year : '',
+    'Plant'  // add label explicitly
   ]);
 
   const nodesCsv = [
-    nodeHeaders.join(','),              // header row
-    ...nodeRows.map(row => row.map(val => `"${val}"`).join(','))  // escape all fields with quotes
+    nodeHeaders.join(','),              
+    ...nodeRows.map(row => row.map(val => `"${val}"`).join(',')) 
   ].join('\n');
 
   // Build CSV content for relationships
   const relRows = graphData.edges.map(edge => [
     edge.source,
     edge.target,
-    'PARENT_OF' // fixed relationship type
+    'PARENT_OF' 
   ]);
 
   const relsCsv = [
-    relHeaders.join(','),               // header row
+    relHeaders.join(','),               
     ...relRows.map(row => row.map(val => `"${val}"`).join(','))
   ].join('\n');
 
-  // Save to disk, for example in temp folder relative to current file
   const tempDir = path.join(__dirname, 'temp');
   await fs.mkdir(tempDir, { recursive: true });
 
@@ -74,27 +78,37 @@ async function writeCsvFiles(graphData) {
   return { nodesFile, relsFile };
 }
 
-
 async function importWithNeo4jAdmin(graphData) {
-  // Step 1: write CSV files
-  const { nodesFile, relsFile } = await writeCsvFiles(graphData);
+  try {
+    // Step 1: Write CSV files
+    const { nodesFile, relsFile } = await writeCsvFiles(graphData);
 
-  // Step 2: build neo4j-admin import command
-  const cmd = `neo4j-admin import --database=neo4j --nodes="${nodesFile}" --relationships="${relsFile}" --force=true`;
+    // Step 2: Stop Neo4j (ensure DB is offline before import)
+    console.log('⛔ Stopping Neo4j...');
+    await execAsync('neo4j stop');
 
-  console.log('Running neo4j-admin import...');
+    // Step 3: Build and run neo4j-admin import command
+    const cmd = `neo4j-admin database import full neo4j --overwrite-destination=true --nodes="${nodesFile}" --relationships="${relsFile}" --verbose`;
+    //const cmd = `neo4j-admin database import full neo4j --overwrite-destination=true --nodes="${nodesFile}" --verbose`;
 
-  exec(cmd, (error, stdout, stderr) => {
-    if (error) {
-      console.error('neo4j-admin import failed:', error);
-      return;
-    }
+    console.log('🚀 Running neo4j-admin import...');
+    const { stdout, stderr } = await execAsync(cmd);
+
     if (stderr) {
-      console.warn('neo4j-admin import warnings:', stderr);
+      console.warn('⚠️ neo4j-admin import warnings:', stderr);
     }
-    console.log('neo4j-admin import output:', stdout);
-  });
+    console.log('✅ neo4j-admin import output:', stdout);
+
+    // Step 4: Start Neo4j again
+    console.log('▶️ Starting Neo4j...');
+    await execAsync('neo4j start');
+    console.log('✅ Neo4j restarted successfully.');
+
+  } catch (error) {
+    console.error('❌ Import failed:', error.message || error);
+  }
 }
+
 
 
 
@@ -301,7 +315,7 @@ export const insertADMINNeo4jDB= async (req, res) => {
   printNodesWith6Digits(data);
   
   // Instead of inserting with Cypher, create CSVs & import with neo4j-admin:
-    await importWithNeo4jAdmin(data);
+  await importWithNeo4jAdmin(data);
 
   res.json("CSV generation and neo4j-admin import started");
 }

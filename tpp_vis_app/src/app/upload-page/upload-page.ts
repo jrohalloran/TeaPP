@@ -68,6 +68,8 @@ export class UploadComponent {
   // Loading Overlay Flags 
   loading: boolean = false;
   loadingTable: boolean = false;
+  dataflag: boolean = false;
+  synbreedFlag: boolean = false;
 
   // Search Attributes 
   searchInput: string = '';
@@ -169,6 +171,27 @@ export class UploadComponent {
       console.log('Sending Data to backend for Processing');
       const response = await firstValueFrom(this.backendApiService.getCleanData(data));
       console.log('Response from backend:', response);
+      const finalData = response[0];
+      this.dataflag = response[1]
+      if (this.dataflag){
+      try{
+          await this.getSynbreedPedigree(finalData);
+          if (this.synbreedFlag){
+
+            await this.sendNeo4jUpload();
+          }
+        } catch (error) {
+          console.error('Error:', error);
+        }
+
+        }else{
+          console.log("No Data recieved -- functions cannot be executed");
+      }
+
+
+
+
+
       console.log("Navigating to Home Page");
       this.dataTransferService.setResponse(response);
       this.router.navigate(['/home']);
@@ -215,6 +238,40 @@ export class UploadComponent {
       this.loadingTable = false;
     }
   }
+
+
+  async getSynbreedPedigree(finalData: any){
+
+    // Updated Graph DB loading component 
+    console.log("Getting Synbreed Pedigree");
+
+    const data = finalData;
+
+    try {
+      const response = await firstValueFrom(this.backendApiService.processPedigree(data));
+      console.log('Response from backend:', response);
+      this.synbreedFlag = response;
+    } catch (error) {
+      console.error('Error:', error);
+
+    }
+  }
+
+
+  async sendNeo4jUpload(){
+
+    // TO DO:      Updated Graph DB loading component 
+    console.log("Uploading Neo4j Data");
+    try {
+      //const response = await firstValueFrom(this.backendApiService.insertNeo4j());
+      const response = await firstValueFrom(this.backendApiService.insertAdminNeo4j());
+      console.log('Response from backend:', response);
+      //this.graphDBloaded = response;
+    } catch (error) {
+          console.error('Error:', error);
+    }
+  }
+
 
   // Formatting Functions 
 
