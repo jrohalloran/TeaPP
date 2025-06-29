@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { backendApiService } from '../services/backEndRequests.service';
 import { CommonModule } from '@angular/common';
 import { firstValueFrom } from 'rxjs';
@@ -7,11 +7,36 @@ import { MatTableModule } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSort } from '@angular/material/sort';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Router } from '@angular/router';
 import { DataTransferService } from '../services/dataTransferService';
+import { MatTableDataSource } from '@angular/material/table';
+
+
+
+export interface postgreSQLTableData {
+  table_name: string;
+  seq_scan: string;
+  idx_scan: string;
+  rows: string;
+  total_size: string;
+}
+
+export interface Neo4jTableData{
+  labels: string;
+  nodeCount: number;
+  propertyKeys: string;
+  relationshipCount: number;
+  relationshipTypes: string;
+}
+
+export interface Neo4jStatRow {
+  key: string;
+  value: string | number;
+}
 
 @Component({
   selector: 'app-database-page',
@@ -23,7 +48,8 @@ import { DataTransferService } from '../services/dataTransferService';
       ReactiveFormsModule,
       MatCheckboxModule,
       MatProgressSpinnerModule,
-      MatTabsModule],
+      MatTabsModule,
+      MatSort],
   standalone: true,
   templateUrl: './database-page.html',
   styleUrls: ['./database-page.css']
@@ -31,10 +57,30 @@ import { DataTransferService } from '../services/dataTransferService';
 
 export class DatabasePage {
 
+  //@Input() dataSource: postgreSQLTableData[] = [];
+
+    postgreSQLTableData: any[] = [];
+    neo4jTableData: any[] = [];
+
+    postgresTableColumns = ['table_name','rows', 'total_size'];
+    neo4jDisplayedColumns: string[] = ['key', 'value'];
+
+    postgresSearchColumns  = ['correct_id', 'correct_female', 'correct_male', 'year', 'generation'];
+    neo4jSearchColumns = ['source', 'relation', 'target'];
+
         // Search Attributes 
     searchInput: string = '';
     searchResults: any[] = [];
     searchPerformed = false;
+   // postgresSearch: any[] = [];
+   // neo4jSearch: any[] = [];
+    postgresSearch = new MatTableDataSource<any>([]);  // initialize with empty array
+    neo4jSearch = new MatTableDataSource<any>([]); 
+
+    @ViewChild('postgresSort') postgresSort!: MatSort;
+    @ViewChild('neo4jSort') neo4jSort!: MatSort;
+
+
 
     constructor(private backendApiService: backendApiService,
                   private router: Router,
@@ -47,10 +93,43 @@ export class DatabasePage {
 
       await this.getPostgresStats();
       await this.getNeo4jStats();
+      this.postgresSearch.sort = this.postgresSort;
+      this.postgresSearch.sortingDataAccessor = (item, property) => {
+        switch(property) {
+          case 'rows':
+          case 'total_size':
+            return Number(item[property]) || 0;
+          default:
+            return (item[property] || '').toString().toLowerCase();
+        }
+      };
+
+      this.neo4jSearch.sort = this.neo4jSort;
+      this.neo4jSearch.sortingDataAccessor = (item, property) => {
+        switch(property) {
+          case 'nodeCount':
+          case 'relationshipCount':
+            return Number(item[property]) || 0;
+          default:
+            return (item[property] || '').toString().toLowerCase();
+        }
+      };
 
 
     }
-  
+
+    populateSQLTable(response: any[]){
+        this.postgreSQLTableData = response;
+
+    }
+
+    populateNeo4jTable(response: any[]){
+
+      this.neo4jTableData = response;
+
+    }
+
+    neo4jDataSource: Neo4jStatRow[] = [];
 
 
     async getNeo4jStats(){
@@ -60,7 +139,11 @@ export class DatabasePage {
         try {
           const response = await firstValueFrom(this.backendApiService.getNeo4jStats());
           console.log('Neo4J Stats Response from backend:', response);
-        } catch (error) {
+             this.neo4jDataSource = Object.entries(response).map(([key, value]) => ({
+                    key,
+                    value: Array.isArray(value) ? value.join(', ') : (value as string | number)
+                  }));
+          } catch (error) {
               console.error('Error:', error);
         }
     }
@@ -72,30 +155,35 @@ export class DatabasePage {
         try {
           const response = await firstValueFrom(this.backendApiService.getPostgresStats());
           console.log('Postgres Stats Response from backend:', response);
+          this.postgreSQLTableData = response;
         } catch (error) {
               console.error('Error:', error);
       }
 
     }
 
-    
 
 
-    performSearch() {
+
+    async performSearch() {
     const term = this.searchInput?.toLowerCase().trim();
     this.searchPerformed = true;
+    console.log(this.searchInput);
 
     if (!term) {
       this.searchResults = [];
       return;
     }
-    /*
-    this.searchResults = this.cleanData.filter(row =>
-      Object.values(row).some(value =>
-        String(value).toLowerCase().includes(term)
-      )
-    );*/
+    try{
+      const response = await firstValueFrom(this.backendApiService.searchID([this.searchInput]));
+      console.log('Search Response from backend:', response);
+      this.postgresSearch.data = response['postgres'] || [];
+      this.neo4jSearch.data = response['neo4j'] || [];
+      
+    }
+    catch(error){
+      console.error('Error:', error);
+    }
   }
-
-
+  
 }

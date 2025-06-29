@@ -38,6 +38,7 @@ import updateParentsRoutes from './routes/updateParentsID.js'
 import getKinshipRoutes  from './routes/getKinship.js';
 import performKinshipfromRoutes from './routes/performKinship.js';
 import getStatsRoutes from './routes/getStats.js'
+import searchRoutes from './routes/searchID.js'
 
 const app = express();
 
@@ -148,6 +149,9 @@ app.use('/api', updateParentsRoutes);
 // Stats + Searching 
 
 app.use('/api', getStatsRoutes);
+
+app.use('/api', searchRoutes);
+
 
 // NEO4J Routes
 app.use('/api', nuclearFamilyRoutes); // depricated?

@@ -94,6 +94,12 @@ export class backendApiService {
 
   }
 
+  searchID(ID:any[]): Observable<any> {
+    console.log("Sending /searchID");
+    return this.http.post(`${this.apiUrl}/searchID`,ID);
+
+  }
+
 
   // ------------- VISUALISATION ------------------
   /// NEO4J API REQUESTS 

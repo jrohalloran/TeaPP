@@ -1,3 +1,31 @@
+/* Flex container for side-by-side tables */
+.stats-tables-container {
+  display: flex;
+  flex-wrap: wrap; /* allows responsive stacking on smaller screens */
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+/* Individual table wrapper */
+.table-wrapper {
+  flex: 1 1 48%;
+  min-width: 300px;
+}
+
+/* Ensure mat-tables stretch full width */
+.mat-elevation-z8 {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+/* Search section styling */
+.search-section {
+  padding: 1rem;
+  background-color: #fafafa;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+}
+
 .search-box {
   width: 100%;
   margin-bottom: 1rem;
@@ -7,15 +35,21 @@
   overflow-x: auto;
   max-height: 300px;
   border: 1px solid #f0f0f0;
-  padding: 0.5rem;
+  padding: 1rem;
   background-color: #fff;
   border-radius: 4px;
+  margin-bottom: 1rem; 
 }
 
+/* Shared table styles */
 .search-results table {
   width: 100%;
   border-collapse: collapse;
   font-size: 0.85rem;
+}
+
+.search-results thead {
+  background-color: #f9f9f9;
 }
 
 .search-results th,
@@ -23,4 +57,23 @@
   padding: 0.3rem 0.5rem;
   border: 1px solid #f0f0f0;
   text-align: left;
+  vertical-align: top;
+}
+
+/* Optional: hover effect */
+.search-results tbody tr:hover {
+  background-color: #f5f5f5;
+}
+
+/* Optional: visually distinguish Postgres vs Neo4j results if needed */
+.search-results h3 {
+  margin-top: 0;
+  font-size: 1rem;
+  color: #333;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 0.3rem;
+}
+
+.table-section {
+  margin-bottom: 32px; /* or any space you like */
 }

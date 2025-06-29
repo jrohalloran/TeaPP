@@ -211,13 +211,8 @@ async function main(userCleanedIDs,userCleanedParents,processedData){
 
     //console.log(updatedData);
     await insertData(updatedData);
-    // Update Parents - New clones 
-    // Update Parents - New Parents
     status = true;
     return updatedData;
-    //console.log(userCleanedIDs);
-    //console.log(userCleanedParents);
-    //console.log(processedData);
 }
 
 

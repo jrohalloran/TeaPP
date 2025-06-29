@@ -11,6 +11,7 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import { exec } from 'child_process';
 import { promisify } from 'util';
+import { Client } from 'pg';
 
 const execAsync = promisify(exec);
 
@@ -224,87 +225,43 @@ function printNodesWith6Digits(graphData) {
   });
 }
 
-//const BATCH_SIZE = 500;
+async function updatePostgres(data) {
+  console.log("Starting Insertion Function to Update Year/Gener...");
 
-/*
-async function insertDataInBatches(data) {
-  console.log("Starting batched data upload to Neo4j");
-  const session = driver.session();
+  const client = new Client({
+    user: "jennyohalloran",
+    host: "localhost",
+    database: "teapp_app_db",
+    port: "5432",
+  });
+
+  console.log("----- Attempting to connect to PostgreSQL DB -----");
 
   try {
-    console.log("----- Successfully Connected ----");
+    await client.connect();
+    console.log("----- Connection successful -----");
 
-    // Helper to split array into chunks
-    function chunkArray(array, size) {
-      const chunks = [];
-      for (let i = 0; i < array.length; i += size) {
-        chunks.push(array.slice(i, i + size));
-      }
-      return chunks;
+
+
+    for (const entry of data) {
+      // Assuming entry has fields: id, year, gener
+      const query = `
+        UPDATE cleanData
+        SET year = $1, generation = $2
+        WHERE correct_id = $3
+      `;
+      const values = [entry.year, entry.gener, entry.id];
+      await client.query(query, values);
     }
 
-    // Prepare nodes and warn for null year
-    const preparedNodes = data.nodes.map((node, idx) => {
-      if (node.year == null) {
-        console.warn(`Warning: node with id ${node.id} (index ${idx}) has a null year.`);
-      }
-      return {
-        id: node.id,
-        gener: node.gener,
-        par1: node.par1,
-        par2: node.par2,
-        year: node.year != null ? neo4j.int(node.year) : null,
-      };
-    });
-
-    const nodeBatches = chunkArray(preparedNodes, BATCH_SIZE);
-    console.log(`Total nodes: ${preparedNodes.length}, split into ${nodeBatches.length} batches of up to ${BATCH_SIZE} nodes each.`);
-
-    // Insert nodes batch by batch with logs
-    for (let i = 0; i < nodeBatches.length; i++) {
-      const batch = nodeBatches[i];
-      await session.run(
-        `
-        UNWIND $nodes AS node
-        MERGE (p:Plant {id: node.id})
-        SET p.gener = node.gener, p.par1 = node.par1, p.par2 = node.par2, p.year = node.year
-        `,
-        { nodes: batch }
-      );
-      console.log(`Inserted node batch ${i + 1} / ${nodeBatches.length} (Batch size: ${batch.length})`);
-    }
-
-    // Prepare edges
-    const preparedEdges = data.edges.map(edge => ({
-      source: edge.source,
-      target: edge.target,
-    }));
-
-    const edgeBatches = chunkArray(preparedEdges, BATCH_SIZE);
-    console.log(`Total edges: ${preparedEdges.length}, split into ${edgeBatches.length} batches of up to ${BATCH_SIZE} edges each.`);
-
-    // Insert edges batch by batch with logs
-    for (let i = 0; i < edgeBatches.length; i++) {
-      const batch = edgeBatches[i];
-      await session.run(
-        `
-        UNWIND $edges AS edge
-        MATCH (a:Plant {id: edge.source}), (b:Plant {id: edge.target})
-        MERGE (a)-[:PARENT_OF]->(b)
-        `,
-        { edges: batch }
-      );
-      console.log(`Inserted edge batch ${i + 1} / ${edgeBatches.length} (Batch size: ${batch.length})`);
-    }
-
-    console.log('Batched data import complete!');
-  } catch (error) {
-    console.error('Error importing data:', error);
+    console.log("Data updated successfully in cleanData table!");
+  } catch (err) {
+    console.error("Error updating data", err);
   } finally {
-    await session.close();
-    await driver.close();
+    await client.end();
   }
-}*/
+}
+
 
 
 export const insertADMINNeo4jDB= async (req, res) => {
@@ -313,7 +270,11 @@ export const insertADMINNeo4jDB= async (req, res) => {
   const data = await readFile();
   getYear(data);
   printNodesWith6Digits(data);
-  
+  console.log(data);
+
+  // Updating Postrgres 
+
+  await updatePostgres(data.nodes);
   // Instead of inserting with Cypher, create CSVs & import with neo4j-admin:
   await importWithNeo4jAdmin(data);
 

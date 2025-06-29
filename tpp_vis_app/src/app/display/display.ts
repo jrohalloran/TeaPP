@@ -403,10 +403,10 @@ export class DisplayComponent implements AfterViewInit {
 
 
   
-  async getSearchedNode(item: { correct_id: any; }):Promise<void>{
+  async getSearchedNode(item: any):Promise<void>{
 
         console.log('Getting Pedigree for searched clone...')
-        const nodeID = item.correct_id;
+        const nodeID = item
         this.showBottomOverlay = false;
         this.isBottomLoading = true;
 
@@ -452,7 +452,7 @@ export class DisplayComponent implements AfterViewInit {
 
   selectItem(item: any): void {
     this.selectedItem = item;
-    console.log(item.correct_id);
+    console.log(item);
     console.log(item)
     //this.searchTerm = item.id;
     this.filteredData = [];
@@ -462,18 +462,52 @@ export class DisplayComponent implements AfterViewInit {
 
 }
 
+/*
   onSearch(): void {
-    console.log(this.cloneList);
+    //console.log(this.cloneList);
     const term = this.searchTerm?.toString().toLowerCase() || '';
     
 
-    this.filteredData = this.cloneList.filter(item =>
-      //console.log(item.clone_id?.toString().toLowerCase().includes(term));
-      item.correct_id?.toString().toLowerCase().includes(term)
-      //item.role?.toString().toLowerCase().includes(term)
-    );
-    console.log(this.filteredData);
+    this.filteredData = this.cloneList.filter(item => {
+      const termLower = term.toLowerCase();
 
+      return (
+        item.correct_id?.toString().toLowerCase().includes(termLower) ||
+        item.clone_id?.toString().toLowerCase().includes(termLower) ||
+        item.correct_female?.toString().toLowerCase().includes(termLower) ||
+        item.correct_male?.toString().toLowerCase().includes(termLower)
+        );
+    
+    });
+  console.log(this.filteredData);
+      }*/
+
+onSearch(): void {
+  const term = this.searchTerm?.toString().toLowerCase() || '';
+  const matches = new Set<string>(); // To collect unique matches
+
+  for (const item of this.cloneList) {
+    const fields = [
+      item.correct_id?.toString(),
+      item.clone_id?.toString(),
+      item.correct_female?.toString(),
+      item.correct_male?.toString()
+    ];
+
+    for (const field of fields) {
+      if (!field) continue;
+
+      const value = field.toLowerCase();
+      if (value.includes(term)) {
+        // Store the original (not lowercased) field value to show to user
+        matches.add(field);
+      }
+    }
+  }
+
+  // Convert Set to Array and assign to filteredData
+  this.filteredData = Array.from(matches);
+  console.log(this.filteredData);
 }
 
 

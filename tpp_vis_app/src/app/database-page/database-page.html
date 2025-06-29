@@ -1,46 +1,146 @@
-<div>
-  <h3>Statistics</h3>
-  
+<div class="stats-tables-container">
+  <div class="table-wrapper">
+  <h3>PostgresSQL DB Statistics</h3>
 
+  <table mat-table [dataSource]="postgreSQLTableData" class="mat-elevation-z8">
+
+  <!-- Table Name -->
+  <ng-container matColumnDef="table_name">
+    <th mat-header-cell *matHeaderCellDef> Table Name </th>
+    <td mat-cell *matCellDef="let element"> {{element.table_name}} </td>
+  </ng-container>
+
+  <!-- Rows -->
+  <ng-container matColumnDef="rows">
+    <th mat-header-cell *matHeaderCellDef> Rows </th>
+    <td mat-cell *matCellDef="let element"> {{element.rows}} </td>
+  </ng-container>
+
+  <!-- Total Size -->
+  <ng-container matColumnDef="total_size">
+    <th mat-header-cell *matHeaderCellDef> Total Size </th>
+    <td mat-cell *matCellDef="let element"> {{element.total_size}} </td>
+  </ng-container>
+
+  <!-- Header & Row -->
+  <tr mat-header-row *matHeaderRowDef="postgresTableColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: postgresTableColumns;"></tr>
+</table>
 </div>
 
-<div>
-    <h3>Search</h3>
+<div class="table-wrapper">
+<h2>Neo4j Graph Stats</h2>
 
-        <!-- Controlled Search Input -->
-        <mat-form-field appearance="outline" class="search-box">
-          <mat-label>Search by any field</mat-label>
-          <input matInput [(ngModel)]="searchInput" placeholder="Type any ID or parent..." />
-        </mat-form-field>
+<table mat-table [dataSource]="neo4jDataSource" class="mat-elevation-z8" style="width: 100%; margin-top: 20px;">
 
-        <!-- Search Button -->
-        <button mat-stroked-button color="primary" (click)="performSearch()">
-          Search
-        </button>
+  <!-- Key Column -->
+  <ng-container matColumnDef="key">
+    <th mat-header-cell *matHeaderCellDef> Key </th>
+    <td mat-cell *matCellDef="let element"> {{ element.key }} </td>
+  </ng-container>
 
-        <!-- Search results -->
-        <div *ngIf="searchResults?.length" class="search-results">
-          <table>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Correct ID</th>
-                <th>Correct Female</th>
-                <th>Correct Male</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let row of searchResults">
-                <td>{{ row.ID }}</td>
-                <td >{{ row.correct_ID }}</td>
-                <td>{{ row.correct_female }}</td>
-                <td>{{ row.correct_male }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+  <!-- Value Column -->
+  <ng-container matColumnDef="value">
+    <th mat-header-cell *matHeaderCellDef> Value </th>
+    <td mat-cell *matCellDef="let element"> {{ element.value }} </td>
+  </ng-container>
 
-        <div *ngIf="searchPerformed && !searchResults.length">
-          <p>No matches found.</p>
-        </div>
+  <!-- Header and Row Declarations -->
+  <tr mat-header-row *matHeaderRowDef="neo4jDisplayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: neo4jDisplayedColumns;"></tr>
+
+</table>
+
+</div>
+</div>
+
+<div class="search-section">
+    <h3>Search Database Entries</h3>
+
+    <!-- Search Input -->
+    <mat-form-field appearance="outline" class="search-box">
+      <mat-label>Search by any field</mat-label>
+      <input matInput [(ngModel)]="searchInput" placeholder="Type any ID or parent..." />
+    </mat-form-field>
+
+    <button mat-stroked-button color="primary" (click)="performSearch()">Search</button>
+
+    <!-- Angular Material Table -->
+   <div class = table-section >
+    <div *ngIf="postgresSearch.data.length > 0"  style="max-height: 400px; overflow-y: auto;">
+      <h3>Postgres Results</h3>
+
+      <table mat-table [dataSource]="postgresSearch" matSort #postgresSort="matSort">
+
+        <!-- ID Column -->
+        <ng-container matColumnDef="correct_id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+          <td mat-cell *matCellDef="let row">{{ row.correct_id }}</td>
+        </ng-container>
+
+        <!-- Female Parent -->
+        <ng-container matColumnDef="correct_female">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Female Parent</th>
+          <td mat-cell *matCellDef="let row">{{ row.correct_female }}</td>
+        </ng-container>
+
+        <!-- Male Parent -->
+        <ng-container matColumnDef="correct_male">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Male Parent</th>
+          <td mat-cell *matCellDef="let row">{{ row.correct_male }}</td>
+        </ng-container>
+
+        <!-- Year -->
+        <ng-container matColumnDef="year">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Year</th>
+          <td mat-cell *matCellDef="let row">{{ row.year }}</td>
+        </ng-container>
+
+        <!-- Generation -->
+        <ng-container matColumnDef="generation">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Generation</th>
+          <td mat-cell *matCellDef="let row">{{ row.generation }}</td>
+        </ng-container>
+
+        <!-- Header and Row Declarations -->
+        <tr mat-header-row *matHeaderRowDef="postgresSearchColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: postgresSearchColumns;"></tr>
+
+      </table>
+    </div>
+  </div>
+
+      <!-- Neo4j Search Results Table -->
+  <div class = table-section >
+    <div *ngIf="neo4jSearch.data.length > 0" style="max-height: 400px; overflow-y: auto;">
+      <h3>Neo4j Results</h3>
+
+      <table mat-table [dataSource]="neo4jSearch" matSort #neo4jSort="matSort">
+
+
+        <!-- Source -->
+        <ng-container matColumnDef="source">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Source</th>
+          <td mat-cell *matCellDef="let item">{{ item.source?.id }}</td>
+        </ng-container>
+
+        <!-- Relation -->
+        <ng-container matColumnDef="relation">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Relation</th>
+          <td mat-cell *matCellDef="let item">{{ item.relation }}</td>
+        </ng-container>
+
+        <!-- Target -->
+        <ng-container matColumnDef="target">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Target</th>
+          <td mat-cell *matCellDef="let item">{{ item.target?.id }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="neo4jSearchColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: neo4jSearchColumns;"></tr>
+
+      </table>
+    </div>
+  </div>
+
 </div>

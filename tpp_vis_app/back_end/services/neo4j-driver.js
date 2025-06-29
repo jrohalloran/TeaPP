@@ -341,3 +341,4 @@ export async function fetchPartnerOf(names) {
 
   return allResults;
 }
+

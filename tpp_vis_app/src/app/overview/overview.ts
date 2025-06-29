@@ -30,70 +30,13 @@ import { DataTransferService } from '../services/dataTransferService';
 })
 export class Overview {
 
-      // Search Attributes 
-    searchInput: string = '';
-    searchResults: any[] = [];
-    searchPerformed = false;
-
-    constructor(private backendApiService: backendApiService,
-                  private router: Router,
-                  private dataTransferService: DataTransferService
-      ){}
-
-
     async ngAfterViewInit(): Promise<void> {
 
 
-      await this.getPostgresStats();
-      await this.getNeo4jStats();
+      //await this.getPostgresStats();
+      //await this.getNeo4jStats();
 
 
     }
-  
-
-
-    async getNeo4jStats(){
-      console.log('Getting stats for Neo4J database')
-
-      console.log("Uploading Neo4j Data");
-        try {
-          const response = await firstValueFrom(this.backendApiService.getNeo4jStats());
-          console.log('Neo4J Stats Response from backend:', response);
-        } catch (error) {
-              console.error('Error:', error);
-        }
-    }
-
-    async getPostgresStats(){
-      console.log('Getting stats for postgres database');
-
-      console.log("Uploading PostgreSQL Data");
-        try {
-          const response = await firstValueFrom(this.backendApiService.getPostgresStats());
-          console.log('Postgres Stats Response from backend:', response);
-        } catch (error) {
-              console.error('Error:', error);
-      }
-
-    }
-
-    
-
-
-    performSearch() {
-    const term = this.searchInput?.toLowerCase().trim();
-    this.searchPerformed = true;
-
-    if (!term) {
-      this.searchResults = [];
-      return;
-    }
-    /*
-    this.searchResults = this.cleanData.filter(row =>
-      Object.values(row).some(value =>
-        String(value).toLowerCase().includes(term)
-      )
-    );*/
-  }
 
 }

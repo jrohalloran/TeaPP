@@ -68,20 +68,15 @@
 
           <!-- Dropdown of matching items -->
           <ul class="dropdown" *ngIf="filteredData.length < 20">
-            <li *ngFor="let item of filteredData" (click)="selectItem(item)">{{ item.clone_id }} 
+            <li *ngFor="let item of filteredData" (click)="selectItem(item)">{{ item }} 
             </li>
           </ul>
-
-          <!-- Optional: show selected item -->
-          <div *ngIf="selectedItem" class="selected-item">
-            <p>Selected: <strong>{{ selectedItem.clone_id}}</strong> </p>
-          </div>
-        </div>
               <!-- Stats section -->
       <div class="bottom-half">
         <h3>Statistics</h3>
         <p>Nodes: {{ stats.nodes }}</p>
         <p>Edges: {{ stats.edges }}</p>
+      </div>
       </div>
 
     </aside>
