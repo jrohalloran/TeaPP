@@ -1,0 +1,6 @@
+Unique parents: 212
+Unique Female Parents: 148
+Unique Male Parents: 182
+Used as Both: 118
+Female only: 30
+Male only: 64

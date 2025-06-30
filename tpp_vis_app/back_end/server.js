@@ -194,6 +194,8 @@ app.get('/api/images', (req, res) => {
   });
 });
 
+app.use('/diagramImages', express.static(path.join(__dirname, '/controllers/temp')));
+
 
 
 // NEO4J CONNECTION TEST

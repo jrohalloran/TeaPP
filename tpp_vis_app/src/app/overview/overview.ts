@@ -13,6 +13,15 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Router } from '@angular/router';
 import { DataTransferService } from '../services/dataTransferService';
 
+interface GridItem {
+  url: string;
+  name: string;
+  gridArea: string; 
+  title: string; // <-- add this
+}
+
+
+
 @Component({
   selector: 'app-overview',
   imports: [CommonModule,
@@ -28,15 +37,84 @@ import { DataTransferService } from '../services/dataTransferService';
   templateUrl: './overview.html',
   styleUrls: ['./overview.css']
 })
+
+
 export class Overview {
+
+
+    siblingCount: any[] = [];
+    rankedCount: any[] = [];
+    images: GridItem[] = [];
+
+    
+
+
+    constructor(private backendApiService: backendApiService,
+      ){}
+
 
     async ngAfterViewInit(): Promise<void> {
 
 
-      //await this.getPostgresStats();
-      //await this.getNeo4jStats();
+      await this.getPedigreeStats();
+      await this.getDiagrams();
 
 
     }
 
+    async getDiagrams(){
+      console.log("Getting Diagrams");
+
+
+      this.images = [
+      { url: this.backendApiService.getDiagramUrl('venn_parents_Gener_2.png'), name: 'clustermap', gridArea: 'hero',
+         title: "Parents per Generation" },
+      { url: this.backendApiService.getDiagramUrl('year_gen_venn_2.png'), name: 'clustermap', gridArea: 'thumb1', title: "Year of Breeding for Each Generation"  }
+    ];
+
+    }
+
+
+
+
+
+
+
+    async getPedigreeStats(){
+
+        console.log("Getting Pedigree Stats")
+
+        try {
+          const response = await firstValueFrom(this.backendApiService.getPedigreeStats());
+          console.log('Pedigree Stats Response from backend:', response);
+          this.siblingCount = response[0];
+          this.rankedCount = response[1];
+          console.log(this.siblingCount);
+          console.log(this.rankedCount);
+
+          } catch (error) {
+              console.error('Error:', error);
+        }
+    }
+
+
+  getImageClass(name: string): string {
+      if (name.includes('pca')) {
+        return 'thumbnail-img';
+      } else if (name.includes('clustermap')) {
+        return 'banner-img';
+      } else {
+        return 'default-img';
+      }
+    }
+
+  selectedImageUrl: string | null = null;
+
+  openModal(url: string): void {
+    this.selectedImageUrl = url;
+  }
+
+  closeModal(): void {
+    this.selectedImageUrl = null;
+  }
 }

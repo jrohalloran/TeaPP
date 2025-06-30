@@ -25,16 +25,11 @@ export class backendApiService {
   private apiUrl = 'http://localhost:3333/api';
   private imageListUrl = 'http://localhost:3333/api/images';
   private imageBaseUrl = 'http://localhost:3333/kinshipImages';
+  private diagramsBaseUrl = 'http://localhost:3333/diagramImages';
 
   constructor(private http: HttpClient) {}
 
-  getJSON(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/getJSON`);
-  }
-
-
   
-
   /// File processing requests 
 
   processUploadFile(): Observable<any>{
@@ -91,6 +86,12 @@ export class backendApiService {
   getPostgresStats(): Observable<any> {
     console.log("Getting /getPostgresStats");
     return this.http.get(`${this.apiUrl}/getPostgresStats`);
+
+  }
+
+  getPedigreeStats(): Observable<any> {
+    console.log("Getting /getStats");
+    return this.http.get(`${this.apiUrl}/getStats`);
 
   }
 
@@ -168,6 +169,10 @@ export class backendApiService {
 
   getImageUrl(fileName: string): string {
     return `${this.imageBaseUrl}/${fileName}`;
+  }
+
+  getDiagramUrl(fileName: string): string {
+    return `${this.diagramsBaseUrl}/${fileName}`;
   }
   
 }

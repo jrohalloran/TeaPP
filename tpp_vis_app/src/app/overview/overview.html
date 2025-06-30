@@ -1,5 +1,45 @@
-<div>
-  <h3>Statistics</h3>
-  
+
+
+<div class = statistics>
+<h1>Pedigree Statistics</h1>
+
 
 </div>
+
+
+
+<div class="custom-grid">
+  <!-- Loop through each image item -->
+  <div
+    *ngFor="let item of images"
+    class="grid-item"
+    [ngStyle]="{ 'grid-area': item.gridArea }"
+  >
+    <!-- Show image figure if URL exists -->
+    <figure *ngIf="item.url" class="image-figure">
+      <figcaption>
+        <strong>{{ item.title || item.name }}</strong><br />
+      </figcaption>
+      <img 
+        [src]="item.url" 
+        [alt]="item.name" 
+        [ngClass]="getImageClass(item.name)" 
+        (click)="openModal(item.url)" 
+      />
+    </figure>
+
+    <!-- Fallback stats box if no image URL -->
+    <div *ngIf="!item.url" class="stats-box">
+      <h3>{{ item.title || 'Statistics' }}</h3>
+      <!-- You can add more stats content here if needed -->
+    </div>
+    
+  </div>
+</div>
+
+    <!-- Modal Viewer -->
+  <div class="modal" *ngIf="selectedImageUrl" (click)="closeModal()">
+    <img [src]="selectedImageUrl" alt="Enlarged Image" />
+  </div>
+
+

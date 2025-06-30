@@ -65,6 +65,30 @@ async function performSynbreed() {
     });
 }
 
+async function performStatistics() {
+    console.log("performing statistics")
+    
+    const scriptPath = path.join(__dirname, 'scripts', 'perform_statistics.R');
+    const dataFilePath = outputFile;
+    const scriptDir = path.dirname(scriptPath);
+
+    const command = `Rscript "${scriptPath}" "${dataFilePath}" "${scriptDir}"`;
+
+    return new Promise((resolve, reject) => {
+        exec(command, { maxBuffer: 1024 * 5000 }, (error, stdout, stderr) => {
+        if (error) {
+            console.error(`Error running R script: ${error.message}`);
+            return reject(error);
+        }
+        if (stderr) {
+            console.warn(`R script stderr:\n${stderr}`);
+        }
+        console.log(`R script output:\n${stdout}`);
+        resolve();
+        });
+    });
+}
+
 
 
 function removeParentEntries(data){
