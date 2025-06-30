@@ -46,7 +46,7 @@ cat("Working directory set to:", getwd(), "\n")
 df <- fromJSON(json_file)
 
 # View the data as a proper data frame (datagram)
-head(df)
+#head(df)
 
 
 ## ************ Exploration ********
@@ -57,7 +57,7 @@ head(df)
 ## Removal of twins - how many are left?
 
 ## ------ NUMBER OF TWINS - TWIN NO.2
-matched_rows <- grepl("^\\d{7}([a-zA-Z/])2$",df$correct_ID)
+matched_rows <- grepl("^\\d{7}([a-zA-Z/])2$",df$correct_id)
 # Get matching rows
 matching_df <- df[matched_rows, ]
 nrow(matching_df)
@@ -65,12 +65,12 @@ nrow(matching_df)
 
 #### -------- TWIN NO.2 AS PARENTS
 ## Checking Twins ending in letter + "2" aren't used as parents 
-matched_rows <- grepl("^\\d{7}([a-zA-Z/])2$",df$correct_ID)
+matched_rows <- grepl("^\\d{7}([a-zA-Z/])2$",df$correct_id)
 # Get matching rows
 matching_df <- df[matched_rows, ]
 nrow(matching_df)
 
-matched_rows <- grepl("^\\d{7}([a-zA-Z/])2$",df$ID)
+matched_rows <- grepl("^\\d{7}([a-zA-Z/])2$",df$clone_id)
 # Get matching rows
 matching_df <- df[matched_rows, ]
 nrow(matching_df)
@@ -88,13 +88,13 @@ matching_df <- df[matched_rows, ]
 nrow(matching_df)
 
 ## ------ NUMBER OF TWINS - TWIN NO.1
-matched_rows <- grepl("^\\d{7}([a-zA-Z/])1$",df$correct_ID)
+matched_rows <- grepl("^\\d{7}([a-zA-Z/])1$",df$correct_id)
 # Get matching rows
 matching_df <- df[matched_rows, ]
 nrow(matching_df) 
 
 
-matched_rows <- grepl("^\\d{7}([a-zA-Z/])1$",df$ID)
+matched_rows <- grepl("^\\d{7}([a-zA-Z/])1$",df$clone_id)
 # Get matching rows
 matching_df <- df[matched_rows, ]
 nrow(matching_df) 
@@ -122,7 +122,7 @@ results <- data.frame(
 )
 
 # Twin No.1
-matched_rows <- grepl("^\\d{6,7}([a-zA-Z/])1$", df$correct_ID)
+matched_rows <- grepl("^\\d{6,7}([a-zA-Z/])1$", df$correct_id)
 results <- rbind(results, data.frame(Description = "Twin No.1 IDs", Count = sum(matched_rows)))
 
 matched_rows <- grepl("^\\d{6,7}([a-zA-Z/])1$", df$correct_male)
@@ -132,7 +132,7 @@ matched_rows <- grepl("^\\d{6,7}([a-zA-Z/])1$", df$correct_female)
 results <- rbind(results, data.frame(Description = "Twin No.1 used as mother", Count = sum(matched_rows)))
 
 # Twin No.2
-matched_rows <- grepl("^\\d{6,7}([a-zA-Z/])2$", df$correct_ID)
+matched_rows <- grepl("^\\d{6,7}([a-zA-Z/])2$", df$correct_id)
 results <- rbind(results, data.frame(Description = "Twin No.2 IDs", Count = sum(matched_rows)))
 
 matched_rows <- grepl("^\\d{6,7}([a-zA-Z/])2$", df$correct_male)
@@ -237,19 +237,6 @@ print(results)
 file<- paste0(temp_dir,"/sibling_counts.txt")
 write.table(results, file = file, sep = "\t", row.names = FALSE, quote = FALSE)
 
-
-
-
-length(unique(c(df$correct_female)))
-length(unique(c(df$correct_male))) 
-length(intersect(unique(c(df$correct_female)),unique(c(df$correct_male))))
-length(setdiff(unique(c(df$correct_female)),unique(c(df$correct_male))))
-length(setdiff(unique(c(df$correct_male)),unique(c(df$correct_female))))
-
-
-parents <- unique(c(df$correct_male,df$correct_female))
-length(parents)
-
 # Calculate values
 num_female_unique <- length(unique(c(df$correct_female)))
 num_male_unique <- length(unique(c(df$correct_male)))
@@ -257,24 +244,101 @@ num_intersect <- length(intersect(unique(c(df$correct_female)), unique(c(df$corr
 num_female_not_male <- length(setdiff(unique(c(df$correct_female)), unique(c(df$correct_male))))
 num_male_not_female <- length(setdiff(unique(c(df$correct_male)), unique(c(df$correct_female))))
 
-
-parents <- unique(c(df$correct_male,df$correct_female))
+parents <- unique(c(df$correct_male, df$correct_female))
 num_parents <- length(parents)
 
-# Prepare output lines
-output_lines <- c(
-    paste("Unique parents:", num_parents),
-    paste("Unique Female Parents:", num_female_unique),
-    paste("Unique Male Parents:", num_male_unique),
-    paste("Used as Both:", num_intersect),
-    paste("Female only:", num_female_not_male),
-    paste("Male only:", num_male_not_female)
+# Create a data frame
+summary_df <- data.frame(
+  Metric = c(
+    "Unique Parents",
+    "Unique Female Parents",
+    "Unique Male Parents",
+    "Used as Both",
+    "Female Only",
+    "Male Only"
+  ),
+  Count = c(
+    num_parents,
+    num_female_unique,
+    num_male_unique,
+    num_intersect,
+    num_female_not_male,
+    num_male_not_female
+  )
 )
 
-# Write to file
-file<- paste0(temp_dir,"/summary_counts.txt")
-writeLines(output_lines, "summary_counts.txt")
+# Write to a tab-delimited file
+file <- file.path(temp_dir, "summary_counts.tsv")
+write.table(summary_df, file, sep = "\t", row.names = FALSE, quote = FALSE)
 
 
+# Getting altering statistics 
+# Get changed IDs
 
 
+print("setdiff, ID, correct_ID")
+print(length(unique(setdiff(df$clone_id, df$correct_id))))
+
+print("setdiff, female_par, correct_female")
+print(length(unique(setdiff(df$female_par, df$correct_female))))
+
+print("setdiff, male_par, correct_male")
+print(length(unique(setdiff(df$male_par, df$correct_male))))
+
+
+num_id_updated<-length(unique(setdiff(df$clone_id, df$correct_id)))
+num_male_par_updated<-length(unique(setdiff(df$male_par, df$correct_male)))
+num_female_par_updated<-length(unique(setdiff(df$female_par, df$correct_female)))
+
+
+print("intersect, correct_female, clone_id")
+print(length(unique(intersect(df$correct_female, df$clone_id))))
+
+
+print("intersect, correct_male, clone_id")
+print(length(unique(intersect(df$correct_male, df$clone_id))))
+
+#print(unique(df$year));
+
+
+formatting_df <- data.frame(
+  Metric = c(
+    "Offspring IDs",
+    "Female Parents",
+    "Male Parents"
+  ),
+  Count = c(
+    num_id_updated,
+    num_male_par_updated,
+    num_female_par_updated
+  )
+)
+
+file <- file.path(temp_dir, "formatting_summary.txt")
+write.table(formatting_df, file, sep = "\t", row.names = FALSE, quote = FALSE)
+
+
+number_records<-print(nrow(df))
+
+
+numbers_df <- data.frame(
+     Metric = c(
+       "Number of Records"
+      ),
+      Count = c(
+           number_records
+  )
+)
+
+file <- file.path(temp_dir, "basic_figures.txt")
+write.table(numbers_df, file, sep = "\t", row.names = FALSE, quote = FALSE)
+
+
+entry_counts <- as.data.frame(table(df$year))
+colnames(entry_counts) <- c("year", "entry_count")
+entry_counts$year <- as.numeric(as.character(entry_counts$year))
+
+print(entry_counts)
+
+file <- file.path(temp_dir, "year_count.txt")
+write.table(entry_counts, file, sep = "\t", row.names = FALSE, quote = FALSE)

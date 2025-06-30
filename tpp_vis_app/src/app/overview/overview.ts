@@ -44,6 +44,11 @@ export class Overview {
 
     siblingCount: any[] = [];
     rankedCount: any[] = [];
+    summaryCount: any[] = [];
+    twinCount: any[] = [];
+    yearCount: any[] = [];
+    basicStats: any[] = [];
+    formattedCount: any[] = [];
     images: GridItem[] = [];
 
     
@@ -74,12 +79,6 @@ export class Overview {
 
     }
 
-
-
-
-
-
-
     async getPedigreeStats(){
 
         console.log("Getting Pedigree Stats")
@@ -89,8 +88,15 @@ export class Overview {
           console.log('Pedigree Stats Response from backend:', response);
           this.siblingCount = response[0];
           this.rankedCount = response[1];
-          console.log(this.siblingCount);
-          console.log(this.rankedCount);
+          this.summaryCount = response[2];
+          this.twinCount = response[3];
+          this.yearCount = response[4];
+          this.basicStats = response[5];
+          this.formattedCount = response[6];
+          //console.log(this.siblingCount);
+          //console.log(this.rankedCount);
+          //console.log(this.summaryCount);
+          //console.log(this.twinCount);
 
           } catch (error) {
               console.error('Error:', error);

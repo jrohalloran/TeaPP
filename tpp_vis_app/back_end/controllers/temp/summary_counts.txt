@@ -1,6 +1,7 @@
-Unique parents: 212
-Unique Female Parents: 148
-Unique Male Parents: 182
-Used as Both: 118
-Female only: 30
-Male only: 64
+Metric	Count
+Unique Parents	212
+Unique Female Parents	148
+Unique Male Parents	182
+Used as Both	118
+Female Only	30
+Male Only	64

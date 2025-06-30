@@ -1,12 +1,147 @@
+<div class="main-wrapper">
+<div class="stats-container">
+
+  <div class = "instructions"></div>
+
+  <h1>Summary & Descriptive Statistics</h1>
+  <!-- Left Column -->
+  <div class="stats-column">
+    <!-- Section 1 -->
+    <div class="stats-section">
+      <h2>Entry Counts by Sibling</h2>
+      <p>Occurance of recorded siblings</p>
+      <div class="table-scroll-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Sibling</th>
+              <th>Entry Count</th>
+              <th>Unique Parent Count</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of siblingCount">
+              <td>{{ item.Sibling }}</td>
+              <td>{{ item.Entry_Count }}</td>
+              <td>{{ item.Unique_Parent_Count }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="stats-section">
+      <h2>Parental Records</h2>
+      <p></p>
+      <div class="table-scroll-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Metric</th>
+              <th>Count</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of summaryCount">
+              <td>{{ item.Metric }}</td>
+              <td>{{ item.Count }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Section 4 -->
+    <div class="stats-section">
+      <h2>Twin Statistics</h2>
+      <p>Occurance of twins.</p>
+      <div class="table-scroll-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Description</th>
+              <th>Count</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of twinCount">
+              <td>{{ item.Description }}</td>
+              <td>{{ item.Count }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    </div>
+
+  <!-- Right Column -->
+  <div class="stats-column">
+
+    <div class="stats-section">
+      <h2>Ranked No. of Offspring</h2>
+      <p>The individuals that contributed the most to breeding events - Highest incidence of being a parent</p>
+      <div class="table-scroll-container">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>No. Offspring</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of rankedCount">
+              <td>{{ item.Var1 }}</td>
+              <td>{{ item.Freq }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
 
 
-<div class = statistics>
-<h1>Pedigree Statistics</h1>
+    <div class="stats-section">
+      <h2>Year by Count</h2>
+      <p>Frequency of Offspring breed for each year</p>
+      <div class="table-scroll-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Year</th>
+              <th>No. Offspring</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of yearCount">
+              <td>{{ item.year }}</td>
+              <td>{{ item.entry_count }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
 
-
-</div>
-
-
+    <div class="stats-section">
+      <h2>Formatting Statistics</h2>
+      <p>Number of ID/Entries re-formatted on Upload</p>
+      <div class="table-scroll-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Record Type</th>
+              <th>Count</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of formattedCount">
+              <td>{{ item.Metric }}</td>
+              <td>{{ item.Count }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  
 
 <div class="custom-grid">
   <!-- Loop through each image item -->
@@ -41,5 +176,5 @@
   <div class="modal" *ngIf="selectedImageUrl" (click)="closeModal()">
     <img [src]="selectedImageUrl" alt="Enlarged Image" />
   </div>
-
+</div>
 
