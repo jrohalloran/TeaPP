@@ -50,6 +50,7 @@ export class Overview {
     basicStats: any[] = [];
     formattedCount: any[] = [];
     images: GridItem[] = [];
+    statsImages:GridItem [] = [];
 
     
 
@@ -97,6 +98,8 @@ export class Overview {
           //console.log(this.rankedCount);
           //console.log(this.summaryCount);
           //console.log(this.twinCount);
+          this.statsImages = [{ url: this.backendApiService.getDiagramUrl('year_histogram.png'), name: 'histogram', gridArea: 'hero',
+          title: "Parents per Generation" },]
 
           } catch (error) {
               console.error('Error:', error);

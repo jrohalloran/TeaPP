@@ -118,6 +118,20 @@
           </tbody>
         </table>
       </div>
+      <div
+          *ngFor="let item of statsImages"
+          class="grid-item"
+          [ngStyle]="{ 'grid-area': item.gridArea }"
+        >
+      <figure *ngIf="item.url" class="image-figure">
+      <img 
+        [src]="item.url" 
+        [alt]="item.name" 
+        [ngClass]="getImageClass(item.name)" 
+        (click)="openModal(item.url)" 
+      />
+      </figure>
+    </div>
     </div>
 
     <div class="stats-section">

@@ -3,6 +3,7 @@
 cat("✅ R script started...\n")
 
 library(jsonlite)
+library(ggplot2)
 
 
 
@@ -338,7 +339,38 @@ entry_counts <- as.data.frame(table(df$year))
 colnames(entry_counts) <- c("year", "entry_count")
 entry_counts$year <- as.numeric(as.character(entry_counts$year))
 
-print(entry_counts)
 
 file <- file.path(temp_dir, "year_count.txt")
 write.table(entry_counts, file, sep = "\t", row.names = FALSE, quote = FALSE)
+
+
+
+hist_file <- file.path(temp_dir, "year_histogram.png")
+
+# Create and save histogram plot
+png(filename = hist_file, width = 800, height = 600)
+# Create enhanced histogram plot
+ggplot(entry_counts, aes(x = factor(year), y = entry_count)) +   # use factor for discrete bars
+  geom_col(fill = "#4C72B0", color = "#2A437C", width = 0.7, alpha = 0.85) +  # navy blue bars with border and transparency
+  geom_text(aes(label = entry_count), vjust = -0.5, size = 4, color = "#2A437C", fontface = "bold") +  # values on top of bars
+  labs(
+    title = "Number of Offspring per Year",
+    subtitle = "The number of individuals bred per year",
+    x = "Year",
+    y = "Entry Count"
+  ) +
+  theme_minimal(base_family = "Helvetica", base_size = 14) +
+  theme(
+    plot.title = element_text(size = 20, face = "bold", hjust = 0.5, margin = margin(b = 10)),
+    plot.subtitle = element_text(size = 14, hjust = 0.5, margin = margin(b = 20)),
+    axis.title = element_text(face = "bold"),
+    axis.text.x = element_text(angle = 45, hjust = 1, color = "#2A437C", face = "bold"),
+    axis.text.y = element_text(color = "#2A437C"),
+    panel.grid.major = element_line(color = "#D9D9D9"),
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "#F9F9F9"),
+    plot.background = element_rect(fill = "#FFFFFF", color = NA)
+  ) +
+  coord_cartesian(clip = 'off')  # allow text labels to not be cut off
+
+dev.off()
