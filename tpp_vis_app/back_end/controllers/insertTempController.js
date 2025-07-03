@@ -66,10 +66,6 @@ async function insertTemperature(){
 }
 
 
-
-
-
-
 export const processTemperature = async (req, res) => {
   console.log("Attempting to insert Rainfall data...");
 
