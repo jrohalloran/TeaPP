@@ -8,7 +8,6 @@
 
 import { fetchNuclearFamilyData } from '../services/neo4j-driver.js';
 import { formatForSigma,convertToSigmaFormat,layerByYearReverse } from '../utils/sigmaFormatter.js';
-import { saveJsonToFile } from '../utils/fileWriter.js';
 
 
 export const getNuclearFamily = async (req, res) => {
@@ -29,9 +28,7 @@ export const getNuclearFamily = async (req, res) => {
 
     let plotData = layerByYearReverse(sigmaData);
     plotData = convertToSigmaFormat(plotData);
-
-    //await saveJsonToFile(plotData, 'plotData.json')
-
+    
     res.json(plotData);
   } catch (err) {
     console.error('Controller error:', err);

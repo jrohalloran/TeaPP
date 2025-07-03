@@ -19,50 +19,25 @@ import db from '../services/postgres_db.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const backend_dir = path.dirname(__dirname);
-const tempDir = path.join(__dirname, 'temp_envir');
+const tempDir = path.join(__dirname, 'temp');
 const outputFile = path.join(tempDir, 'rainfall_data.txt');
 
-let data;
 
-async function getRainfallData(){
+
+
+async function getTempData(){
 
     console.log("Getting Rainfall Stats from Database");
 
-    try {
-        const query = `
-        SELECT *
-          FROM rainfall 
-        `;
-        const result = await db.query(query);
-        data = result.rows;
-        console.log(result.rows);
-        
-      } catch (error) {
-        console.error(error);
-      }
-}
-
-async function writeFile(){
-
-    console.log("Attempting Write Data file...")
-    const headers = Object.keys(data[0]).join('\t');
-    const dataLines = data.map(row => Object.values(row).join('\t'));
-    const content = [headers, ...dataLines].join('\n');
-    
-    try{
-        fs.writeFileSync(outputFile, content);
-        console.log("File Successfully Written:", outputFile);
-    } catch (error) {
-        console.error('Error:', error);
-    }
 
 }
+
 
 async function performStatistics() {
 
     console.log("Performing statistics")
     
-    const scriptPath = path.join(__dirname, 'scripts', 'process_rainfall.R');
+    const scriptPath = path.join(__dirname, 'scripts', 'process_temperature.R');
     const scriptDir = path.dirname(scriptPath);
 
     // Escape quotes inside the JSON string for safe shell usage:
@@ -85,13 +60,11 @@ async function performStatistics() {
 
 
 
-
-export const getRainfallStats= async (req, res) => {
+export const getTempStats= async (req, res) => {
 
     console.log("Attempting to process Pedigree Statistics...");
     try {
-        await getRainfallData();
-        await writeFile();
+        await getTempData();
         await performStatistics();
         res.json("This pathway works");
     } catch (error) {

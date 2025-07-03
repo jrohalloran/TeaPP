@@ -208,5 +208,16 @@ export class backendApiService {
     return this.http.get(`${this.apiUrl}/processRainfallFile`);
   }
 
+
+  getTempStats(): Observable<any> {
+    console.log("Getting Temperature Stats");
+    return this.http.get(`${this.apiUrl}/getTemperatureStats`);
+  }
+
+  processTempFile(): Observable<any> {
+    console.log("Processing Temperature File");
+    return this.http.get(`${this.apiUrl}/processTempFile`);
+  }
+
   
 }

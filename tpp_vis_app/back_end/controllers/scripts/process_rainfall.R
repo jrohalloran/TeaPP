@@ -49,41 +49,42 @@ cat("Working directory set to:", getwd(), "\n")
 
 # Parse JSON into a data frame
 #df <- fromJSON(json_file)
-df <- read.delim(input_file, header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+df_long <- read.delim(input_file, header = TRUE, sep = "\t", stringsAsFactors = FALSE)
 
 # View the data
 #head(data)
 # View the data as a proper data frame (datagram)
-print(head(df))
+print(head(df_long))
 
-
+df_long$date<-ymd(df_long$date)
+df_long$rainfall <- as.numeric(df_long$rainfall)
 # Selecting columns 
 #cols_to_exclude <- c("TOTAL", "MEAN")
 #df<- data %>% select(-all_of(cols_to_exclude))
 #df<- df[!(rownames(df) %in% c("Mean")), ]
 
 ## Converting to Numeric
-df <- df %>% mutate_all(~ as.numeric(as.character(.)))
-sapply(df, function(x) sum(is.na(as.numeric(as.character(x)))))
+#df <- df %>% mutate_all(~ as.numeric(as.character(.)))
+#sapply(df, function(x) sum(is.na(as.numeric(as.character(x)))))
 
 
 # Converting to long format 
 #df <- df %>% rownames_to_column("year")
 
-df_long <- df %>%
-  pivot_longer(
-    cols = -year,
-    names_to = "month",
-    values_to = "rainfall"
-  )
+#df_long <- df %>%
+ #pivot_longer(
+   # cols = -year,
+   # names_to = "month",
+   # values_to = "rainfall"
+  #)
 
 
 # Creating a Date Object (additional column)--> Assigning labels etc. 
-df_long <- df_long %>%
-  mutate(
-    year = as.integer(year),
-    date = dmy(paste("01", month, year))
-  )
+#df_long <- df_long %>%
+  #mutate(
+   # year = as.integer(year),
+   # date = dmy(paste("01", month, year))
+  #)
 
 
 file<- paste0(temp_dir,"/Month_Rain_lineplot.png")
@@ -254,6 +255,6 @@ g<-ggplot(df_long, aes(x = month, y = rainfall, group = factor(year), color = fa
     plot.background = element_rect(fill = "white", color = NA),  # White background
     panel.background = element_rect(fill = "white", color = NA))
 
-ggsave(file, plot = g, width = 6, height = 4, dpi = 300)
+ggsave(file, plot = g, width = 6, height = 6, dpi = 300)
 
 
