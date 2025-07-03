@@ -11,6 +11,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
+import { Router } from '@angular/router';
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms'; 
+
 
 @Component({
   selector: 'app-file-upload',
@@ -21,7 +25,8 @@ import { MatIconModule } from '@angular/material/icon';
       MatInputModule,
       MatButtonModule,
       MatCheckboxModule,
-      MatIconModule],
+      MatIconModule,
+      FormsModule],
   templateUrl: './file-upload.html',
   styleUrl: './file-upload.css'
 })
@@ -38,6 +43,8 @@ export class FileUploadComponent {
  selectedGenomFile: File | null = null;
  uploadStatus: string = 'waiting';
 
+ selectedEnvType: string = '';
+
  
  processedData : any[] = [];
 
@@ -47,7 +54,8 @@ export class FileUploadComponent {
 
 
  constructor(private uploadService: UploadService,
-    private backendApiService: backendApiService) {}
+    private backendApiService: backendApiService,
+    private router: Router) {}
 
 
   checkIfTabDelimited(file: File): Promise<boolean> {
@@ -76,9 +84,6 @@ export class FileUploadComponent {
       reader.readAsText(blob);
     });
   }
-
-
-
 
 
 
@@ -213,8 +218,6 @@ export class FileUploadComponent {
     this.loadingChange.emit(false);
   }
 
-
-
   async uploadEnvFile() {
     this.loadingChange.emit(true);
         if (!this.selectedEnvFile) {
@@ -240,13 +243,13 @@ export class FileUploadComponent {
 
     console.log("File is correct format -- Text file");
     
+    if (this.selectedEnvType == 'rainfall'){
     this.uploadService.uploadEnvRAINFile(this.selectedEnvFile).subscribe({
       next: (response) => {
         console.log('Upload response:', response);
 
         this.uploadStatus = 'completed';
-        
-
+        this.processRainfallFile();
       },
       error: (error) => {
         console.error('Upload error:', error);
@@ -255,6 +258,15 @@ export class FileUploadComponent {
     });
     this.loadingChange.emit(false);
   }
+    if(this.selectedEnvType == 'temperature'){
+      console.log("Will perform temperature processing")
+      }
+    else{
+      console.log("please select a file type ")
+    }
+
+}
+
 
 
   async uploadGenomFile() {
@@ -286,6 +298,22 @@ export class FileUploadComponent {
     }
   }
 
+    async processRainfallFile(){
+    this.loadingChange.emit(true);
+
+    console.log("Requesting File Process....");
+    try {
+      const response = await firstValueFrom(this.backendApiService.processRainfallFile());
+      console.log('Response from backend:', response);
+      if (response){
+        this.loadingChange.emit(false);
+        this.router.navigate(['/home']);
+      }
+
+      } catch (error) {
+      console.error('Error:', error);
+    }
+  }
 
   onUploadComplete(response: any) {
     this.loadingChange.emit(true);

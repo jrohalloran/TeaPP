@@ -40,6 +40,7 @@ import performKinshipfromRoutes from './routes/performKinship.js';
 import getStatsRoutes from './routes/getStats.js'
 import searchRoutes from './routes/searchID.js'
 import authenticationRoutes from './routes/getUserDetails.js'
+import envStatsRoutes from './routes/envStats.js'
 
 const app = express();
 
@@ -69,6 +70,7 @@ if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir);
 }
 
+/*
 const env_uploadDir = 'env_uploads';
 if (fs.existsSync(env_uploadDir)){
   console.log("/env_uploads directory exists");
@@ -78,7 +80,7 @@ if (fs.existsSync(env_uploadDir)){
 if (!fs.existsSync(env_uploadDir)) {
   console.log("---- Making Directory ----");
   fs.mkdirSync(env_uploadDir);
-}
+}*/
 
 
 
@@ -279,6 +281,16 @@ app.get('/api/images', (req, res) => {
 });
 
 app.use('/diagramImages', express.static(path.join(__dirname, '/controllers/temp')));
+
+
+// ENVIRONMENTAL DATA 
+
+app.use('/api', envStatsRoutes);
+
+app.use('/rainfallImages', express.static(path.join(__dirname, 'controllers/temp_envir')));
+
+
+
 
 
 

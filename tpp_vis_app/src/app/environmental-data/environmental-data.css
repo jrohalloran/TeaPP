@@ -1,0 +1,117 @@
+.loading-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(255, 255, 255, 0.8);
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.main-content {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 900px;
+  overflow: hidden;
+  background-color: #f9f9f9; /* Greenish background */
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+/* Welcome / Info section */
+.top-section {
+  background-color: #f0f4f8;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+/* Two panels side-by-side */
+.two-panels {
+  display: flex;
+  gap: 2rem;
+  flex: 0 0 auto;
+  min-height: auto;
+}
+/* Individual panel (upload / analyse) */
+.panel {
+  flex: 1;
+  background-color: #f9f9f9;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  max-height: 100%;
+}
+
+.content-container{
+    flex: 1 1 auto;
+    overflow: auto;
+    background-color: #f9f9f9;
+    padding: 1rem;
+    border-radius: 5px;
+    max-height: 850px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.custom-grid {
+    padding: 1rem;
+    border-radius: 5px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    grid-template-areas:
+        "hero thumb1"
+        "thumb2 stats"
+        "thumb3 thumb4";
+    gap: 1rem;
+}
+
+.grid-item {
+  padding: 2rem;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.grid-item img {
+  width: 100%;
+  max-width: 600px;
+  height: auto;
+  object-fit: contain;
+  border-radius: 2px;
+  display: block;
+  margin: 0 auto;
+}
+
+/* Modal Styles */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2000;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: zoom-out;
+}
+
+.modal img {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+}

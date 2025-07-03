@@ -62,6 +62,27 @@
         <li><strong>File Size:</strong> {{selectedEnvFile.size}} bytes</li>
       </ul>
     </section>
+    <div class="data-type-selection">
+      <p>Please select a data type:</p>
+      <label>
+        <input
+          type="radio"
+          name="envDataType"
+          value="rainfall"
+          [(ngModel)]="selectedEnvType"
+        />
+        Rainfall
+      </label>
+      <label>
+        <input
+          type="radio"
+          name="envDataType"
+          value="temperature"
+          [(ngModel)]="selectedEnvType"
+        />
+        Temperature
+      </label>
+    </div>
 
     <!-- Upload button -->
     <button (click)="uploadEnvFile(); actionMethod($event)">Start Upload</button>

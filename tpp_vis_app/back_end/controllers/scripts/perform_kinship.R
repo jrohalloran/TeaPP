@@ -53,7 +53,7 @@ cat("Working directory set to:", getwd(), "\n")
 df <- read.delim(json_file, header = TRUE, sep = "\t", stringsAsFactors = FALSE)
 
 # View the data
-head(data)
+#head(data)
 # View the data as a proper data frame (datagram)
 head(df)
 

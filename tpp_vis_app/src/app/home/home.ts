@@ -7,6 +7,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { DisplayComponent } from '../display/display';
 import { Kinship } from '../kinship/kinship';
 import { Overview } from '../overview/overview';
+import { EnvironmentalData } from '../environmental-data/environmental-data';
 import { DatabasePage } from '../database-page/database-page';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
@@ -19,7 +20,8 @@ import { MatMenuModule } from '@angular/material/menu';
             MatMenuModule,
             Kinship,
             Overview,
-            DatabasePage ],
+            DatabasePage,
+            EnvironmentalData ],
   templateUrl: './home.html',
   styleUrl: './home.css'
 })

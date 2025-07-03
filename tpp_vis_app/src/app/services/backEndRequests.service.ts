@@ -26,6 +26,7 @@ export class backendApiService {
   private imageListUrl = 'http://localhost:3333/api/images';
   private imageBaseUrl = 'http://localhost:3333/kinshipImages';
   private diagramsBaseUrl = 'http://localhost:3333/diagramImages';
+  private rainfallBaseUrl = 'http://localhost:3333/rainfallImages';
 
   constructor(private http: HttpClient) {}
 
@@ -178,7 +179,6 @@ export class backendApiService {
     return this.http.get(`${this.apiUrl}/performKinship`);
   }
 
-
   getImages(): Observable<string[]> {
     return this.http.get<string[]>(this.imageListUrl);
   }
@@ -190,5 +190,23 @@ export class backendApiService {
   getDiagramUrl(fileName: string): string {
     return `${this.diagramsBaseUrl}/${fileName}`;
   }
+
+  getRainfallUrl(fileName: string): string {
+    return `${this.rainfallBaseUrl}/${fileName}`;
+  }
+
+  // ------------ ENVIRONMENTAL DATA  ---------------
+
+  // RAINFALL
+  getRainfallStats(): Observable<any> {
+    console.log("Getting Rainfall Stats");
+    return this.http.get(`${this.apiUrl}/getRainfallStats`);
+  }
+
+  processRainfallFile(): Observable<any> {
+    console.log("Processing Rainfall File");
+    return this.http.get(`${this.apiUrl}/processRainfallFile`);
+  }
+
   
 }

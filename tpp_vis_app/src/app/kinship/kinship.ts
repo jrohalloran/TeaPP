@@ -13,7 +13,7 @@ import { CommonModule } from '@angular/common';
 interface GridItem {
   url: string;
   name: string;
-  gridArea: string;  // <-- add this
+  gridArea: string;
 }
 
 
