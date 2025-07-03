@@ -204,9 +204,6 @@ function preProcessData(){
     const uploadsDir = path.join(backend_dir, 'uploads');
     console.log("Uploads Directory:", uploadsDir);
 
-
-
-
     const scriptPath = path.join(__dirname, 'scripts', 'process_raw.R');
     console.log("Script Directory:", scriptPath);
     const command = `Rscript "${scriptPath}"`;
@@ -275,7 +272,7 @@ async function main() {
   try {
     // Run R script to preprocess data
     console.log("Calling Pre-processing Function...");
-    await preProcessData();
+    await preProcessData(); // Getting preProcessed Data - R-script process_raw.R
     console.log("-------------------------------------");
     console.log("Calling Raw Data Loading Function...");
     rawEntries = await readUploadedFile();  // Await here if async

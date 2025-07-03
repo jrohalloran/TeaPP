@@ -29,8 +29,24 @@ export class backendApiService {
 
   constructor(private http: HttpClient) {}
 
-  
-  /// File processing requests 
+
+  /// --------------- AUTHENTICATION -------------------------
+
+
+  checkUserDetails(data:any[]): Observable<any>{
+        console.log("Sending Inputed Details to back-end");
+        return this.http.post(`${this.apiUrl}/getUserDetails`,data);
+
+  }
+
+
+  createNewUser(data:any[]): Observable<any>{
+        console.log("Sending Inputed Details to back-end");
+        return this.http.post(`${this.apiUrl}/setUserDetails`,data);
+
+  }
+
+  /// -------------- File processing requests ------------------
 
   processUploadFile(): Observable<any>{
         console.log("Sending Processing Request to back-end");
@@ -75,7 +91,7 @@ export class backendApiService {
   }
 
 
-  // STATS + SEARCHING
+  //---------------- STATS + SEARCHING------------------------
 
 
   getNeo4jStats(): Observable<any> {

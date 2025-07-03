@@ -82,3 +82,68 @@ section[ngSwitchCase='completed'] {
 section[ngSwitchCase='error'] {
   color: red;
 }
+
+
+
+.bottom-tab {
+  background-color: #f9f9f9;
+  border-top: 2px solid #ccc;
+  transition: height 0.4s ease;
+  overflow: hidden;
+  border-radius: 0 0 10px 10px;
+  box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.05);
+  height: 80px;
+}
+
+.bottom-tab.expanded {
+  height: 280px;
+}
+
+.tab-header {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #e7e7e7;
+  font-weight: bold;
+  font-size: 1rem;
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.tab-header:hover {
+  background-color: #dcdcdc;
+}
+
+.tab-header-text {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tab-header mat-icon {
+  font-size: 20px;
+}
+
+.tab-content {
+  padding: 1rem 2rem;
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+.tab-content h3 {
+  margin-top: 10;
+  color: #24588c;
+}
+
+.tab-content ul {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+
+.tab-content li {
+  margin-bottom: 0.5rem;
+}
+

@@ -10,12 +10,12 @@
     <div class="bottom-section two-panels">
       <!-- Upload New Dataset -->
       <div class="panel">
-        <button mat-raised-button color="primary" (click)="getExistingKinship()" >Get Existing Kinship Analysis</button>
+        <button mat-raised-button color="primary" (click)="getExistingKinship()" >Get Existing Kinship Matrix Data</button>
       </div>
 
       <!-- Analyse Existing Data -->
       <div class="panel">
-        <button mat-raised-button color="primary"(click)="startNewAnalysis()">Analyse Kinship</button>
+        <button mat-raised-button color="primary"(click)="startNewAnalysis()">Calculate Kinship Matrix</button>
       </div>
 </div>
 <div class="custom-grid">
@@ -26,9 +26,8 @@
   >
     <img *ngIf="item.url" [src]="item.url" [alt]="item.name" [ngClass]="getImageClass(item.name)" (click)="openModal(item.url)" />
     <div *ngIf="!item.url" class="stats-box">
-      <h3>Stats</h3>
-      <p>Views: 1234</p>
-      <p>Likes: 567</p>
+      <h3>Statistics</h3>
+      <p>Here will display any relevant statistics and comments for the Kinship Matris calculated.</p>
     </div>
   </div>
 </div>

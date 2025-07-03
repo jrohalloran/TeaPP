@@ -71,7 +71,7 @@ export const getNeo4jStats= async (req, res) => {
     console.log("Starting to retrieve Neo4j stats");
     try {
         const stats = await getStats();
-        console.log(stats);
+        //console.log(stats);
         res.json(stats);
     } catch (error) {
         console.error('Error fetching table stats:', error);

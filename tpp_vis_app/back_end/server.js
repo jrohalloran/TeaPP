@@ -39,6 +39,7 @@ import getKinshipRoutes  from './routes/getKinship.js';
 import performKinshipfromRoutes from './routes/performKinship.js';
 import getStatsRoutes from './routes/getStats.js'
 import searchRoutes from './routes/searchID.js'
+import authenticationRoutes from './routes/getUserDetails.js'
 
 const app = express();
 
@@ -68,8 +69,23 @@ if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir);
 }
 
+const env_uploadDir = 'env_uploads';
+if (fs.existsSync(env_uploadDir)){
+  console.log("/env_uploads directory exists");
+  console.log("---- Removing Directory ----");
+  fs.rmSync(env_uploadDir, { recursive: true, force: true })
+}
+if (!fs.existsSync(env_uploadDir)) {
+  console.log("---- Making Directory ----");
+  fs.mkdirSync(env_uploadDir);
+}
+
+
 
 const EXPECTED_HEADERS = ['ID', 'Female_parent', 'Male_parent'];
+
+const EXPECTED_RAIN_HEADERS = ['year',	'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
 
 
 // Set up multer for file upload
@@ -82,6 +98,20 @@ const storage = multer.diskStorage({
  }
 });
 const upload = multer({ storage: storage });
+
+
+const env_storage = multer.diskStorage({
+ destination: function (req, file, cb) {
+   cb(null, 'env_uploads/'); // Upload directory
+ },
+ filename: function (req, file, cb) {
+   cb(null, file.originalname); // Keep the original file name
+ }
+});
+const env_upload = multer({ storage: env_storage });
+
+
+
 
 // Upload route
 app.post('/uploadfile', (req, res) => {
@@ -127,8 +157,61 @@ app.post('/uploadfile', (req, res) => {
 });
 
 
+
+app.post('/uploadEnvRAINfile', (req, res) => {
+  console.log('Starting Environmental File Upload...');
+
+  env_upload.single('file')(req, res, function (err) {
+    if (err instanceof multer.MulterError) {
+      return res.status(500).json({ message: 'Multer error occurred during upload.', error: err.message });
+    } else if (err) {
+      return res.status(500).json({ message: 'An unknown error occurred during upload.', error: err.message });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({ message: 'No file uploaded.' });
+    }
+
+    const filePath = path.join('env_uploads', req.file.originalname);
+
+    // Read file contents
+    fs.readFile(filePath, 'utf8', (readErr, data) => {
+      if (readErr) {
+        return res.status(500).json({ message: 'Error reading uploaded file.' });
+      }
+
+      const lines = data.split('\n');
+      const headers = lines[0].trim().split('\t');
+
+      const headersMatch = EXPECTED_RAIN_HEADERS.every((h, i) => h === headers[i]);
+      
+      if (!headersMatch) {
+        // Delete the file if headers don't match
+        fs.unlink(filePath, () => {
+          return res.status(400).json({
+            message: `Invalid file headers. Expected: ${EXPECTED_RAIN_HEADERS.join(', ')}`
+          });
+        });
+      } else {
+        console.log('File uploaded successfully with valid headers:', req.file);
+        return res.status(200).json({ message: 'File uploaded and validated successfully.' });
+      }
+
+    });
+  });
+});
+
+
+
 // Serve uploaded files
 app.use('/uploads', express.static('uploads'));
+
+
+
+// USER LOGIN + AUTHENTICATION ROUTES
+
+
+app.use('/api', authenticationRoutes)
 
 
 
@@ -146,7 +229,8 @@ app.use('/api', processPedigreeRoutes);
 
 app.use('/api', updateParentsRoutes); 
 
-// Stats + Searching 
+
+// STAT + SEARCHING Routes
 
 app.use('/api', getStatsRoutes);
 
@@ -217,11 +301,12 @@ app.use('/diagramImages', express.static(path.join(__dirname, '/controllers/temp
     await driver.close();
   }
 
-  // Make queries
-
   await driver.close();
 })();
 
+
+
+// HANDLING ERRORS 
 process.on('unhandledRejection', (reason) => {
   console.error('Unhandled Rejection:', reason);
 });

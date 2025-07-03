@@ -28,8 +28,6 @@ export const getKinship= async (req, res) => {
         if (err) 
             return res.status(500).json({ error: 'Failed to read images directory' });
     const imageFiles = files.filter(file => /\.(png|jpg|jpeg|gif)$/i.test(file));
-    console.log(imagesFiles);
     res.json(imageFiles);
-    //res.json("Kinship Retrieved");
     });
 }

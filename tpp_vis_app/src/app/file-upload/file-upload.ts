@@ -4,10 +4,24 @@ import { CommonModule } from '@angular/common';
 import { UploadService } from '../services/upload.service';
 import { backendApiService } from '../services/backEndRequests.service';
 import { firstValueFrom } from 'rxjs';
+import { MatTab } from '@angular/material/tabs';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatTableModule } from '@angular/material/table';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-file-upload',
-  imports: [CommonModule],
+  imports: [CommonModule, 
+      MatTab,
+      MatTableModule,
+      MatTabsModule,
+      MatInputModule,
+      MatButtonModule,
+      MatCheckboxModule,
+      MatIconModule],
   templateUrl: './file-upload.html',
   styleUrl: './file-upload.css'
 })
@@ -20,6 +34,8 @@ export class FileUploadComponent {
 
 
  selectedFile: File | null = null;
+ selectedEnvFile: File | null = null;
+ selectedGenomFile: File | null = null;
  uploadStatus: string = 'waiting';
 
  
@@ -95,6 +111,63 @@ export class FileUploadComponent {
   }
 
 
+  async handleFileEnvSelection(event: any) {
+    const file: File = event.target.files[0];
+
+    if (!file) {
+      return;
+    }
+
+    const isTextFile = file.name.endsWith('.txt');
+    if (!isTextFile) {
+      alert("Please select a .txt file.");
+      this.selectedFile = null;
+      return;
+    }
+
+    const isTabDelimited = await this.checkIfTabDelimited(file);
+    if (!isTabDelimited) {
+      alert("The selected file is not tab-delimited.");
+      this.selectedFile = null;
+      return;
+    }
+
+    // ✅ All checks passed — safe to assign and show info
+    this.selectedEnvFile = file;
+    console.log('Selected file:', this.selectedEnvFile.name);
+    console.log("clicked?: " + this.clicked);
+  }
+
+
+  async handleFileGenomSelection(event: any) {
+    const file: File = event.target.files[0];
+
+    if (!file) {
+      return;
+    }
+
+    const isTextFile = file.name.endsWith('.txt');
+    if (!isTextFile) {
+      alert("Please select a .txt file.");
+      this.selectedFile = null;
+      return;
+    }
+
+    const isTabDelimited = await this.checkIfTabDelimited(file);
+    if (!isTabDelimited) {
+      alert("The selected file is not tab-delimited.");
+      this.selectedFile = null;
+      return;
+    }
+
+    // ✅ All checks passed — safe to assign and show info
+    this.selectedFile = file;
+    console.log('Selected file:', this.selectedFile.name);
+    console.log("clicked?: " + this.clicked);
+  }
+
+
+
   async uploadFile() {
     this.loadingChange.emit(true);
     if (!this.selectedFile) {
@@ -140,6 +213,57 @@ export class FileUploadComponent {
     this.loadingChange.emit(false);
   }
 
+
+
+  async uploadEnvFile() {
+    this.loadingChange.emit(true);
+        if (!this.selectedEnvFile) {
+      alert("Please select a file before uploading.");
+      return;
+    }
+
+    console.log(this.clicked);
+    this.uploadStatus = 'inProgress';
+
+    console.log('Selected File:', this.selectedEnvFile.name);
+    console.log('File Type:', this.selectedEnvFile.type);
+
+    // Check for .txt extension (more reliable than MIME)
+    const isTextFile = this.selectedEnvFile.name.endsWith('.txt');
+
+    if (!isTextFile) {
+      console.log("File is not the correct format");
+      alert("Please select a text file (.txt).");
+      this.uploadStatus = 'error';
+      return;
+    }
+
+    console.log("File is correct format -- Text file");
+    
+    this.uploadService.uploadEnvRAINFile(this.selectedEnvFile).subscribe({
+      next: (response) => {
+        console.log('Upload response:', response);
+
+        this.uploadStatus = 'completed';
+        
+
+      },
+      error: (error) => {
+        console.error('Upload error:', error);
+        this.uploadStatus = 'error';
+      }
+    });
+    this.loadingChange.emit(false);
+  }
+
+
+  async uploadGenomFile() {
+    this.loadingChange.emit(true);
+  }
+
+
+
+
   actionMethod(event: any) {
     event.target.disabled = true;
   }
@@ -170,5 +294,11 @@ export class FileUploadComponent {
     this.uploadResponse.emit(response);
   }
 
+  isBottomTabExpanded = false;
+
+  toggleBottomTab(): void {
+    this.isBottomTabExpanded = !this.isBottomTabExpanded;
+  }
+  
 
 }

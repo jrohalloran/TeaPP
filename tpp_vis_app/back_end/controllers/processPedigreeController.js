@@ -13,39 +13,59 @@ import { Client } from 'pg';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import fs_promise from 'fs/promises';
-import fs from 'fs';
+import fs, { write } from 'fs';
+import db from '../services/postgres_db.js';
 
 
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const backend_dir = path.dirname(__dirname);
+const tempDir = path.join(__dirname, 'temp');
 
-let outputFile;
+const outputTextFile = path.join(tempDir, 'temp_cleanData.txt');
 
-async function writeData(data){
+let data;
 
-        console.log("Attempting Write JSON file...")
+async function joinPlants() {
+    console.log("Getting all of Plants table")
+  try {
+    const query = `
+    SELECT *
+      FROM cleanData 
+      WHERE removed IS NOT TRUE
+    `;
+    const result = await db.query(query);
+    data = result.rows;
+    //console.log(result.rows);
+
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+async function writeFile(){
+
+
+    console.log("Attempting Write Data file...")
+    const headers = Object.keys(data[0]).join('\t');
+    const dataLines = data.map(row => Object.values(row).join('\t'));
+    const content = [headers, ...dataLines].join('\n');
     
-    console.log(__dirname);
-    const tempDir = path.join(__dirname, 'temp');
-    console.log("Temp Directory:", tempDir);
-    outputFile = path.join(tempDir, 'cleanData.json');
-    console.log("File Directory:", outputFile);
-
     try{
-        fs.writeFileSync(outputFile, JSON.stringify(data, null, 2));
-        console.log("File Successfully Written:", outputFile);
+        fs.writeFileSync(outputTextFile, content);
+        console.log("File Successfully Written:", outputTextFile);
     } catch (error) {
         console.error('Error:', error);
     }
+
 }
 
 
 async function performSynbreed() {
     
     const scriptPath = path.join(__dirname, 'scripts', 'perform_synbreed.R');
-    const dataFilePath = outputFile;
+    const dataFilePath = outputTextFile;
     const scriptDir = path.dirname(scriptPath);
 
     const command = `Rscript "${scriptPath}" "${dataFilePath}" "${scriptDir}"`;
@@ -64,31 +84,6 @@ async function performSynbreed() {
         });
     });
 }
-
-async function performStatistics() {
-    console.log("performing statistics")
-    
-    const scriptPath = path.join(__dirname, 'scripts', 'perform_statistics.R');
-    const dataFilePath = outputFile;
-    const scriptDir = path.dirname(scriptPath);
-
-    const command = `Rscript "${scriptPath}" "${dataFilePath}" "${scriptDir}"`;
-
-    return new Promise((resolve, reject) => {
-        exec(command, { maxBuffer: 1024 * 5000 }, (error, stdout, stderr) => {
-        if (error) {
-            console.error(`Error running R script: ${error.message}`);
-            return reject(error);
-        }
-        if (stderr) {
-            console.warn(`R script stderr:\n${stderr}`);
-        }
-        console.log(`R script output:\n${stdout}`);
-        resolve();
-        });
-    });
-}
-
 
 
 function removeParentEntries(data){
@@ -102,10 +97,11 @@ function removeParentEntries(data){
 export const processPedigree = async (req, res) => {
     console.log("Attempting to process Pedigree...");
     const data = req.body;
-    const cleanedData = removeParentEntries(data);
+    //const cleanedData = removeParentEntries(data);
 
     try {
-        await writeData(cleanedData);
+        await joinPlants();
+        await writeFile();
         await performSynbreed();
         res.json(true);
     } catch (error) {

@@ -220,7 +220,7 @@ function printNodesWith6Digits(graphData) {
 
   graphData.nodes.forEach(node => {
     if (node.id && sixDigitPattern.test(node.id)) {
-      console.log('Matching node:', node);
+      //console.log('Matching node:', node);
     }
   });
 }
@@ -270,7 +270,7 @@ export const insertADMINNeo4jDB= async (req, res) => {
   const data = await readFile();
   getYear(data);
   printNodesWith6Digits(data);
-  console.log(data);
+  //console.log(data);
 
   // Updating Postrgres 
 

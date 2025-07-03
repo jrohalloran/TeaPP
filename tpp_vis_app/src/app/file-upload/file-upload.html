@@ -1,6 +1,8 @@
-<h2>Upload Your File</h2>
 
+<mat-tab-group>
+<mat-tab label="Pedigree Data">
 <div class="upload-wrapper">
+<h3>Upload Your Pedigree Data File</h3>
 <!-- File input field -->
 <input type="file" class="upload-input" (change)="handleFileSelection($event)" #fileInput />
 
@@ -27,3 +29,119 @@
 </section>
 </div>
 </div>
+    <div class="bottom-tab" [class.expanded]="isBottomTabExpanded">
+      <div class="tab-header" (click)="toggleBottomTab()">
+        <span class="tab-header-text">
+          <mat-icon>{{ isBottomTabExpanded ? 'expand_more' : 'expand_less' }}</mat-icon>
+          {{ isBottomTabExpanded ? 'Close Help' : 'Help' }}
+        </span>
+      </div>
+      <div class="tab-content">
+        <h3>Need Assistance?</h3>
+        <p>Here you can upload the Pedigree Data.</p>
+        <ul>
+          <p>Selected your Pedigree data file from your local directory.</p>
+          <p>Formats Accepted:</p>
+          <p>- Tab-deliminated text file (.txt)</p>
+          <p>- Column Names: "ID","female_parent","male_parent"</p>
+        </ul>
+      </div>
+    </div>
+</mat-tab>
+<mat-tab label="Environmental Data">
+  <div class="upload-wrapper">
+  <h3>Upload Your Environmental Data File</h3>
+  <input type="file" class="upload-input" (change)="handleFileEnvSelection($event)" #fileInput />
+    <div *ngIf="selectedEnvFile">
+    <!-- Display file details -->
+    <section class="file-details">
+      <h3>Selected File Details:</h3>
+      <ul>
+        <li><strong>Filename:</strong> {{selectedEnvFile.name}}</li>
+        <li><strong>File Type:</strong> {{selectedEnvFile.type}}</li>
+        <li><strong>File Size:</strong> {{selectedEnvFile.size}} bytes</li>
+      </ul>
+    </section>
+
+    <!-- Upload button -->
+    <button (click)="uploadEnvFile(); actionMethod($event)">Start Upload</button>
+
+    <!-- Display upload status -->
+    <section [ngSwitch]="uploadStatus">
+      <p *ngSwitchCase="'inProgress'">Uploading, please wait...</p>
+      <p *ngSwitchCase="'completed'">File uploaded successfully!</p>
+      <p *ngSwitchCase="'error'">An error occurred during upload.</p>
+      <p *ngSwitchDefault>Ready to upload your file.</p>
+    </section>
+    </div>
+
+  </div>
+      <div class="bottom-tab" [class.expanded]="isBottomTabExpanded">
+      <div class="tab-header" (click)="toggleBottomTab()">
+        <span class="tab-header-text">
+          <mat-icon>{{ isBottomTabExpanded ? 'expand_more' : 'expand_less' }}</mat-icon>
+          {{ isBottomTabExpanded ? 'Close Help' : 'Help' }}
+        </span>
+      </div>
+      <div class="tab-content">
+        <h3>Need Assistance?</h3>
+        <p>Here you can upload the Environmental Data for your pedigree dataset.</p>
+        <ul>
+          <p>Selected your environmental data file from your local directory.</p>
+          <p>Specify data type (Rainfal / Temperature) using the checkbox.</p>
+          <p>Formats Accepted:</p>
+        </ul>
+      </div>
+    </div>
+
+</mat-tab>
+<mat-tab label="Genomic Data">
+  <div class="upload-wrapper">
+  <h3>Upload Your Genomic Data File</h3>
+  <input type="file" class="upload-input" (change)="handleFileGenomSelection($event)" #fileInput />
+  <div *ngIf="selectedGenomFile">
+    <!-- Display file details -->
+    <section class="file-details">
+      <h3>Selected File Details:</h3>
+      <ul>
+        <li><strong>Filename:</strong> {{selectedGenomFile.name}}</li>
+        <li><strong>File Type:</strong> {{selectedGenomFile.type}}</li>
+        <li><strong>File Size:</strong> {{selectedGenomFile.size}} bytes</li>
+      </ul>
+    </section>
+
+    <!-- Upload button -->
+    <button (click)="uploadEnvFile(); actionMethod($event)">Start Upload</button>
+
+    <!-- Display upload status -->
+    <section [ngSwitch]="uploadStatus">
+      <p *ngSwitchCase="'inProgress'">Uploading, please wait...</p>
+      <p *ngSwitchCase="'completed'">File uploaded successfully!</p>
+      <p *ngSwitchCase="'error'">An error occurred during upload.</p>
+      <p *ngSwitchDefault>Ready to upload your file.</p>
+    </section>
+   </div>
+
+
+
+
+  </div>
+      <div class="bottom-tab" [class.expanded]="isBottomTabExpanded">
+      <div class="tab-header" (click)="toggleBottomTab()">
+        <span class="tab-header-text">
+          <mat-icon>{{ isBottomTabExpanded ? 'expand_more' : 'expand_less' }}</mat-icon>
+          {{ isBottomTabExpanded ? 'Close Help' : 'Help' }}
+        </span>
+      </div>
+      <div class="tab-content">
+        <h3>Need Assistance?</h3>
+        <p>Here you can upload the Genomic Data for your pedigree dataset.</p>
+        <ul>
+          <li>Selected your genomic data file from your local directory.</li>
+        </ul>
+      </div>
+    </div>
+
+</mat-tab>
+
+</mat-tab-group>

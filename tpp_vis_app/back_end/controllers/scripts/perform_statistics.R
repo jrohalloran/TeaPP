@@ -1,5 +1,13 @@
 
 
+## Jennifer O'Halloran
+
+## 25/06/25
+
+## Thesis Project: TeaPP Visualisation App Prototype 
+
+
+
 cat("✅ R script started...\n")
 
 library(jsonlite)
@@ -61,7 +69,7 @@ df <- fromJSON(json_file)
 matched_rows <- grepl("^\\d{7}([a-zA-Z/])2$",df$correct_id)
 # Get matching rows
 matching_df <- df[matched_rows, ]
-nrow(matching_df)
+#nrow(matching_df)
 
 
 #### -------- TWIN NO.2 AS PARENTS
@@ -69,49 +77,49 @@ nrow(matching_df)
 matched_rows <- grepl("^\\d{7}([a-zA-Z/])2$",df$correct_id)
 # Get matching rows
 matching_df <- df[matched_rows, ]
-nrow(matching_df)
+#nrow(matching_df)
 
 matched_rows <- grepl("^\\d{7}([a-zA-Z/])2$",df$clone_id)
 # Get matching rows
 matching_df <- df[matched_rows, ]
-nrow(matching_df)
-print(matching_df)
+#nrow(matching_df)
+#print(matching_df)
 
 matched_rows <- grepl("^\\d{7}([a-zA-Z/])2$",df$correct_male)
 # Get matching rows
 matching_df <- df[matched_rows, ]
-nrow(matching_df)
+#nrow(matching_df)
 
 
 matched_rows <- grepl("^\\d{7}([a-zA-Z/])2$",df$correct_female)
 # Get matching rows
 matching_df <- df[matched_rows, ]
-nrow(matching_df)
+#nrow(matching_df)
 
 ## ------ NUMBER OF TWINS - TWIN NO.1
 matched_rows <- grepl("^\\d{7}([a-zA-Z/])1$",df$correct_id)
 # Get matching rows
 matching_df <- df[matched_rows, ]
-nrow(matching_df) 
+#nrow(matching_df) 
 
 
 matched_rows <- grepl("^\\d{7}([a-zA-Z/])1$",df$clone_id)
 # Get matching rows
 matching_df <- df[matched_rows, ]
-nrow(matching_df) 
-print(matching_df)
+#nrow(matching_df) 
+#print(matching_df)
 
 #### -------- NO PARENTS ARE TWINS 
 ## Checking Twins ending in letter + "1" aren't used as parents 
 matched_rows <- grepl("^\\d{7}([a-zA-Z/])1$",df$correct_female)
 # Get matching rows
 matching_df <- df[matched_rows, ]
-nrow(matching_df)
+#nrow(matching_df)
 
 matched_rows <- grepl("^\\d{7}([a-zA-Z/])1$",df$correct_male)
 # Get matching rows
 matching_df <- df[matched_rows, ]
-nrow(matching_df)
+#nrow(matching_df)
 
 
 
@@ -165,21 +173,21 @@ nrow(matching_df)
 # Getting number of individual parents 
 matched_parents <- all_parents[grepl(pattern, all_parents)]
 # How many times?
-length(matched_parents)
+#length(matched_parents)
 unique_matched_parents <- unique(matched_parents)
-length(unique_matched_parents)
+#length(unique_matched_parents)
 
 # Checking if any of them are siblings themselves (same prefix)
 
 # Extract the first 7 characters
 prefixes <- substr(matched_parents, 1, 7)
-length(prefixes)
-length(unique(prefixes))
+#length(prefixes)
+#length(unique(prefixes))
 
 
 # Find duplicated prefixes
 dup_prefixes <- unique(prefixes[duplicated(prefixes)])
-length(unique(dup_prefixes))
+#length(unique(dup_prefixes))
 
 # Now find which elements correspond to each duplicated prefix
 result <- lapply(dup_prefixes, function(p) matched_parents[prefixes == p])
@@ -191,7 +199,7 @@ count_table <- table(unlist(result))
 # Sort in decreasing order (highest count first)
 ranked_counts <- sort(count_table, decreasing = TRUE)
 
-print(ranked_counts)
+#print(ranked_counts)
 
 file<- paste0(temp_dir,"/ranked_counts.txt")
 
@@ -232,7 +240,7 @@ for (s in siblings) {
 }
 
 # View the final summary table
-print(results)
+#print(results)
 
 
 file<- paste0(temp_dir,"/sibling_counts.txt")
@@ -277,14 +285,14 @@ write.table(summary_df, file, sep = "\t", row.names = FALSE, quote = FALSE)
 # Get changed IDs
 
 
-print("setdiff, ID, correct_ID")
-print(length(unique(setdiff(df$clone_id, df$correct_id))))
+#print("setdiff, ID, correct_ID")
+#print(length(unique(setdiff(df$clone_id, df$correct_id))))
 
-print("setdiff, female_par, correct_female")
-print(length(unique(setdiff(df$female_par, df$correct_female))))
+#print("setdiff, female_par, correct_female")
+#print(length(unique(setdiff(df$female_par, df$correct_female))))
 
-print("setdiff, male_par, correct_male")
-print(length(unique(setdiff(df$male_par, df$correct_male))))
+#print("setdiff, male_par, correct_male")
+#print(length(unique(setdiff(df$male_par, df$correct_male))))
 
 
 num_id_updated<-length(unique(setdiff(df$clone_id, df$correct_id)))
@@ -292,14 +300,14 @@ num_male_par_updated<-length(unique(setdiff(df$male_par, df$correct_male)))
 num_female_par_updated<-length(unique(setdiff(df$female_par, df$correct_female)))
 
 
-print("intersect, correct_female, clone_id")
-print(length(unique(intersect(df$correct_female, df$clone_id))))
+#print("intersect, correct_female, clone_id")
+#print(length(unique(intersect(df$correct_female, df$clone_id))))
+##print(unique(intersect(df$correct_female, df$clone_id)))
 
+#print("intersect, correct_male, clone_id")
+#print(length(unique(intersect(df$correct_male, df$clone_id))))
+#print(unique(intersect(df$correct_male, df$clone_id)))
 
-print("intersect, correct_male, clone_id")
-print(length(unique(intersect(df$correct_male, df$clone_id))))
-
-#print(unique(df$year));
 
 
 formatting_df <- data.frame(

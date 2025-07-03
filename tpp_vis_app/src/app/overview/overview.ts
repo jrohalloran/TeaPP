@@ -49,6 +49,7 @@ export class Overview {
     yearCount: any[] = [];
     basicStats: any[] = [];
     formattedCount: any[] = [];
+    genCount: any[] = [];
     images: GridItem[] = [];
     statsImages:GridItem [] = [];
 
@@ -94,6 +95,7 @@ export class Overview {
           this.yearCount = response[4];
           this.basicStats = response[5];
           this.formattedCount = response[6];
+          this.genCount = response[7];
           //console.log(this.siblingCount);
           //console.log(this.rankedCount);
           //console.log(this.summaryCount);

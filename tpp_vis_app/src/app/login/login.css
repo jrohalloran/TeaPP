@@ -107,3 +107,9 @@
 .tab-content li {
   margin-bottom: 0.5rem;
 }
+
+.login-message {
+  margin-top: 10px;
+  color: #d9534f; /* Bootstrap danger red */
+  font-weight: 500;
+}

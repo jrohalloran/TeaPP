@@ -36,3 +36,24 @@ export default {
 };
 
 
+
+export async function joinPlants() {
+  let data;
+    console.log("Getting all of Plants table")
+  try {
+    const query = `
+    SELECT *
+      FROM cleanData 
+      WHERE removed IS NOT TRUE
+    `;
+    const result = await db.query(query);
+    data = result.rows;
+    //console.log(result.rows);
+
+  } catch (error) {
+    console.error(error);
+  }
+  return data;
+}
+
+

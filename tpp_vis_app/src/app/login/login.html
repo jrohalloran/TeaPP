@@ -19,6 +19,9 @@
 
           <button type="submit">Login</button>
         </form>
+      <div class="login-message">
+        {{ loginMessage }}
+      </div>
       </mat-tab>
 
       <!-- Sign Up Tab -->
@@ -35,6 +38,9 @@
 
           <button type="submit">Sign Up</button>
         </form>
+        <div class="login-message">
+        {{ signUpMessage }}
+      </div>
       </mat-tab>
     </mat-tab-group>
     <div class="bottom-tab" [class.expanded]="isBottomTabExpanded">

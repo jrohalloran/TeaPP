@@ -160,7 +160,6 @@ async function readRankedCounts(tempDir) {
     }
 }
 
-
 async function readSummaryCounts(tempDir) {
     console.log("Getting Parental Summary Counts");
 
@@ -331,7 +330,38 @@ async function readBasicFigures(tempDir) {
     }
 }
 
+async function readGenTable(tempDir) {
 
+    console.log("Getting Basic Figures")
+    const filename = "gener_table.txt";
+    const filePath = path.join(tempDir, filename);
+    console.log("Reading file:", filePath);
+
+    try {
+        // Read and split into lines
+        let content = await fs_promise.readFile(filePath, 'utf8');
+        const lines = content.trim().split('\n');
+
+        // Parse header
+        const headers = lines[0].split('\t');
+
+        // Parse rows into objects
+        const data = lines.slice(1).map(line => {
+            const values = line.split('\t');
+            return {
+                [headers[0]]: parseInt(values[1], 10),
+                [headers[1]]: parseInt(values[2], 10),
+            };
+        });
+
+        //console.log("Parsed data:", data);
+        return data;
+
+    } catch (err) {
+        console.error("Error reading the file:", err);
+        return [];
+    }
+}
 
 
 
@@ -345,6 +375,7 @@ async function readStats(){
     let year;
     let figures;
     let formatted;
+    let generation;
 
 
     console.log("Getting Saved Statistics");
@@ -363,11 +394,13 @@ async function readStats(){
 
         formatted = await readFormatted(tempDir);
 
+        generation = await readGenTable(tempDir);
+
     }catch(error){
         console.error('Error:', error);
 
     }
-    return [siblings,ranked,summary,twins,year,figures,formatted];
+    return [siblings,ranked,summary,twins,year,figures,formatted,generation];
 }
 
 

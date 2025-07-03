@@ -10,6 +10,7 @@ cat("✅ R script started...\n")
 
 library(openxlsx)
 library(dplyr)
+library(synbreed)
 
 message("Starting Processing of Raw Uploaded Data.....")
 
@@ -177,7 +178,6 @@ rows_with_whitespace <- correct_df[has_whitespace, ]
 
 
 
-
 ########### Processing clone IDs ##########
 
 
@@ -231,7 +231,7 @@ nrow(digit_clones)
 
 
 
-## Getting row with additional / 
+## Getting row with additional "/"
 
 clone_with_slash <- df[grepl("^\\d{7}[a-zA-Z]/\\d+$", df$ID), ]
 nrow(clone_with_slash)
@@ -240,7 +240,7 @@ nrow(clone_with_slash)
 
 ### Updating these in correct_df  -- remove / 
 
-# Step 1: Define the pattern
+
 pattern <- "^\\d{7}[a-zA-Z]/\\d+$"
 matching_rows <- grepl(pattern, correct_df$correct_ID)
 correct_df$correct_ID[matching_rows] <- gsub("/", "", correct_df$correct_ID[matching_rows])
@@ -404,6 +404,14 @@ correct_df <- correct_df[!duplicated(correct_df$correct_ID), ]
 
 ### Save File to local area ####
 
+
+
+ped <- create.pedigree(
+  ID=correct_df$correct_ID,
+  Par1=correct_df$correct_Female,
+  Par2=correct_df$correct_Male,
+  add.ancestors=T)
+table(ped$gener)
 
 file<- paste0(temp_dir,"/preprocessed_data.txt")
 

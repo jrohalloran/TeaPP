@@ -7,12 +7,28 @@
 // Thesis Project 
 
 
-import { Client } from 'pg';
 
+import path from 'path';
+import { Client } from 'pg';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+import fs, { write } from 'fs';
 
 let userCleanedIDs = [];
 let userCleanedParents = [];
 let processedData = [];
+
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const backend_dir = path.dirname(__dirname);
+const tempDir = path.join(__dirname, 'temp');
+const outputFile = path.join(tempDir, 'final_cleanData.json');
+
+
+
+
 
 
 function removeIDEntries(userCleanedIDs,processedData){
@@ -148,8 +164,8 @@ function updateRemovedFlag(cleanedData,processedData){
     if (original && original.removed !== updatedItem.removed) {
       console.log(updatedItem.ID);
       entriesRemoved.push(updatedItem.ID);
-      //console.log(original.removed);
-      //console.log(updatedItem.removed);
+      console.log(original.removed);
+      console.log(updatedItem.removed);
 
       original.removed = updatedItem.removed;
     }
@@ -201,19 +217,36 @@ async function main(userCleanedIDs,userCleanedParents,processedData){
     console.log("----- Removing Flagged Clone IDs ------")
     //let updatedData = removeIDEntries(userCleanedIDs,processedData);
     //updatedData = removeParentEntries(userCleanedParents,processedData);
-    let updatedData = updateCloneIDs(userCleanedIDs,processedData);
-    updatedData = updateParentIDs(userCleanedParents,updatedData);
+    const updatedData = updateCloneIDs(userCleanedIDs,processedData);
+    const updatedData2 = updateParentIDs(userCleanedParents,updatedData);
 
-    updatedData = updateRemovedFlag(userCleanedIDs,updatedData);
-    updatedData = updateRemovedFlag(userCleanedParents,updatedData);
+    const updatedData3 = updateRemovedFlag(userCleanedIDs,updatedData2);
+    const updatedData4 = updateRemovedFlag(userCleanedParents,updatedData3);
 
     console.log("Final Data");
 
     //console.log(updatedData);
-    await insertData(updatedData);
+    await insertData(updatedData4);
     status = true;
-    return updatedData;
+    return updatedData4;
 }
+
+async function writeData(data){
+
+
+    console.log("Attempting Write JSON file...")
+    
+    try{
+        fs.writeFileSync(outputFile, JSON.stringify(data, null, 2));
+        console.log("File Successfully Written:", outputFile);
+    } catch (error) {
+        console.error('Error:', error);
+    }
+
+}
+
+
+
 
 
 export const getCleanData= async (req, res) => {
@@ -227,7 +260,7 @@ export const getCleanData= async (req, res) => {
 
     console.log("Attempting to compare data...")
     const finalData = await main(userCleanedIDs,userCleanedParents,processedData);
-
+    await writeData(finalData);
     res.json([finalData,true]);
 
   } catch (err) {

@@ -1,5 +1,10 @@
 
 
+## Jennifer O'Halloran
+
+## 24/06/25
+
+## Thesis Project: TeaPP Visualisation App Prototype 
 
 cat("✅ R script started...\n")
 
@@ -44,18 +49,35 @@ setwd(temp_dir)
 cat("Working directory set to:", getwd(), "\n")
 
 # Parse JSON into a data frame
-df <- fromJSON(json_file)
+#df <- fromJSON(json_file)
+df <- read.delim(json_file, header = TRUE, sep = "\t", stringsAsFactors = FALSE)
 
+# View the data
+head(data)
 # View the data as a proper data frame (datagram)
+head(df)
+
+
+cols_to_clean <- c("clone_id", "correct_female", "correct_male", "correct_id")
+
+# Convert to character and remove whitespace
+df[cols_to_clean] <- lapply(df[cols_to_clean], function(x) {
+  x <- as.character(x)
+  x <- gsub("\\s+", "", x) 
+  x
+})
+
 head(df)
 
 # Remove entries that are flagged 
 
 ped <- create.pedigree(
-  ID=df$correct_ID,
+  ID=df$correct_id,
   Par1=df$correct_female,
   Par2=df$correct_male,
   add.ancestors=T)
+
+table(ped$gener)
 
 file<- paste0(temp_dir,"/synbreed_pedigree.txt")
 message("Saving file: ", file)
@@ -90,7 +112,7 @@ gen1<- ped[ped$gener == 1, ]
 # View them
 #print(gen1)
 
-length(unique(gen1$ID))
+#length(unique(gen1$ID))
 
 # Extract only digits from each ID for comparison
 digit_only_ids_gen1<- gsub("[^0-9]", "", gen1$ID)
@@ -103,20 +125,20 @@ first_one_digits <- substr(digit_only_ids_gen1, 1, 1)
 # If you want unique first two digits only
 unique_first_two_1 <- unique(first_two_digits)
 unique_first_one_1 <- unique(first_one_digits)
-print(unique_first_two_1)
-print(unique_first_one_1)
+#print(unique_first_two_1)
+#print(unique_first_one_1)
 
 unique_parents1<-unique(gen1$Par1,gen1$Par2)
-length(intersect(gen1$Par1,gen1$Par2))
-length(unique_parents1)
-length(unique_first_two_1)
+#length(intersect(gen1$Par1,gen1$Par2))
+#length(unique_parents1)
+##length(unique_first_two_1)
 
 ## Generation 2
 gen2<- ped[ped$gener == 2, ]
 #print(gen2)
 
 # Getting Number in generation
-length(unique(gen2$ID))
+#length(unique(gen2$ID))
 
 # Extract only digits from each ID for comparison
 digit_only_ids_gen2 <- gsub("[^0-9]", "", gen2$ID)
@@ -127,22 +149,22 @@ first_one_digits <- substr(digit_only_ids_gen2, 1, 1)
 
 unique_first_two_2 <- unique(first_two_digits)
 unique_first_one_2 <- unique(first_one_digits)
-print(unique_first_two_2)
-print(unique_first_one_2)
+#print(unique_first_two_2)
+#print(unique_first_one_2)
 
 # Getting unique parents
 unique_parents2<-unique(gen2$Par1,gen2$Par2)
-length(intersect(gen2$Par1,gen2$Par2))
-length(unique_parents2)
-length(unique_first_two_2)
+#length(intersect(gen2$Par1,gen2$Par2))
+#length(unique_parents2)
+#length(unique_first_two_2)
 
 
 ## Generation 3
 gen3<- ped[ped$gener == 3, ]
 #print(gen3)
-
+gen4<- ped[ped$gener == 4, ]
 # Getting Number in generation
-length(unique(gen3$ID))
+#length(unique(gen3$ID))
 
 # Extract only digits from each ID for comparison
 digit_only_ids_gen3 <- gsub("[^0-9]", "", gen3$ID)
@@ -154,7 +176,7 @@ first_one_digits <- substr(digit_only_ids_gen3, 1, 1)
 # Get unique sets for comparison
 unique_first_two_3 <- unique(first_two_digits)
 unique_first_one_3 <- unique(first_one_digits)
-print(unique_first_two_3)
+#print(unique_first_two_3)
 
 
 # Your sets
@@ -514,4 +536,16 @@ if (num_sets == 1) {
 
 # Close PNG device
 dev.off()
+
+
+
+
+unique_parents1<-unique(gen1$Par1,gen1$Par2)
+#print(length(unique_parents1));
+unique_parents2<-unique(gen2$Par1,gen2$Par2)
+#print(unique_parents2)
+unique_parents3<-unique(gen3$Par1,gen3$Par2)
+#print(unique_parents3)
+unique_parents4<-unique(gen4$Par1,gen4$Par2)
+#print(unique_parents4)
 
