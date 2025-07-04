@@ -88,6 +88,7 @@ const EXPECTED_HEADERS = ['ID', 'Female_parent', 'Male_parent'];
 
 const EXPECTED_RAIN_HEADERS = ['year',	'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
+const EXPECTED_TEMP_HEADERS = ["YEAR","MONTH","JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC","Mean"];
 
 
 // Set up multer for file upload
@@ -111,6 +112,17 @@ const env_storage = multer.diskStorage({
  }
 });
 const env_upload = multer({ storage: env_storage });
+
+
+const env_temp_storage = multer.diskStorage({
+ destination: function (req, file, cb) {
+   cb(null, 'env_temp_uploads/'); // Upload directory
+ },
+ filename: function (req, file, cb) {
+   cb(null, file.originalname); // Keep the original file name
+ }
+});
+const env_temp_upload = multer({ storage: env_temp_storage });
 
 
 
@@ -159,7 +171,6 @@ app.post('/uploadfile', (req, res) => {
 });
 
 
-
 app.post('/uploadEnvRAINfile', (req, res) => {
   console.log('Starting Environmental File Upload...');
 
@@ -204,10 +215,53 @@ app.post('/uploadEnvRAINfile', (req, res) => {
 });
 
 
+app.post('/uploadEnvTEMPfile', (req, res) => {
+  console.log('Starting Environmental File Upload...');
+
+  env_temp_upload.single('file')(req, res, function (err) {
+    if (err instanceof multer.MulterError) {
+      return res.status(500).json({ message: 'Multer error occurred during upload.', error: err.message });
+    } else if (err) {
+      return res.status(500).json({ message: 'An unknown error occurred during upload.', error: err.message });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({ message: 'No file uploaded.' });
+    }
+
+    const filePath = path.join('env_temp_uploads', req.file.originalname);
+
+    // Read file contents
+    fs.readFile(filePath, 'utf8', (readErr, data) => {
+      if (readErr) {
+        return res.status(500).json({ message: 'Error reading uploaded file.' });
+      }
+
+      const lines = data.split('\n');
+      const headers = lines[0].trim().split('\t');
+
+      const headersMatch = EXPECTED_TEMP_HEADERS.every((h, i) => h === headers[i]);
+      
+      if (!headersMatch) {
+        // Delete the file if headers don't match
+        fs.unlink(filePath, () => {
+          return res.status(400).json({
+            message: `Invalid file headers. Expected: ${EXPECTED_TEMP_HEADERS.join(', ')}`
+          });
+        });
+      } else {
+        console.log('File uploaded successfully with valid headers:', req.file);
+        return res.status(200).json({ message: 'File uploaded and validated successfully.' });
+      }
+
+    });
+  });
+});
+
+
 
 // Serve uploaded files
 app.use('/uploads', express.static('uploads'));
-
 
 
 // USER LOGIN + AUTHENTICATION ROUTES
@@ -270,6 +324,7 @@ app.use('/api', performKinshipfromRoutes); // Performing New Kinship
 
 app.use('/kinshipImages', express.static(path.join(__dirname, '/kinship')));
 
+/*
 app.get('/api/images', (req, res) => {
   const imagesPath = path.join(__dirname, '/kinship');
   console.log(imagesPath);
@@ -278,7 +333,7 @@ app.get('/api/images', (req, res) => {
     const imageFiles = files.filter(f => /\.(png|jpg|jpeg|gif)$/i.test(f));
     res.json(imageFiles);
   });
-});
+});*/
 
 app.use('/diagramImages', express.static(path.join(__dirname, '/controllers/temp')));
 
@@ -289,7 +344,7 @@ app.use('/api', envStatsRoutes);
 
 app.use('/rainfallImages', express.static(path.join(__dirname, 'controllers/temp_envir')));
 
-
+app.use('/temperatureImages', express.static(path.join(__dirname, 'controllers/temp_envir_temp')));
 
 
 

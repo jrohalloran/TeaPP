@@ -244,7 +244,8 @@ export class FileUploadComponent {
     console.log("File is correct format -- Text file");
     
     if (this.selectedEnvType == 'rainfall'){
-    this.uploadService.uploadEnvRAINFile(this.selectedEnvFile).subscribe({
+      console.log("Performing Rainfall processing")
+      this.uploadService.uploadEnvRAINFile(this.selectedEnvFile).subscribe({
       next: (response) => {
         console.log('Upload response:', response);
 
@@ -259,7 +260,19 @@ export class FileUploadComponent {
     this.loadingChange.emit(false);
   }
     if(this.selectedEnvType == 'temperature'){
-      console.log("Will perform temperature processing")
+      console.log("Performing temperature processing");
+            this.uploadService.uploadEnvTEMPFile(this.selectedEnvFile).subscribe({
+      next: (response) => {
+        console.log('Upload response:', response);
+
+        this.uploadStatus = 'completed';
+        this.processTempFile();
+      },
+      error: (error) => {
+        console.error('Upload error:', error);
+        this.uploadStatus = 'error';
+      }
+    });
       }
     else{
       console.log("please select a file type ")
@@ -304,6 +317,24 @@ export class FileUploadComponent {
     console.log("Requesting File Process....");
     try {
       const response = await firstValueFrom(this.backendApiService.processRainfallFile());
+      console.log('Response from backend:', response);
+      if (response){
+        this.loadingChange.emit(false);
+        this.router.navigate(['/home']);
+      }
+
+      } catch (error) {
+      console.error('Error:', error);
+    }
+  }
+
+
+  async processTempFile(){
+    this.loadingChange.emit(true);
+
+    console.log("Requesting File Process....");
+    try {
+      const response = await firstValueFrom(this.backendApiService.processTempFile());
       console.log('Response from backend:', response);
       if (response){
         this.loadingChange.emit(false);

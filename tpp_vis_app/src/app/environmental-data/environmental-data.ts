@@ -36,10 +36,10 @@ interface GridItem {
 
 export class EnvironmentalData {
 
-    images: GridItem[] = [];
+    imagesRainfall: GridItem[] = [];
+    imagesTemp: GridItem[] = [];
   
     loading: boolean = false;
-    //images: { url: string, name: string }[] = [];
   
   
     constructor(private backendApiService: backendApiService,
@@ -55,13 +55,13 @@ export class EnvironmentalData {
 
     }
 
-    async getRainfallData(){
+  async getRainfallData(){
 
       try {
         const response = await firstValueFrom(this.backendApiService.getRainfallStats());
         console.log('Response from backend:', response);
         try{
-        this.images = [
+        this.imagesRainfall = [
                 { url: this.backendApiService.getRainfallUrl('annual_Rain_boxplot_Hist.png'), name: 'clustermap', gridArea: 'hero' },
                 { url: this.backendApiService.getRainfallUrl('layered_all_rainfall.png'), name: 'histogram', gridArea: 'thumb1' },
                 { url: this.backendApiService.getRainfallUrl('Month_Rain_lineplot.png'), name: 'pca', gridArea: 'thumb2' },
@@ -81,7 +81,35 @@ export class EnvironmentalData {
 
     }
 
-    getImageClass(name: string): string {
+
+  async getTempData(){
+
+    console.log("Getting Temperature Analysis");
+
+      try {
+        const response = await firstValueFrom(this.backendApiService.getTempStats());
+        console.log('Response from backend:', response);
+        try{
+        
+        this.imagesTemp = [
+                { url: this.backendApiService.getTempUrl('temperature_boxplot_year.png'), name: 'clustermap', gridArea: 'hero' },
+                { url: this.backendApiService.getTempUrl('temperature_year_layered.png'), name: 'histogram', gridArea: 'thumb1' },
+                { url: this.backendApiService.getTempUrl('temperature_year_month.png'), name: 'pca', gridArea: 'thumb2' },
+                { name: 'stats-box', url: '', gridArea: 'stats' }
+              ];
+      this.loading = false;}
+        catch(error){
+                console.error('Error:', error);
+      }
+      } catch (error) {
+        console.error('Error:', error);
+
+      }
+
+
+    }
+
+  getImageClass(name: string): string {
           if (name.includes('pca')) {
             return 'thumbnail-img';
           } else if (name.includes('clustermap')) {

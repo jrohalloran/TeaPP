@@ -94,6 +94,85 @@
   margin: 0 auto;
 }
 
+/* Container for both buttons */
+.two-panels {
+  display: flex;
+  justify-content: space-around;
+  gap: 2rem;
+  padding: 2rem;
+  flex-wrap: wrap;
+}
+
+/* Each panel (holds one button) */
+.panel {
+  background: #f9f9f9;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  flex: 1 1 300px;
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.panel:hover {
+  transform: translateY(-4px);
+}
+
+/* Style buttons inside the panels */
+.panel button {
+  font-size: 1.1rem;
+  padding: 0.75rem 2rem;
+  border-radius: 5px;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.2);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.panel button:hover {
+  background-color: #24588c; /* darker blue */
+  color: white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+/* Container for both buttons */
+.two-panels {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  padding: 2rem;
+  flex-wrap: wrap;
+}
+
+/* Each panel (holds one button) */
+.panel {
+  background-color: transparent;
+  padding: 1rem;
+  flex: 1 1 200px;
+  text-align: center;
+}
+
+/* Style buttons inside the panels */
+.panel button {
+  font-size: 1.1rem;
+  padding: 0.75rem 2rem;
+  border-radius: 8px;
+  background-color: #24588c;
+  color: white;
+  border: none;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+/* Flat hover effect with a slight lift */
+.panel button:hover {
+  background-color: #125ea6; /* darker blue */
+  transform: scale(1.03);
+}
+
+/* Optional: focus effect */
+.panel button:focus {
+  outline: none;
+  background-color: #125ea6;
+}
+
 /* Modal Styles */
 .modal {
   position: fixed;

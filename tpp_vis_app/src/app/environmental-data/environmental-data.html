@@ -1,5 +1,4 @@
   
-  
 <div class="main-content vertical-split">
       <!-- Loading overlay -->
   <div class="loading-overlay" *ngIf="loading">
@@ -12,18 +11,35 @@
       <div class="panel">
         <button mat-raised-button color="primary" (click)="getRainfallData()" >Rainfall Analysis</button>
       </div>
+      <div class="panel">
+        <button mat-raised-button color="primary" (click)="getTempData()" >Temperature Analysis</button>
+      </div>
 </div>
 
 <div class="custom-grid">
   <div
-    *ngFor="let item of images"
+    *ngFor="let item of imagesRainfall"
     class="grid-item"
     [ngStyle]="{ 'grid-area': item.gridArea }"
   >
     <img *ngIf="item.url" [src]="item.url" [alt]="item.name" [ngClass]="getImageClass(item.name)" (click)="openModal(item.url)" />
     <div *ngIf="!item.url" class="stats-box">
-      <h3>Statistics</h3>
+      <h3>Rainfall Statistics</h3>
       <p>Here will display any relevant statistics and comments for Rainfall Analysis.</p>
+    </div>
+  </div>
+</div>
+
+<div class="custom-grid">
+  <div
+    *ngFor="let item of imagesTemp"
+    class="grid-item"
+    [ngStyle]="{ 'grid-area': item.gridArea }"
+  >
+    <img *ngIf="item.url" [src]="item.url" [alt]="item.name" [ngClass]="getImageClass(item.name)" (click)="openModal(item.url)" />
+    <div *ngIf="!item.url" class="stats-box">
+      <h3>Temperature Statistics</h3>
+      <p>Here will display any relevant statistics and comments for Temperature Analysis.</p>
     </div>
   </div>
 </div>

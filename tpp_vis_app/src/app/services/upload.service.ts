@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 export class UploadService {
   private uploadUrl = 'http://localhost:3333/uploadFile'; // Replace with your backend URL
   private uploadEnvRAINUrl = 'http://localhost:3333/uploadEnvRAINFile'; 
+  private uploadEnvTEMPUrl = 'http://localhost:3333/uploadEnvTEMPFile'; 
 
   constructor(private httpClient: HttpClient) {}   
 
@@ -21,5 +22,12 @@ export class UploadService {
    const formData = new FormData();
    formData.append('file', file);
    return this.httpClient.post(this.uploadEnvRAINUrl, formData);
+ }
+
+
+ uploadEnvTEMPFile(file: File): Observable<any> {
+   const formData = new FormData();
+   formData.append('file', file);
+   return this.httpClient.post(this.uploadEnvTEMPUrl, formData);
  }
 }

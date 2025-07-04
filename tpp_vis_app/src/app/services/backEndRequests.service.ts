@@ -27,6 +27,7 @@ export class backendApiService {
   private imageBaseUrl = 'http://localhost:3333/kinshipImages';
   private diagramsBaseUrl = 'http://localhost:3333/diagramImages';
   private rainfallBaseUrl = 'http://localhost:3333/rainfallImages';
+  private temperatureBaseUrl = 'http://localhost:3333/temperatureImages';
 
   constructor(private http: HttpClient) {}
 
@@ -191,9 +192,6 @@ export class backendApiService {
     return `${this.diagramsBaseUrl}/${fileName}`;
   }
 
-  getRainfallUrl(fileName: string): string {
-    return `${this.rainfallBaseUrl}/${fileName}`;
-  }
 
   // ------------ ENVIRONMENTAL DATA  ---------------
 
@@ -217,6 +215,15 @@ export class backendApiService {
   processTempFile(): Observable<any> {
     console.log("Processing Temperature File");
     return this.http.get(`${this.apiUrl}/processTempFile`);
+  }
+
+  // IMAGE DISPLAY 
+  getRainfallUrl(fileName: string): string {
+    return `${this.rainfallBaseUrl}/${fileName}`;
+  }
+
+  getTempUrl(fileName: string): string {
+    return `${this.temperatureBaseUrl}/${fileName}`;
   }
 
   

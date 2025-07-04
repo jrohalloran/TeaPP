@@ -58,33 +58,6 @@ print(head(df_long))
 
 df_long$date<-ymd(df_long$date)
 df_long$rainfall <- as.numeric(df_long$rainfall)
-# Selecting columns 
-#cols_to_exclude <- c("TOTAL", "MEAN")
-#df<- data %>% select(-all_of(cols_to_exclude))
-#df<- df[!(rownames(df) %in% c("Mean")), ]
-
-## Converting to Numeric
-#df <- df %>% mutate_all(~ as.numeric(as.character(.)))
-#sapply(df, function(x) sum(is.na(as.numeric(as.character(x)))))
-
-
-# Converting to long format 
-#df <- df %>% rownames_to_column("year")
-
-#df_long <- df %>%
- #pivot_longer(
-   # cols = -year,
-   # names_to = "month",
-   # values_to = "rainfall"
-  #)
-
-
-# Creating a Date Object (additional column)--> Assigning labels etc. 
-#df_long <- df_long %>%
-  #mutate(
-   # year = as.integer(year),
-   # date = dmy(paste("01", month, year))
-  #)
 
 
 file<- paste0(temp_dir,"/Month_Rain_lineplot.png")
