@@ -16,6 +16,8 @@ import { DataTransferService } from '../services/dataTransferService';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { AuthService } from '../services/auth.service';
 import { ModalComponent } from '../modal/modal';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatIcon } from '@angular/material/icon';
 
 interface ApiData {
     ID: String,
@@ -40,7 +42,9 @@ interface ApiData {
     MatCheckboxModule,
     MatProgressSpinnerModule,
     MatTabsModule,
-    ModalComponent],
+    ModalComponent,
+    MatMenuModule,
+    MatIcon],
   templateUrl: './upload-page.html',
   styleUrl: './upload-page.css'
 })
@@ -53,6 +57,8 @@ export class UploadComponent {
   showUploader = true;
   // Boolean to show Modal Pop-out Component 
   showModal = false;
+
+  isHelpOpen= false;
 
   // Arrays to store Uploaded Data are different processing stages
   apiResult: ApiData[] = [];
@@ -82,7 +88,7 @@ export class UploadComponent {
   filterStats: any[] = [];
 
   // Login State 
-  user: any;
+  currentUser: any;
 
 
   // Table Attrbutes 
@@ -106,7 +112,8 @@ export class UploadComponent {
 
 
   ngOnInit() {
-    this.user = this.authService.getCurrentUser();
+    this.currentUser = this.authService.getCurrentUser();
+
   }
   
   // Performs function after file has been uploaded from child component - file-upload 
@@ -419,6 +426,32 @@ export class UploadComponent {
         String(value).toLowerCase().includes(term)
       )
     );
+  }
+
+    
+  toggleHelpPanel() {
+    this.isHelpOpen = !this.isHelpOpen;
+  }
+
+  onProfile() {
+    // navigate or show profile
+    console.log('Profile clicked');
+
+    this.router.navigate(['/profile']);
+  }
+
+  onSettings() {
+    // navigate or show settings
+    console.log('Settings clicked');
+
+    this.router.navigate(['/profile']);
+  }
+
+  onLogout() {
+    // logout logic here
+    console.log('Logout clicked');
+
+    this.router.navigate(['/login']);
   }
 
 }

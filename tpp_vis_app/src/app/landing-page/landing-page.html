@@ -8,10 +8,15 @@
       Menu <mat-icon>arrow_drop_down</mat-icon>
     </button>
 
+    <div class = "user-details">
+       <h4><mat-icon>account_circle</mat-icon> {{currentUser}}</h4>
+       <h4><mat-icon>folder</mat-icon> Dataset</h4>
+    </div>
+
     <mat-menu #menu="matMenu">
-      <button mat-menu-item (click)="onProfile()">Profile</button>
-      <button mat-menu-item (click)="onSettings()">Settings</button>
-      <button mat-menu-item (click)="onLogout()">Logout</button>
+      <button mat-menu-item (click)="onProfile()">Profile<mat-icon>account_circle</mat-icon></button>
+      <button mat-menu-item (click)="onSettings()">Settings<mat-icon>settings</mat-icon></button>
+      <button mat-menu-item (click)="onLogout()">Logout<mat-icon>logout</mat-icon></button>
     </mat-menu>
 
     <button class="help-button" (click)="toggleHelpPanel()">

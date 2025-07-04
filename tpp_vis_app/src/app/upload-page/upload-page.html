@@ -3,16 +3,39 @@
   <!-- Top bar -->
   <header class="top-bar">
     <div class="top-bar-content">
-      <h1>TeaPP</h1>
+    <h1>TeaPP</h1>
+
+    <button mat-button [matMenuTriggerFor]="menu" class="menu-button">
+      Menu <mat-icon>arrow_drop_down</mat-icon>
+    </button>
+
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="onProfile()">Profile<mat-icon>account_circle</mat-icon></button>
+      <button mat-menu-item (click)="onSettings()">Settings<mat-icon>settings</mat-icon></button>
+      <button mat-menu-item (click)="onLogout()">Logout<mat-icon>logout</mat-icon></button>
+    </mat-menu>
+
+    <div class = "user-details">
+       <h4><mat-icon>account_circle</mat-icon> {{currentUser}}</h4>
+       <h4><mat-icon>folder</mat-icon> Dataset</h4>
     </div>
-    <div class="left">
-    <ng-container *ngIf="user">
-      <span class="user-info">
-        Welcome, {{ user }}
-      </span>
-    </ng-container>
+
+    <button class="help-button" (click)="toggleHelpPanel()">
+      <mat-icon>question_mark</mat-icon>
+    </button>
   </div>
   </header>
+      <div class="help-panel" [class.open]="isHelpOpen">
+    <div class="help-header">
+      <h3>Help</h3>
+      <button class="close-btn" (click)="toggleHelpPanel()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="help-content">
+      <p>This is the help section. Provide instructions or guidance here.</p>
+    </div>
+  </div>  
 
   <!-- Loading overlay -->
   <div class="loading-overlay" *ngIf="loading">

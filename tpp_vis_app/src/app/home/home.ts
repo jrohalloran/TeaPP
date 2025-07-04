@@ -11,6 +11,7 @@ import { EnvironmentalData } from '../environmental-data/environmental-data';
 import { DatabasePage } from '../database-page/database-page';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -33,16 +34,18 @@ export class HomeComponent {
   isHelpOpen = false;
 
   data: any[]=[];
+  currentUser = '';
 
   constructor(private backendApiService: backendApiService,
               private dataTransferService: DataTransferService,
+              private authService: AuthService,
               private router: Router) {}
 
 
   async ngOnInit() {
 
-      console.log('Welcome to the home page');
-      const response = this.dataTransferService.getResponse();
+    console.log('Welcome to the home page');
+    const response = this.dataTransferService.getResponse();
       if (response) {
         // Use the response
         console.log('Received:', response);
@@ -51,62 +54,24 @@ export class HomeComponent {
       } else {
         console.warn('No data received');
       }
+    console.log('Welcome to the home page');
+    const user = await this.authService.getCurrentUser();
+    if (user){
+      console.log(user);
+      this.currentUser = user;
+    }else{
+      this.router.navigate(['/login'])
+
+    }
 
   }
 
   async ngAfterViewInit(): Promise<void> {
 
     console.log('Welcome to the home page');
-    /*
-    if (this.dataFlag){
-      try{
-      await this.getSynbreedPedigree()
-      if (this.synbreedFlag){
-
-        await this.sendNeo4jUpload();
-      }
-    } catch (error) {
-      console.error('Error:', error);
-    }
-
-    }else{
-      console.log("No Data recieved -- functions cannot be executed");
-    }*/
 
   }
 
-  /*
-  async getSynbreedPedigree(){
-
-    // Updated Graph DB loading component 
-    console.log("Getting Synbreed Pedigree");
-
-    const data = this.data;
-
-    try {
-      const response = await firstValueFrom(this.backendApiService.processPedigree(data));
-      console.log('Response from backend:', response);
-      this.synbreedFlag = response;
-    } catch (error) {
-      console.error('Error:', error);
-
-    }
-  }
-
-
-  async sendNeo4jUpload(){
-
-    // TO DO:      Updated Graph DB loading component 
-    console.log("Uploading Neo4j Data");
-    try {
-      //const response = await firstValueFrom(this.backendApiService.insertNeo4j());
-      const response = await firstValueFrom(this.backendApiService.insertAdminNeo4j());
-      console.log('Response from backend:', response);
-      this.graphDBloaded = response;
-    } catch (error) {
-          console.error('Error:', error);
-    }
-  }*/
 
 
   toggleHelpPanel() {
@@ -116,16 +81,36 @@ export class HomeComponent {
   onProfile() {
     // navigate or show profile
     console.log('Profile clicked');
+
+    this.router.navigate(['/profile']);
   }
 
   onSettings() {
     // navigate or show settings
     console.log('Settings clicked');
+
+    this.router.navigate(['/profile']);
   }
 
   onLogout() {
     // logout logic here
     console.log('Logout clicked');
+
+    this.router.navigate(['/login']);
+  }
+
+  newAnalysis(){
+
+    console.log('Directing to Land Page');
+
+    this.router.navigate(['/landing-page']);
+  }
+
+  onUpload() {
+    // navigate or show settings
+    console.log('Directing to Upload-Page');
+
+    this.router.navigate(['/upload-page']);
   }
 
 }

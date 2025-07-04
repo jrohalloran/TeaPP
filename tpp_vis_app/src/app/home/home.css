@@ -1,4 +1,4 @@
-/* Base layout */
+/* ===== Base Layout ===== */
 html, body {
   height: 100%;
   margin: 0;
@@ -9,52 +9,11 @@ html, body {
 .app-wrapper {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: auto;
   background-color: #d3e0d3;
 }
 
-.content-wrapper {
-  padding: 1rem;      /* padding only around the main content */
-  flex: 1;            /* take remaining height */
-  box-sizing: border-box;
-}
-
-.top-container, .tab-container {
-  background-color: white;
-  padding: 1.5rem;
-  margin-bottom: 1rem; /* space between top and tab container */
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  box-sizing: border-box;
-}
-
-/* Make tab-container fill remaining height nicely */
-.tab-container {
-  flex: 1;
-  overflow: auto;
-  display: flex;
-  flex-direction: column;
-  background-color: #f9f9f9; /* lighter background to visually separate */
-  border-color: #ddd;
-  padding: 1rem;
-}
-
-/* Make mat-tab-group fill the tab-container */
-mat-tab-group {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-/* Make tab content fill available space */
-mat-tab-body {
-  flex-grow: 1;
-  overflow: auto;
-}
-
-/* Top bar styling for completeness */
+/* ===== Top Bar ===== */
 .top-bar {
   background-color: #24588c;
   color: white;
@@ -73,6 +32,32 @@ mat-tab-body {
   width: 100%;
 }
 
+.menu-button {
+  font-weight: 800;
+  text-transform: none;
+  color: white;
+}
+
+.user-details {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  color: white;
+  margin-left: auto;
+}
+
+.user-details h4 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+}
+
+.user-details mat-icon {
+  font-size: 24px;
+  vertical-align: middle;
+}
+
 .help-button {
   background: none;
   border: none;
@@ -85,7 +70,7 @@ mat-tab-body {
   height: 40px;
   width: 40px;
   padding: 0;
-  margin-left: auto;
+  margin-left: 1rem;
 }
 
 .help-button mat-icon {
@@ -93,7 +78,7 @@ mat-tab-body {
   line-height: 1;
 }
 
-/* Slide-in Help Panel */
+/* ===== Help Panel Slide-In ===== */
 .help-panel {
   position: fixed;
   top: 0;
@@ -135,32 +120,74 @@ mat-tab-body {
   cursor: pointer;
 }
 
-.menu-button {
-  font-weight: 800;
-  text-transform: none;
-  color: white;
-}
-
-/* Right panel with padding and gap */
-.right-panel {
+/* ===== Main Content Layout ===== */
+.content-wrapper {
   flex: 1;
-  padding: 10px;  /* space inside right panel */
   display: flex;
   flex-direction: column;
-  gap: 10px;      /* space between containers */
-  background-color: #d3e0d3; /* soft greenish background to show in gaps */
+  padding: 1rem 1rem; /* Increased padding */
+  gap: 0.5rem;          /* Add space between top and bottom sections */
+
+}
+
+/* ===== Top Section (Welcome) ===== */
+.top-container,
+.top-section {
+  background-color: #f9f9f9;
+  padding: 2rem;
+  border-radius: 12px;
+  border: 1px solid #c1d1c1;
+  margin-bottom: 2rem;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+}
+
+/* ===== Bottom Section: Two Panels ===== */
+.two-panels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+  padding: 1.5rem;
   box-sizing: border-box;
 }
+
+/* ===== Panel Cards ===== */
+.panel {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 2rem;
+  flex: 1 1 320px;
+  min-height: 280px;
+  max-width: 500px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: background-color 0.3s ease;
+  border: 1px solid #c1d1c1;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* ===== Right Panel (if used in split layout) ===== */
+.right-panel {
+  flex: 1;
+  padding: 2rem; /* increased from 10px */
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  background-color: #d3e0d3;
+  box-sizing: border-box;
+}
+
 
 /* Top container overrides */
 .top-container {
   background-color: #f9f9f9;
   padding: 1.5rem;
   border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  flex-shrink: 0;
   border: 1px solid #c1d1c1;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
 /* Tab container overrides */
@@ -171,9 +198,11 @@ mat-tab-body {
   border: 1px solid #ddd;
   background-color: #f9f9f9;
   flex: 1;
+  padding: 2rem;
   display: flex;
   flex-direction: column;
   overflow: hidden;
+
 }
 
 /* Buttons styling */

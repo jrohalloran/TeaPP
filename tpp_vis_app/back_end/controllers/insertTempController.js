@@ -10,8 +10,7 @@ import { Client } from 'pg';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import fs_promise from 'fs/promises';
-import fs, { write } from 'fs';
-import db from '../services/postgres_db.js';
+
 
 
 const __filename = fileURLToPath(import.meta.url);

@@ -10,10 +10,17 @@
     </button>
 
     <mat-menu #menu="matMenu">
-      <button mat-menu-item (click)="onProfile()">Profile</button>
-      <button mat-menu-item (click)="onSettings()">Settings</button>
-      <button mat-menu-item (click)="onLogout()">Logout</button>
+      <button mat-menu-item (click)="onProfile()">Profile<mat-icon>account_circle</mat-icon></button>
+      <button mat-menu-item (click)="onSettings()">Settings<mat-icon>settings</mat-icon></button>
+      <button mat-menu-item (click)="onUpload()">Upload<mat-icon>folder</mat-icon></button>
+      <button mat-menu-item (click)="newAnalysis()">New Analysis<mat-icon>add</mat-icon></button>
+      <button mat-menu-item (click)="onLogout()">Logout<mat-icon>logout</mat-icon></button>
     </mat-menu>
+
+    <div class = "user-details">
+       <h4><mat-icon>account_circle</mat-icon> {{currentUser}}</h4>
+       <h4><mat-icon>folder</mat-icon> Dataset</h4>
+    </div>
 
     <button class="help-button" (click)="toggleHelpPanel()">
       <mat-icon>question_mark</mat-icon>
@@ -35,7 +42,7 @@
 <div class = "content-wrapper">
   <!-- New container above tabs -->
   <div class="top-container">
-    <h2>Welcome to TeaPP Vis</h2>
+    <h2>Welcome to TeaPP</h2>
     <p>Some intro or controls here</p>
   </div>
 

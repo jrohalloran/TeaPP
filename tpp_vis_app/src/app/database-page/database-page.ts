@@ -7,6 +7,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatIcon } from '@angular/material/icon';
 import { MatSort } from '@angular/material/sort';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -49,7 +50,8 @@ export interface Neo4jStatRow {
       MatCheckboxModule,
       MatProgressSpinnerModule,
       MatTabsModule,
-      MatSort],
+      MatSort,
+      MatIcon],
   standalone: true,
   templateUrl: './database-page.html',
   styleUrls: ['./database-page.css']

@@ -4,6 +4,7 @@ import { DisplayComponent } from './display/display';
 import { HomeComponent } from './home/home';
 import { UploadComponent } from './upload-page/upload-page';
 import { LandingPage } from './landing-page/landing-page';
+import { Profile } from './profile/profile';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -11,5 +12,6 @@ export const routes: Routes = [
   { path: 'upload-page', component: UploadComponent },
   { path: 'landing-page', component: LandingPage },
   { path: 'home', component: HomeComponent },
-  { path: 'display', component: DisplayComponent}
+  { path: 'display', component: DisplayComponent},
+  { path: 'profile', component: Profile}
 ];
