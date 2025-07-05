@@ -190,3 +190,13 @@
 .my-legend a {
   color: #777;
   }
+
+.pedigree{
+  padding: 15px;
+  background-color: #eaeaea;
+  border-right: 1px solid #eaeaea;
+  height: 150vh;
+  box-sizing: border-box;
+  overflow-y: auto;
+
+}

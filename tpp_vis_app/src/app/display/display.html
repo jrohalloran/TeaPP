@@ -41,21 +41,102 @@
         <h2>Controls</h2>
         <button (click)="zoomIn()">Zoom In</button>
         <button (click)="zoomOut()">Zoom Out</button>
+        </div>
+        <div class = pedigree>
         <h2>Pedigree Layout</h2>
-        <button>Generation</button>
-        <button>Year</button>
+        <h3>Filtered:</h3>
+              <label>
+                <input
+                  type="radio"
+                  name="isfiltered"
+                  value= no
+                  [(ngModel)]="isfiltered"
+                />
+                No
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="isfiltered"
+                  value= yes
+                  [(ngModel)]="isfiltered"
+                />
+                Yes
+              </label>
+        <h3>Layer by:</h3>
+              <label>
+                <input
+                  type="radio"
+                  name="selectedLayer"
+                  value='year'
+                  [(ngModel)]="selectedLayer"
+                />
+                Year
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="selectedLayer"
+                  value='generation'
+                  [(ngModel)]="selectedLayer"
+                />
+                Generation
+              </label>
+        <h3>Group by:</h3>
+              <label>
+                <input
+                  type="radio"
+                  name="selectedGroup"
+                  value='sibling'
+                  [(ngModel)]="selectedGroup"
+                />
+                Siblings
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="selectedGroup"
+                  value='none'
+                  [(ngModel)]="selectedGroup"
+                />
+                None
+              </label>
+
+        <h3>Colour:</h3>
+              <label>
+                <input
+                  type="radio"
+                  name="selectedColour"
+                  value='year'
+                  [(ngModel)]="selectedColour"
+                />
+                Year
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="selectedColour"
+                  value='generation'
+                  [(ngModel)]="selectedColour"
+                />
+                Generation
+              </label>
+
+
+      <button (click)="updateDiagram()">Update</button>
       </div>
 
-      <div class='my-legend'>
-        <div class='legend-title'>Legend</div>
+      <div class='my-legend' *ngIf="legend.length > 0">
+        <h2>Legend</h2>
         <div class='legend-scale'>
           <ul class='legend-labels'>
-            <li *ngFor="let item of legendItems">
-              <span [ngStyle]="{'background': item.color}"></span>{{ item.label }}
+            <li *ngFor="let item of legend">
+              <span [ngStyle]="{'background': item.colour}"></span>
+              {{ item.element }}
             </li>
           </ul>
         </div>
-        </div>
+      </div>
       <div class="search-panel">
           <!-- Search Input -->
           <input

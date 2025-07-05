@@ -141,7 +141,7 @@ export class backendApiService {
     return this.http.post(`${this.apiUrl}/getWholeFamily`,nodeID);
   }
 
-  getPedigree(nodeID: string):Observable<any> {
+  getPedigree(nodeID: any[]):Observable<any> {
     console.log("Sending Data to /api/getPedigree");
     return this.http.post(`${this.apiUrl}/getPedigree`,nodeID);
   }
@@ -151,7 +151,10 @@ export class backendApiService {
     return this.http.post(`${this.apiUrl}/getPartnerOf`,nodeID);
   }
 
-
+  getUpdatedNodesEdges(data: any[]): Observable<any> {
+    console.log("Retrieving Updated Nodes and Edges");
+    return this.http.post(`${this.apiUrl}/getUpdatedNodesEdges`,data);
+  }
 
 
 

@@ -36,6 +36,10 @@ interface GraphJSON {
   edges: GraphEdge[];
 }
 
+interface legend{
+  element: string;
+  colour: string;
+}
 
 @Component({
   selector: 'app-visualisation',
@@ -60,6 +64,12 @@ export class DisplayComponent implements AfterViewInit {
   showBottomOverlay: boolean = true;
 
 
+  isfiltered = 'yes';
+  selectedGroup = 'sibling';//Default Grouping
+  selectedColour = 'generation'; //Default Colouring
+  selectedLayer = 'year'; //Default Layering
+
+
   jsonData: GraphJSON = {
     nodes: [],
     edges: []
@@ -75,6 +85,8 @@ export class DisplayComponent implements AfterViewInit {
       edges: []
     };
 
+    
+
   stats = {
     nodes: 0,
     edges: 0,
@@ -88,14 +100,8 @@ export class DisplayComponent implements AfterViewInit {
   selectedItem: any = null;
 
 
-  legendItems = [
-    { label: 'Founders', color: '#1B9E77' },
-    { label: 'Generation 1', color: '#E7298A' },
-    { label: 'Generation 2', color: '#7570B3' },
-    { label: 'Generation 3', color: '#66A61E' },
-    { label: 'Generation 4', color: '#D95F02'},
-    { label: 'Selected Plant(s)', color: '#fe6100'}
-  ];
+  legend: { element: string | number; colour: string }[] = [];
+
 
   // Setting Up Graphs & Sigma for containers 
   graphTop = new Graph({ multi: true });
@@ -114,7 +120,6 @@ export class DisplayComponent implements AfterViewInit {
   async ngAfterViewInit(): Promise<void> {
 
     console.log('Initialize Sigma in #sigma-container');
-    //await this.getJSON();
     await this.getGroupedData();
     await this.getAllPlants();
 
@@ -127,11 +132,11 @@ export class DisplayComponent implements AfterViewInit {
   
 
   async getGroupedData(): Promise<void> {
-    console.log('Retrieving JSON for all Data');
     try {
       const response = await firstValueFrom(this.backendApiService.getAllNodesEdges());
       console.log('Response from backend:', response);
       this.groupedFamilyData = response;
+      this.legend = response.legend;
     } catch (error) {
       console.error('Error:', error);
     }
@@ -343,6 +348,15 @@ export class DisplayComponent implements AfterViewInit {
     console.log("Matching Selected Nodes -- Changing colour.....")
     console.log(nodeID);
     console.log(this.nuclearFamilyData.nodes);
+    if (this.selectedColour == "generation"){
+
+    }
+
+    const yearColorMap = new Map<number, string>();
+      this.legend.forEach(item => {
+        yearColorMap.set(Number(item.element), item.colour);
+      });
+
     this.nuclearFamilyData.nodes.forEach(element =>{
       for (let i=0;i<nodeID.length;i++){
         if (element.id == nodeID[i]){
@@ -350,11 +364,21 @@ export class DisplayComponent implements AfterViewInit {
           console.log(element);
           element.color = '#fe6100';
 
+        }else {
+              if (this.selectedColour == "generation"){
+                const originalColor = yearColorMap.get(Number(element.gener));
+                element.color = originalColor || '#1B9E77'; // fallback color if year is missing
+            
+              }
+              if (this.selectedColour == "year"){
+                const originalColor = yearColorMap.get(Number(element.year));
+                element.color = originalColor || '#1B9E77'; // fallback color if year is missing
+            
+              }
+              else{continue}
         }
-    }})
-
-
-
+      }
+    });
   }
     
 
@@ -389,7 +413,9 @@ export class DisplayComponent implements AfterViewInit {
           this.getSelectPlantPG(nodeID); // Get entry for select clones
           //this.getPartnerOf(nodeID);// Get partners of selected clones
 
-          const response = await firstValueFrom(this.backendApiService.getPedigree(nodeID));
+          const data = [nodeID, this.selectedColour];
+
+          const response = await firstValueFrom(this.backendApiService.getPedigree(data));
           console.log('Response from backend:', response);
           this.nuclearFamilyData = response;
           this.setStatistics();
@@ -462,25 +488,6 @@ export class DisplayComponent implements AfterViewInit {
 
 }
 
-/*
-  onSearch(): void {
-    //console.log(this.cloneList);
-    const term = this.searchTerm?.toString().toLowerCase() || '';
-    
-
-    this.filteredData = this.cloneList.filter(item => {
-      const termLower = term.toLowerCase();
-
-      return (
-        item.correct_id?.toString().toLowerCase().includes(termLower) ||
-        item.clone_id?.toString().toLowerCase().includes(termLower) ||
-        item.correct_female?.toString().toLowerCase().includes(termLower) ||
-        item.correct_male?.toString().toLowerCase().includes(termLower)
-        );
-    
-    });
-  console.log(this.filteredData);
-      }*/
 
 onSearch(): void {
   const term = this.searchTerm?.toString().toLowerCase() || '';
@@ -510,5 +517,36 @@ onSearch(): void {
   console.log(this.filteredData);
 }
 
+
+
+async getUpdatedData(flags: any[]): Promise<void> {
+    try {
+      console.log("Sending Flags to backend.")
+      const response = await firstValueFrom(this.backendApiService.getUpdatedNodesEdges(flags));
+      console.log('Response from backend:', response);
+      this.groupedFamilyData = response;
+      this.legend = response.legend;
+      console.log(this.legend);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+}
+
+ async updateDiagram(){
+  this.isTopLoading = true;
+
+  console.log("Updating Diagram");
+  console.log(this.selectedGroup);
+  console.log(this.selectedLayer);
+  console.log(this.isfiltered);
+
+  const flags = [this.selectedGroup,this.selectedLayer, this.isfiltered,this.selectedColour];
+  console.log(flags);
+
+  await this.getUpdatedData(flags);
+  this.loadGraph();
+  this.isTopLoading=false;
+
+ }
 
 }

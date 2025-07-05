@@ -11,12 +11,15 @@ import { convertToSigmaFormat,
     allNodeslayerByYearReverse,
     groupSiblings,
     filterNodesWithoutHigherGenDescendants,
-    removeIsolatedNodes} from '../utils/sigmaFormatter.js';
+    removeIsolatedNodes,
+    convertToSigmaFormatDynamic} from '../utils/sigmaFormatter.js';
 //import { saveJsonToFile } from '../utils/fileWriter.js';
 
 
 export const getAllNodesEdges = async (req, res) => {
     console.log("Starting getAllNodesEdges Function");
+
+    const colourFlag = "generation";
   try {
 
     console.log("Fetching Data");
@@ -25,6 +28,8 @@ export const getAllNodesEdges = async (req, res) => {
 
     //console.log(graphData);
 
+
+    // REMOVAL OF NODES THAT ARE NOT USED FOR BREEDING
     const filteredData = filterNodesWithoutHigherGenDescendants(graphData)
 
     const groupedData = groupSiblings(filteredData);
@@ -37,7 +42,7 @@ export const getAllNodesEdges = async (req, res) => {
 
     //console.log(layeredData);
 
-    const plotData = convertToSigmaFormat(cleanedData);
+    const plotData = convertToSigmaFormatDynamic(cleanedData,colourFlag);
 
     
     res.json(plotData);

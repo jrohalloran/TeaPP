@@ -8,12 +8,14 @@
 
 import { fetchPedigreeData } from '../services/neo4j-driver.js';
 import { formatForSigma2,convertToSigmaFormat,layerByYearBoundedSpacing } from '../utils/sigmaFormatter.js';
-//import { saveJsonToFile } from '../utils/fileWriter.js';
-
 
 export const getPedigree= async (req, res) => {
+
+
   try {
-    let nodeIDs = req.body.nodeID || req.body;
+    let nodeIDs = req.body.nodeID || req.body[0];
+    let colourFlag = req.body[1] || "generation";
+    console.log(colourFlag);
     console.log(nodeIDs);
     if (!nodeIDs) {
       return res.status(400).json({ error: 'Missing nodeID(s) in request body' });
@@ -27,14 +29,13 @@ export const getPedigree= async (req, res) => {
 
     // Format raw data to Sigma.js format
     const sigmaData = await formatForSigma2(rawData);
-    console.log(sigmaData);
-    // Saving the file to local directory -- for finding optimal layout
-    //await saveJsonToFile(sigmaData, 'PedigreeGraph.json');
+    //console.log(sigmaData);
+    
 
     let plotData = layerByYearBoundedSpacing(sigmaData);
+    console.log(colourFlag);
     plotData = convertToSigmaFormat(plotData);
 
-    //await saveJsonToFile(plotData, 'plotData_pedigree.json')
 
     res.json(plotData);
   } catch (err) {
