@@ -440,8 +440,8 @@ export class DisplayComponent implements AfterViewInit {
           console.log("Retrieving Data...");
           this.getSelectPlantPG([nodeID]); // Get entry for select clones
           //this.getPartnerOf([nodeID]);// Get partners of selected clones
-
-          const response = await firstValueFrom(this.backendApiService.getPedigree(nodeID));
+          const data = [nodeID, this.selectedColour];
+          const response = await firstValueFrom(this.backendApiService.getPedigree(data));
           console.log('Response from backend:', response);
           this.nuclearFamilyData = response;
           console.log(this.nuclearFamilyData);
