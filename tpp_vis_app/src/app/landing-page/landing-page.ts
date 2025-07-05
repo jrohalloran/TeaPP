@@ -72,19 +72,26 @@ export class LandingPage {
     this.isHelpOpen = !this.isHelpOpen;
   }
 
+
   onProfile() {
     // navigate or show profile
     console.log('Profile clicked');
+
+    this.router.navigate(['/profile']);
   }
 
   onSettings() {
     // navigate or show settings
     console.log('Settings clicked');
+
+    this.router.navigate(['/profile']);
   }
 
   onLogout() {
     // logout logic here
     console.log('Logout clicked');
+
+    this.router.navigate(['/login']);
   }
 
   

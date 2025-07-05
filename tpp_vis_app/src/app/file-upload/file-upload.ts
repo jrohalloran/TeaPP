@@ -12,7 +12,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
-import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms'; 
 
 
@@ -51,6 +50,10 @@ export class FileUploadComponent {
  uploaded: boolean = false;
  clicked: boolean = false;
  processed: boolean = false;
+
+
+  envMessage: string = '';
+  pedMessage: string = '';
 
 
  constructor(private uploadService: UploadService,
@@ -98,6 +101,7 @@ export class FileUploadComponent {
     const isTextFile = file.name.endsWith('.txt');
     if (!isTextFile) {
       alert("Please select a .txt file.");
+      this.pedMessage = 'File is not a Text file - Please choose another';
       this.selectedFile = null;
       return;
     }
@@ -106,6 +110,7 @@ export class FileUploadComponent {
     if (!isTabDelimited) {
       alert("The selected file is not tab-delimited.");
       this.selectedFile = null;
+      this.pedMessage = 'File is not Tab-deliminated - Please choose another';
       return;
     }
 
@@ -126,6 +131,7 @@ export class FileUploadComponent {
     const isTextFile = file.name.endsWith('.txt');
     if (!isTextFile) {
       alert("Please select a .txt file.");
+      this.envMessage = 'File is not a Text file - Please choose another';
       this.selectedFile = null;
       return;
     }
@@ -133,9 +139,11 @@ export class FileUploadComponent {
     const isTabDelimited = await this.checkIfTabDelimited(file);
     if (!isTabDelimited) {
       alert("The selected file is not tab-delimited.");
+      this.envMessage = 'File is not tab-delimited - Please choose another';
       this.selectedFile = null;
       return;
     }
+    this.envMessage = '';
 
     // ✅ All checks passed — safe to assign and show info
     this.selectedEnvFile = file;
@@ -238,45 +246,53 @@ export class FileUploadComponent {
       console.log("File is not the correct format");
       alert("Please select a text file (.txt).");
       this.uploadStatus = 'error';
+      this.envMessage = "Please Select a Text File";
       return;
     }
 
     console.log("File is correct format -- Text file");
-    
-    if (this.selectedEnvType == 'rainfall'){
-      console.log("Performing Rainfall processing")
-      this.uploadService.uploadEnvRAINFile(this.selectedEnvFile).subscribe({
-      next: (response) => {
-        console.log('Upload response:', response);
+    if (!this.selectedEnvType){
+        if (this.selectedEnvType == 'rainfall'){
+          console.log("Performing Rainfall processing")
+          this.uploadService.uploadEnvRAINFile(this.selectedEnvFile).subscribe({
+          next: (response) => {
+            console.log('Upload response:', response);
 
-        this.uploadStatus = 'completed';
-        this.processRainfallFile();
-      },
-      error: (error) => {
-        console.error('Upload error:', error);
-        this.uploadStatus = 'error';
+            this.uploadStatus = 'completed';
+            this.processRainfallFile();
+          },
+          error: (error) => {
+            console.error('Upload error:', error);
+            this.uploadStatus = 'error';
+          }
+        });
+        this.loadingChange.emit(false);
       }
-    });
+      if(this.selectedEnvType == 'temperature'){
+          console.log("Performing temperature processing");
+                this.uploadService.uploadEnvTEMPFile(this.selectedEnvFile).subscribe({
+          next: (response) => {
+            console.log('Upload response:', response);
+
+            this.uploadStatus = 'completed';
+            this.processTempFile();
+          },
+          error: (error) => {
+            console.error('Upload error:', error);
+            this.uploadStatus = 'error';
+          }
+        });
+          }
+        else{
+          this.loadingChange.emit(false);
+          this.envMessage = "Please select a Data Type";
+          console.log("please select a file type ")
+        }
+  }else{
     this.loadingChange.emit(false);
+    console.log("please select a file type ");
+    this.envMessage = "Please select a Data Type";
   }
-    if(this.selectedEnvType == 'temperature'){
-      console.log("Performing temperature processing");
-            this.uploadService.uploadEnvTEMPFile(this.selectedEnvFile).subscribe({
-      next: (response) => {
-        console.log('Upload response:', response);
-
-        this.uploadStatus = 'completed';
-        this.processTempFile();
-      },
-      error: (error) => {
-        console.error('Upload error:', error);
-        this.uploadStatus = 'error';
-      }
-    });
-      }
-    else{
-      console.log("please select a file type ")
-    }
 
 }
 
@@ -290,7 +306,7 @@ export class FileUploadComponent {
 
 
   actionMethod(event: any) {
-    event.target.disabled = true;
+    //event.target.disabled = true;
   }
 
 

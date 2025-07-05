@@ -28,6 +28,9 @@
   <p *ngSwitchDefault>Ready to upload your file.</p>
 </section>
 </div>
+    <div class="message">
+        {{ pedMessage }}
+    </div>
 </div>
     <div class="bottom-tab" [class.expanded]="isBottomTabExpanded">
       <div class="tab-header" (click)="toggleBottomTab()">
@@ -82,6 +85,9 @@
         />
         Temperature
       </label>
+    </div>
+    <div class="message">
+        {{ envMessage }}
     </div>
 
     <!-- Upload button -->
