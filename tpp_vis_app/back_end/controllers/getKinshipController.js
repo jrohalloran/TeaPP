@@ -14,8 +14,8 @@ import fs from 'fs/promises';
 
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const backend_dir = path.dirname(__dirname);
+const __dirname = dirname(__filename); //controller directory
+const backend_dir = path.dirname(__dirname); //backend directory
 
 // Thesis Project - Getting Existing Kinship Analysis 
 

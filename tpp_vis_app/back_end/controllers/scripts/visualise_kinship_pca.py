@@ -15,10 +15,17 @@ from sklearn.decomposition import PCA
 
 # ==== Settings ====
 KINSHIP_NPY = "kinship.npy"         # Must be 47,000 x 47,000
-GENERATION_FILE = "pedigree.txt"  # Tab-separated file with 'gener' column
-OUTDIR = "kinship_plots"
+ # Tab-separated file with 'gener' column
+
 N_COMPONENTS = 10  # Number of PCs to compute
 
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir) # Scripts
+temp_dir = os.path.join(parent_dir,"temp")
+GENERATION_FILE = os.path.join(temp_dir, "pedigree.txt")
+
+
+OUTDIR = os.path.join(parent_dir, "kinship_plots")
 os.makedirs(OUTDIR, exist_ok=True)
 
 # ==== Load Kinship Matrix ====

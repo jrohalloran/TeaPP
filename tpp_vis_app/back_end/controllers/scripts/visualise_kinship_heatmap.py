@@ -22,6 +22,8 @@ chunk_size = 1000  # rows per chunk
 matrix_chunks = []
 row_labels = []
 
+
+
 npy_file = "kinship_matrix.npy"
 
 if os.path.exists(npy_file):
@@ -70,14 +72,21 @@ K_small = block_reduce(K, block_size=block_size, func=np.nanmean)
 
 print(f"Downsampled matrix shape: {K_small.shape}")
 
-outdir = "kinship_plots"
-os.makedirs(outdir, exist_ok=True)
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir) # Scripts
+temp_dir = os.path.join(parent_dir,"temp")
+GENERATION_FILE = os.path.join(temp_dir, "pedigree.txt")
+
+
+OUTDIR = os.path.join(parent_dir, "kinship_plots")
+os.makedirs(OUTDIR, exist_ok=True)
 
 #1. Heatmap of downsampled matrix
 plt.figure(figsize=(10, 8))
 sns.heatmap(K_small, cmap="viridis")
 plt.title(f"Downsampled Kinship Matrix (block size={block_size})")
-plt.savefig(f"{outdir}/kinship_heatmap.png", dpi=300)
+plt.savefig(f"{OUTDIR}/kinship_heatmap.png", dpi=300)
 plt.close()
 
 # 2. Histogram of kinship values
@@ -86,7 +95,7 @@ plt.hist(K.flatten(), bins=100, color='skyblue', edgecolor='black')
 plt.title("Histogram of Kinship Values")
 plt.xlabel("Kinship")
 plt.ylabel("Frequency")
-plt.savefig(f"{outdir}/kinship_histogram.png", dpi=300)
+plt.savefig(f"{OUTDIR}/kinship_histogram.png", dpi=300)
 plt.close()
 
 # 3. KDE plot of kinship values
@@ -100,7 +109,7 @@ plt.close()
 # 4. Clustered heatmap
 sns.clustermap(K_small, cmap="viridis", figsize=(12, 12))
 plt.suptitle("Clustered Kinship Heatmap")
-plt.savefig(f"{outdir}/kinship_clustermap.png", dpi=300)
+plt.savefig(f"{OUTDIR}/kinship_clustermap.png", dpi=300)
 plt.close()
 
 # 5. PCA plot
@@ -115,7 +124,7 @@ plt.close()
 #plt.close()
 
 
-meta_df = pd.read_table("pedigree.txt", dtype={'ID': str})
+meta_df = pd.read_table(GENERATION_FILE, dtype={'ID': str})
 meta_df = meta_df.set_index('ID')
 IDs = [...]
 assert len(IDs) == K.shape[0], "Mismatch between IDs and kinship matrix shape"
@@ -152,7 +161,7 @@ plt.legend(handles, le.classes_, title="Generation", bbox_to_anchor=(1.05, 1), l
 
 # Save
 plt.tight_layout()
-plt.savefig(f"{outdir}/kinship_pca_coloured.png", dpi=300)
+plt.savefig(f"{OUTDIR}/kinship_pca_coloured.png", dpi=300)
 plt.close()
 
 #
@@ -175,8 +184,8 @@ plt.hist(means, bins=50, color='salmon', edgecolor='black')
 plt.title("Distribution of Mean Kinship per Individual")
 plt.xlabel("Mean Kinship")
 plt.ylabel("Frequency")
-plt.savefig(f"{outdir}/kinship_mean_histogram.png", dpi=300)
+plt.savefig(f"{OUTDIR}/kinship_mean_histogram.png", dpi=300)
 plt.close()
 
-print(f"All plots saved in folder: {outdir}")
+print(f"All plots saved in folder: {OUTDIR}")
 
