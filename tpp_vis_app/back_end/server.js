@@ -70,19 +70,6 @@ if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir);
 }
 
-/*
-const env_uploadDir = 'env_uploads';
-if (fs.existsSync(env_uploadDir)){
-  console.log("/env_uploads directory exists");
-  console.log("---- Removing Directory ----");
-  fs.rmSync(env_uploadDir, { recursive: true, force: true })
-}
-if (!fs.existsSync(env_uploadDir)) {
-  console.log("---- Making Directory ----");
-  fs.mkdirSync(env_uploadDir);
-}*/
-
-
 
 const EXPECTED_HEADERS = ['ID', 'Female_parent', 'Male_parent'];
 
@@ -257,7 +244,6 @@ app.post('/uploadEnvTEMPfile', (req, res) => {
     });
   });
 });
-
 
 
 // Serve uploaded files

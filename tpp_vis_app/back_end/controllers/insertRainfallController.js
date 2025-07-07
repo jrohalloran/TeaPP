@@ -152,7 +152,7 @@ export const processRainfall = async (req, res) => {
     await reformatRainfall();
     console.log("Reformatting Complete");
 
-    const data = await readRainfall(); // ✅ add await
+    const data = await readRainfall(); 
     console.log(data);
 
     const result = await insertRainfall(data); 
@@ -162,7 +162,7 @@ export const processRainfall = async (req, res) => {
     console.log("Processing Complete - Updating Flag");
 
   } catch (error) {
-    console.error('Controller error:', error); // ✅ fixed error variable
+    console.error('Controller error:', error); 
     res.status(500).json({ error: 'Failed to process data' });
   }
 };
