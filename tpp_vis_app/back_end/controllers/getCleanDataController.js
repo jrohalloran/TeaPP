@@ -182,11 +182,12 @@ async function insertData(data) {
 
 
   const client = new Client({
-    user: "jennyohalloran",
-    host: "localhost",
-    database: "teapp_app_db",
-    port: "5432",
-  });
+        user: "postgres",
+        password: "liptontea",
+        host: "localhost",
+        database: "teapp_app_db",
+        port: "5432",
+    });
   console.log("----- Attempting to connect to PostgreSQL DB-----");
   try {
     await client.connect();

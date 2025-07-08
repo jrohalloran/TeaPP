@@ -89,7 +89,7 @@ async function importWithNeo4jAdmin(graphData) {
     await execAsync('neo4j stop');
 
     // Step 3: Build and run neo4j-admin import command
-    const cmd = `neo4j-admin database import full neo4j --overwrite-destination=true --nodes="${nodesFile}" --relationships="${relsFile}" --verbose`;
+    const cmd = `sudo neo4j-admin database import full neo4j --overwrite-destination=true --nodes="${nodesFile}" --relationships="${relsFile}" --verbose`;
     //const cmd = `neo4j-admin database import full neo4j --overwrite-destination=true --nodes="${nodesFile}" --verbose`;
 
     console.log('🚀 Running neo4j-admin import...');
@@ -228,13 +228,13 @@ function printNodesWith6Digits(graphData) {
 async function updatePostgres(data) {
   console.log("Starting Insertion Function to Update Year/Gener...");
 
-  const client = new Client({
-    user: "postgres",
-    password: "liptontea",
-    host: "localhost",
-    database: "teapp_app_db",
-    port: "5432",
-  });
+    const client = new Client({
+        user: "postgres",
+        password: "liptontea",
+        host: "localhost",
+        database: "teapp_app_db",
+        port: "5432",
+    });
 
   console.log("----- Attempting to connect to PostgreSQL DB -----");
 
