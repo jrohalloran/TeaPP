@@ -86,7 +86,7 @@ async function importWithNeo4jAdmin(graphData) {
 
     // Step 2: Stop Neo4j (ensure DB is offline before import)
     console.log('⛔ Stopping Neo4j...');
-    await execAsync('neo4j stop');
+    await execAsync('sudo neo4j stop');
 
     // Step 3: Build and run neo4j-admin import command
     const cmd = `sudo neo4j-admin database import full neo4j --overwrite-destination=true --nodes="${nodesFile}" --relationships="${relsFile}" --verbose`;
@@ -102,7 +102,7 @@ async function importWithNeo4jAdmin(graphData) {
 
     // Step 4: Start Neo4j again
     console.log('▶️ Starting Neo4j...');
-    await execAsync('neo4j start');
+    await execAsync('sudo neo4j start');
     console.log('✅ Neo4j restarted successfully.');
 
   } catch (error) {
