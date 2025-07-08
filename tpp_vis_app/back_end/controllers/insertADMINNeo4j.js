@@ -229,7 +229,8 @@ async function updatePostgres(data) {
   console.log("Starting Insertion Function to Update Year/Gener...");
 
   const client = new Client({
-    user: "jennyohalloran",
+    user: "postgres",
+    password: "liptontea",
     host: "localhost",
     database: "teapp_app_db",
     port: "5432",

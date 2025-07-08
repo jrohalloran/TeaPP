@@ -16,6 +16,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+import { environment } from '../../environments/environment';
+
 
 
 @Injectable({
@@ -23,12 +25,21 @@ import { Observable } from 'rxjs';
 })
 export class backendApiService {
   
+  /*
   private apiUrl = 'http://localhost:3333/api';
   private imageListUrl = 'http://localhost:3333/api/images';
   private imageBaseUrl = 'http://localhost:3333/kinshipImages';
   private diagramsBaseUrl = 'http://localhost:3333/diagramImages';
   private rainfallBaseUrl = 'http://localhost:3333/rainfallImages';
-  private temperatureBaseUrl = 'http://localhost:3333/temperatureImages';
+  private temperatureBaseUrl = 'http://localhost:3333/temperatureImages';*/
+
+  private apiUrl = environment.apiUrl;
+  private imageListUrl = environment.imageListUrl;
+  private imageBaseUrl = environment.imageBaseUrl;
+  private diagramsBaseUrl = environment.diagramsBaseUrl;
+  private rainfallBaseUrl = environment.rainfallBaseUrl;
+  private temperatureBaseUrl = environment.temperatureBaseUrl;
+
 
   constructor(private http: HttpClient) {}
 
@@ -38,6 +49,7 @@ export class backendApiService {
 
   checkUserDetails(data:any[]): Observable<any>{
         console.log("Sending Inputed Details to back-end");
+        console.log(this.apiUrl);
         return this.http.post(`${this.apiUrl}/getUserDetails`,data);
 
   }

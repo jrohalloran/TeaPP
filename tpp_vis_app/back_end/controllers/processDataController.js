@@ -231,12 +231,13 @@ async function insertData(rawEntries,processedEntries) {
   console.log("Starting Insertion Function....");
 
 
-  const client = new Client({
-    user: "jennyohalloran",
-    host: "localhost",
-    database: "teapp_app_db",
-    port: "5432",
-  });
+    const client = new Client({
+        user: "postgres",
+        password: "liptontea",
+        host: "localhost",
+        database: "teapp_app_db",
+        port: "5432",
+    });
   
 
   try {

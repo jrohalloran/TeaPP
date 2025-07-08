@@ -112,8 +112,10 @@ function parseProcessedFile(text) {
 async function insertRainfall(data){
     console.log("Starting Insertion Function....");
     let insertFlag;
+
     const client = new Client({
-        user: "jennyohalloran",
+        user: "postgres",
+        password: "liptontea",
         host: "localhost",
         database: "teapp_app_db",
         port: "5432",

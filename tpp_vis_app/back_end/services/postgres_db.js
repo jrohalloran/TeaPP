@@ -16,16 +16,9 @@ const { Pool } = pg;
 
 // Creating a 'pool' of connection
 
-/*
-const pool = new Pool({
-    user:"jennyohalloran",
-    host:"localhost",
-    database:"tpp_db",
-    port:"5432"
-});*/
-
   const pool = new Pool({
-    user: "jennyohalloran",
+    user: "postgres",
+    password: "liptontea",
     host: "localhost",
     database: "teapp_app_db",
     port: "5432",

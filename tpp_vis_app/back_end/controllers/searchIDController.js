@@ -26,11 +26,12 @@ const backend_dir = path.dirname(__dirname);
 
 
 const pool = new Pool({
-    user: "jennyohalloran",
-    host: "localhost",
-    database: "teapp_app_db",
-    port: "5432",
-  });
+        user: "postgres",
+        password: "liptontea",
+        host: "localhost",
+        database: "teapp_app_db",
+        port: "5432",
+    });
 
 // Neo4j setup
 const driver = neo4j.driver(

@@ -13,7 +13,8 @@ dotenv.config();
 const { Pool } = pg;
 
   const pool = new Pool({
-    user: "jennyohalloran",
+    user: "postgres",
+    password: "liptontea",
     host: "localhost",
     database: "accounts_teapp",
     port: "5432",

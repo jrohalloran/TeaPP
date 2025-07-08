@@ -10,12 +10,12 @@ import { Pool } from 'pg';
 
 
 const pool = new Pool({
-    user: "jennyohalloran",
+    user: "postgres",
+    password: "liptontea",
     host: "localhost",
     database: "teapp_app_db",
     port: "5432",
-});
-
+  });
 
 async function getTableStats() {
   const client = await pool.connect();

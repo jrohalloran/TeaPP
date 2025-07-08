@@ -1,14 +1,22 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
  providedIn: 'root'
 })
 export class UploadService {
-  private uploadUrl = 'http://localhost:3333/uploadFile'; // Replace with your backend URL
-  private uploadEnvRAINUrl = 'http://localhost:3333/uploadEnvRAINFile'; 
-  private uploadEnvTEMPUrl = 'http://localhost:3333/uploadEnvTEMPFile'; 
+  //private uploadUrl = 'http://localhost:3333/uploadFile'; // Replace with your backend URL
+  //private uploadEnvRAINUrl = 'http://localhost:3333/uploadEnvRAINFile'; 
+  //private uploadEnvTEMPUrl = 'http://localhost:3333/uploadEnvTEMPFile'; 
+
+  private uploadUrl = environment.uploadUrl;
+  private uploadEnvRAINUrl = environment.uploadEnvRAINUrl;
+  private uploadEnvTEMPUrl = environment.uploadEnvTEMPUrl;
+
+
+
 
   constructor(private httpClient: HttpClient) {}   
 

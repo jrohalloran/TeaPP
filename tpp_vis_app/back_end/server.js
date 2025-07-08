@@ -115,7 +115,7 @@ const env_temp_upload = multer({ storage: env_temp_storage });
 
 
 // Upload route
-app.post('/uploadfile', (req, res) => {
+app.post('/uploadFile', (req, res) => {
   console.log('Starting File Upload...');
 
   upload.single('file')(req, res, function (err) {
