@@ -49,11 +49,31 @@
   <div class="main-content-area">
     <div *ngIf="currentView === 'profile'">
       <h3>Profile</h3>
-      <p>Your profile info goes here.</p>
+      <img src="reshot-icon-user-ZXFJAEQURK.svg" alt="User image" class="profile-img"/>
+
+      <p>Username: {{currentUser}}</p>
+      <p>Email Address:</p>
+      <p>Priveleges:</p>
     </div>
     <div *ngIf="currentView === 'settings'">
       <h3>Settings<mat-icon>settings</mat-icon></h3>
-      <p>Your settings go here.</p>
+      <p>Theme</p>
+      <label>
+      <input 
+        type="checkbox" 
+        [checked]="selectedTheme === 'light'"
+        (change)="selectTheme('light')"
+      /> Light
+    </label>
+    <label>
+      <input 
+        type="checkbox" 
+        [checked]="selectedTheme === 'dark'"
+        (change)="selectTheme('dark')"
+      /> Dark
+    </label>
+    <p>Font Size</p>
+    <p>Font Size</p>
     </div>
     <div *ngIf="currentView === 'notifications'">
       <h3>Notifications</h3>
