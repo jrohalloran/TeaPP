@@ -91,7 +91,7 @@ gp <- create.gpData(pedigree=ped)
 summary(gp)
 
 message("Performing Kinship Matrix")
-#kinship.mx <- kin(gp)
+kinship.mx <- kin(gp)
 
 
 file<- paste0(temp_dir,"/kinship_matrix.txt")
