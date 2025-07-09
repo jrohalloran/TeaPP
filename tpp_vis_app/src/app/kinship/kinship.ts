@@ -59,12 +59,6 @@ export class Kinship {
     console.log("Getting Existing Analysis Data")
     this.loading = true;
     
-    /*this.backendApiService.getImages().subscribe(fileNames => {
-      this.images = fileNames.map(name => ({
-        url: this.backendApiService.getImageUrl(name),
-        name: name
-      }));
-    });*/
 
     this.images = [
       { url: this.backendApiService.getImageUrl('kinship_clustermap.png'), name: 'clustermap', gridArea: 'hero' },
@@ -90,6 +84,8 @@ export class Kinship {
     }
 
   }
+
+  
 
   getImageClass(name: string): string {
       if (name.includes('pca')) {
