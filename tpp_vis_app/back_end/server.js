@@ -310,6 +310,11 @@ app.use('/api', performKinshipfromRoutes); // Performing New Kinship
 
 app.use('/kinshipImages', express.static(path.join(__dirname, '/kinship')));
 
+app.use('/calculatedKinship', express.static(path.join(__dirname, '/controllers/kinship_plots')));
+
+
+
+
 /*
 app.get('/api/images', (req, res) => {
   const imagesPath = path.join(__dirname, '/kinship');
