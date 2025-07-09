@@ -38,6 +38,7 @@ export class EnvironmentalData {
 
     imagesRainfall: GridItem[] = [];
     imagesTemp: GridItem[] = [];
+    selectedAnalysis: 'rainfall' | 'temperature' | null = null;
   
     loading: boolean = false;
   
@@ -56,6 +57,8 @@ export class EnvironmentalData {
     }
 
   async getRainfallData(){
+    this.loading = true;
+    this.selectedAnalysis = 'rainfall';
 
       try {
         const response = await firstValueFrom(this.backendApiService.getRainfallStats());
@@ -83,6 +86,8 @@ export class EnvironmentalData {
 
 
   async getTempData(){
+    this.loading = true;
+    this.selectedAnalysis = 'temperature';
 
     console.log("Getting Temperature Analysis");
 

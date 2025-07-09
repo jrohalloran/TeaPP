@@ -79,6 +79,7 @@ export class Kinship {
 
 
   async startNewAnalysis(){
+    this.loading = true;
 
     // Send data // request (use data already in back-end)
     try {
@@ -94,6 +95,7 @@ export class Kinship {
       { url: this.backendApiService.getKinshipUrl('scree_plot.png'), name: 'scree', gridArea: 'thumb4' },
       { name: 'stats-box', url: '', gridArea: 'stats' } // stats box without URL
     ];
+    this.loading = false;
 
     }
 

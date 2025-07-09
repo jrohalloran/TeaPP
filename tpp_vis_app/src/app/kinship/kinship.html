@@ -1,6 +1,6 @@
   
   
-<div class="main-content vertical-split">
+<div class="main-content vertical-split content-wrapper">
       <!-- Loading overlay -->
   <div class="loading-overlay" *ngIf="loading">
     <mat-progress-spinner mode="indeterminate" diameter="60" color="primary"></mat-progress-spinner>
@@ -10,7 +10,7 @@
     <div class="bottom-section two-panels">
       <!-- Upload New Dataset -->
       <div class="panel">
-        <button mat-raised-button color="primary" (click)="getExistingKinship()" >Get Existing Kinship Matrix Data</button>
+        <button mat-raised-button color="primary" (click)="getExistingKinship()" >Get stored Kinship Matrix Data</button>
       </div>
 
       <!-- Analyse Existing Data -->

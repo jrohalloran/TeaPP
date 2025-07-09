@@ -58,11 +58,17 @@ export interface Neo4jStatRow {
 })
 
 export class DatabasePage {
+  loading: boolean = false;
 
   //@Input() dataSource: postgreSQLTableData[] = [];
 
     postgreSQLTableData: any[] = [];
     neo4jTableData: any[] = [];
+
+    pgStatus = false;
+    neoStatus = false;
+    neoStatusMessage: string = '';
+    pgStatusMessage = '';
 
     postgresTableColumns = ['table_name','rows', 'total_size'];
     neo4jDisplayedColumns: string[] = ['key', 'value'];
@@ -91,8 +97,9 @@ export class DatabasePage {
 
 
     async ngAfterViewInit(): Promise<void> {
+      this.loading = true;
 
-
+      await this.getDBStatus();
       await this.getPostgresStats();
       await this.getNeo4jStats();
       this.postgresSearch.sort = this.postgresSort;
@@ -116,6 +123,7 @@ export class DatabasePage {
             return (item[property] || '').toString().toLowerCase();
         }
       };
+      this.loading = false;
 
 
     }
@@ -165,7 +173,40 @@ export class DatabasePage {
     }
 
 
+    async getDBStatus(){
+      
+      console.log('Getting DB Status');
 
+        try {
+          const response = await firstValueFrom(this.backendApiService.getDBStatus());
+          console.log('Postgres Stats Response from backend:', response);
+          this.postgreSQLTableData = response;
+          this.pgStatus = response.pg;
+          this.neoStatus = response.neo;
+          if (this.pgStatus){
+            this.pgStatusMessage = "Live";
+          }else{
+            this.pgStatusMessage = "Offline";
+
+          }
+          if (this.neoStatus){
+            this.neoStatusMessage = "Live";
+          }else{
+            this.neoStatusMessage = "Offline";
+
+          }
+
+
+
+
+
+
+        } catch (error) {
+              console.error('Error:', error);
+
+      }
+
+    }
 
     async performSearch() {
     const term = this.searchInput?.toLowerCase().trim();
@@ -187,5 +228,38 @@ export class DatabasePage {
       console.error('Error:', error);
     }
   }
-  
+
+    async refreshAll(){
+      this.loading = true;
+
+      console.log("Refresh Database tables");
+            await this.getDBStatus();
+      await this.getPostgresStats();
+      await this.getNeo4jStats();
+      this.postgresSearch.sort = this.postgresSort;
+      this.postgresSearch.sortingDataAccessor = (item, property) => {
+        switch(property) {
+          case 'rows':
+          case 'total_size':
+            return Number(item[property]) || 0;
+          default:
+            return (item[property] || '').toString().toLowerCase();
+        }
+      };
+
+      this.neo4jSearch.sort = this.neo4jSort;
+      this.neo4jSearch.sortingDataAccessor = (item, property) => {
+        switch(property) {
+          case 'nodeCount':
+          case 'relationshipCount':
+            return Number(item[property]) || 0;
+          default:
+            return (item[property] || '').toString().toLowerCase();
+        }
+      };
+      this.loading = false;
+
+
+    }
+
 }

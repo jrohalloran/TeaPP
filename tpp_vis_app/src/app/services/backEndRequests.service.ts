@@ -121,6 +121,11 @@ export class backendApiService {
 
   }
 
+  getDBStatus(): Observable<any> {
+    console.log("Getting /getDBStatus");
+    return this.http.get(`${this.apiUrl}/getDBStatus`);
+
+  }
 
   // ------------- VISUALISATION ------------------
   /// NEO4J API REQUESTS 

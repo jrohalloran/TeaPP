@@ -24,7 +24,7 @@ const pool = new Pool({
     port:"5432"
 });*/
 
-  const pool = new Pool({
+const pool = new Pool({
     user: "jennyohalloran",
     host: "localhost",
     database: "teapp_app_db",
