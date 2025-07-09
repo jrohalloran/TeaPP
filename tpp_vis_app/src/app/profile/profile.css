@@ -203,3 +203,9 @@ button:hover {
   font-size: 28px;
   line-height: 1;
 }
+
+
+.profile-img {
+  width: 120px;
+  height: 120px;
+}

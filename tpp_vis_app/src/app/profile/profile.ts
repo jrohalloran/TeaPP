@@ -82,6 +82,18 @@ export class Profile {
 
   }
 
+  selectedTheme: string | null = null;
+
+    selectTheme(option: string) {
+    if (this.selectedTheme === option) {
+      // Deselecting the currently selected option
+      this.selectedTheme = null;
+    } else {
+      this.selectedTheme = option;
+    }
+  }
+
+
   
 
 }

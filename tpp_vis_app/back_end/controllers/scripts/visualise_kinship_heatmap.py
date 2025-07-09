@@ -1,7 +1,7 @@
 
 ## Jennifer O'Halloran
 
-## /25
+## 09/07/25
 
 ## Thesis Project: TeaPP Visualisation App Prototype 
 
@@ -22,16 +22,21 @@ chunk_size = 1000  # rows per chunk
 matrix_chunks = []
 row_labels = []
 
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir) # Scripts
+temp_dir = os.path.join(parent_dir,"temp")
+GENERATION_FILE = os.path.join(temp_dir, "pedigree.txt")
 
 
-npy_file = "kinship_matrix.npy"
+npy_file = os.path.join(temp_dir,"kinship_matrix.npy")
+txt_file = os.path.join(temp_dir,"kinship_matrix.txt")
 
 if os.path.exists(npy_file):
     print(f"Loading matrix from {npy_file}...")
     K = np.load(npy_file)
 else:
     print("Reading kinship.txt and assembling matrix...")
-    with open("kinship_matrix.txt") as f:
+    with open(txt_file) as f:
         header = f.readline().strip().split()[1:]
         print(f"Header loaded with {len(header)} columns")
 
@@ -71,12 +76,6 @@ block_size = (100, 100)
 K_small = block_reduce(K, block_size=block_size, func=np.nanmean)
 
 print(f"Downsampled matrix shape: {K_small.shape}")
-
-
-current_dir = os.path.dirname(os.path.abspath(__file__))
-parent_dir = os.path.dirname(current_dir) # Scripts
-temp_dir = os.path.join(parent_dir,"temp")
-GENERATION_FILE = os.path.join(temp_dir, "pedigree.txt")
 
 
 OUTDIR = os.path.join(parent_dir, "kinship_plots")

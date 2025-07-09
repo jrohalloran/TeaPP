@@ -23,6 +23,9 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir) # Scripts
 temp_dir = os.path.join(parent_dir,"temp")
 GENERATION_FILE = os.path.join(temp_dir, "pedigree.txt")
+npy_file = os.path.join(temp_dir,"kinship_matrix.npy")
+txt_file = os.path.join(temp_dir,"kinship_matrix.txt")
+
 
 
 OUTDIR = os.path.join(parent_dir, "kinship_plots")
@@ -30,7 +33,7 @@ os.makedirs(OUTDIR, exist_ok=True)
 
 # ==== Load Kinship Matrix ====
 print("Loading kinship matrix...")
-K = np.load(KINSHIP_NPY)  
+K = np.load(npy_file)  
 print(f"Kinship matrix shape: {K.shape}")
 assert K.shape[0] == K.shape[1], "Kinship matrix must be square."
 

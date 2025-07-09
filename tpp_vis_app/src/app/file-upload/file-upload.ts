@@ -251,7 +251,7 @@ export class FileUploadComponent {
     }
 
     console.log("File is correct format -- Text file");
-    if (!this.selectedEnvType){
+    if (this.selectedEnvType){
         if (this.selectedEnvType == 'rainfall'){
           console.log("Performing Rainfall processing")
           this.uploadService.uploadEnvRAINFile(this.selectedEnvFile).subscribe({
