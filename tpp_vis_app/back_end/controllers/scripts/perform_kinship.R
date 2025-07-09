@@ -93,7 +93,9 @@ summary(gp)
 message("Performing Kinship Matrix")
 #kinship.mx <- kin(gp)
 
-#write.csv(kinship.mx, file = "kinship_matrix.csv", row.names = TRUE)
 
-#write.table(kinship.mx, file = "kinship_matrix.txt", sep = "\t", quote = FALSE, row.names = TRUE, col.names = NA)
+file<- paste0(temp_dir,"/kinship_matrix.txt")
+#write.csv(kinship.mx, file, row.names = TRUE)
+
+write.table(kinship.mx, file, sep = "\t", quote = FALSE, row.names = TRUE, col.names = NA)
 
