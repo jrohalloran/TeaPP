@@ -8,7 +8,8 @@ export const environment = {
   diagramsBaseUrl: '/diagramImages',
   rainfallBaseUrl: '/rainfallImages',
   temperatureBaseUrl: '/temperatureImages',
-  uploadUrl:'/uploadFile', // Replace with your backend URL
+  uploadUrl:'/uploadFile',
   uploadEnvRAINUrl:'/uploadEnvRAINFile',
   uploadEnvTEMPUrl:'/uploadEnvTEMPFile',
+  imageKinshipBaseUrl: '/calculatedKinship',
 };

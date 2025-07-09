@@ -40,6 +40,7 @@ export class backendApiService {
   private diagramsBaseUrl = environment.diagramsBaseUrl;
   private rainfallBaseUrl = environment.rainfallBaseUrl;
   private temperatureBaseUrl = environment.temperatureBaseUrl;
+  private imageKinshipBaseUrl = environment.imageKinshipBaseUrl;
 
 
   constructor(private http: HttpClient) {}
