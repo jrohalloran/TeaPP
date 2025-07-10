@@ -102,10 +102,12 @@ message("Performing Kinship Matrix")
 #write.table(kinship.mx, file, sep = "\t", quote = FALSE, row.names = TRUE, col.names = NA)
 
 library(AGHmatrix)
+pedigree <- gp$pedigree
+
 pedigree <- data.frame(
-  ID=df$correct_id,
-  Par1=df$correct_female,
-  Par2=df$correct_male,
+  ID = pedigree$ID,
+  Par1 = pedigree$Par1,
+  Par2 = pedigree$Par2
 )
 
 # Compute additive kinship matrix
