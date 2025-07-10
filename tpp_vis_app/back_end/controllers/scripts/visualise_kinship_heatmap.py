@@ -123,45 +123,45 @@ plt.close()
 #plt.close()
 
 
-meta_df = pd.read_table(GENERATION_FILE, dtype={'ID': str})
-meta_df = meta_df.set_index('ID')
-IDs = [...]
-assert len(IDs) == K.shape[0], "Mismatch between IDs and kinship matrix shape"
+#meta_df = pd.read_table(GENERATION_FILE, dtype={'ID': str})
+#meta_df = meta_df.set_index('ID')
+#IDs = [...]
+#assert len(IDs) == K.shape[0], "Mismatch between IDs and kinship matrix shape"
 
-missing = [i for i in IDs if i not in meta_df.index]
-if missing:
-    raise ValueError(f"Missing IDs in metadata: {missing}")
+#missing = [i for i in IDs if i not in meta_df.index]
+#if missing:
+    #raise ValueError(f"Missing IDs in metadata: {missing}")
 
 # Get generations in order
-generations_ordered = meta_df.loc[IDs, 'gener'].astype(str).values
+#generations_ordered = meta_df.loc[IDs, 'gener'].astype(str).values
 
 # Encode generation labels
-le = LabelEncoder()
-generation_labels = le.fit_transform(generations_ordered)
+#le = LabelEncoder()
+#generation_labels = le.fit_transform(generations_ordered)
 
 # Perform PCA
-pca = PCA(n_components=2)
-coords = pca.fit_transform(K)
+#pca = PCA(n_components=2)
+#coords = pca.fit_transform(K)
 
 # PCA
-pca = PCA(n_components=2)
-coords = pca.fit_transform(K)
+#pca = PCA(n_components=2)
+#coords = pca.fit_transform(K)
 
 # Plot
-plt.figure(figsize=(8, 6))
-scatter = plt.scatter(coords[:, 0], coords[:, 1], c=generation_labels, cmap='tab10', s=5)
-plt.title("PCA of Kinship Matrix")
-plt.xlabel("PC1")
-plt.ylabel("PC2")
+#plt.figure(figsize=(8, 6))
+#scatter = plt.scatter(coords[:, 0], coords[:, 1], c=generation_labels, cmap='tab10', s=5)
+#plt.title("PCA of Kinship Matrix")
+#plt.xlabel("PC1")
+#plt.ylabel("PC2")
 
 # Legend
-handles, _ = scatter.legend_elements(prop="colors", alpha=0.6)
-plt.legend(handles, le.classes_, title="Generation", bbox_to_anchor=(1.05, 1), loc='upper left')
+#handles, _ = scatter.legend_elements(prop="colors", alpha=0.6)
+#plt.legend(handles, le.classes_, title="Generation", bbox_to_anchor=(1.05, 1), loc='upper left')
 
 # Save
-plt.tight_layout()
-plt.savefig(f"{OUTDIR}/kinship_pca_coloured.png", dpi=300)
-plt.close()
+#plt.tight_layout()
+#plt.savefig(f"{OUTDIR}/kinship_pca_coloured.png", dpi=300)
+#plt.close()
 
 #
 # 6. MDS plot
