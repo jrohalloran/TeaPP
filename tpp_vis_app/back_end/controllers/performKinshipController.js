@@ -4,12 +4,10 @@
  * // IBIX Thesis Project - TPP Visualisation
 ***/
 
-//import {joinPlants} from "tpp_vis_app/back_end/services/login_db.service.js"
 import path, { join } from 'path';
 import { exec, spawn } from 'child_process';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-//import fs_promise from 'fs/promises';
 import fs from 'fs';
 import db from '../services/postgres_db.js';
 
@@ -84,59 +82,6 @@ async function getKinship() {
         });
     });
 }
-
-
-// Running Visualisation Scripts
-/*
-async function getPCA() {
-    console.log("Running Python script to visualise PCA");
-    
-    const scriptPath = path.join(__dirname, 'scripts', 'visualise_kinship_pca.py');
-    const command = `python3 "${scriptPath}"`;
-    console.log('========== PCA Script Execution ==========');
-    console.log(`[INFO] Timestamp: ${new Date().toISOString()}`);
-    console.log(`[INFO] Script path: ${scriptPath}`);
-
-    return new Promise((resolve, reject) => {
-        exec(command, { maxBuffer: 1024 * 5000 }, (error, stdout, stderr) => {
-            if (error) {
-                console.error(`Error running Python: ${error.message}`);
-                return reject(error);
-            }
-            if (stderr) {
-                console.warn(`Python stderr:\n${stderr}`);
-            }
-            console.log(`Python stdout:\n${stdout}`);
-            resolve(stdout);  // optionally return stdout if needed
-        });
-    });
-}*/
-
-/*
-async function getHeatmap(){
-     console.log("Running Python script to visualise Heatmap + Histograms");
-    
-    const scriptPath = path.join(__dirname, 'scripts', 'visualise_kinship_heatmap.py');
-    const command = `python3 "${scriptPath}"`;
-    console.log('========== HEATMAP Script Execution ==========');
-    console.log(`[INFO] Timestamp: ${new Date().toISOString()}`);
-    console.log(`[INFO] Script path: ${scriptPath}`);
-
-    return new Promise((resolve, reject) => {
-        exec(command, { maxBuffer: 1024 * 5000 }, (error, stdout, stderr) => {
-            if (error) {
-                console.error(`Error running Python: ${error.message}`);
-                return reject(error);
-            }
-            if (stderr) {
-                console.warn(`Python stderr:\n${stderr}`);
-            }
-            console.log(`Python stdout:\n${stdout}`);
-            resolve(stdout);  // optionally return stdout if needed
-        });
-    });
-
-}*/
 
 
 
@@ -232,7 +177,6 @@ export const performKinship= async (req, res) => {
         await getPCA();
 
     
-
     }catch(error){
 
     }
