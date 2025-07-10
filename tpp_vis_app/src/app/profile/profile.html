@@ -36,7 +36,7 @@
   <!-- New container above tabs -->
   <div class="top-container">
     <h2>Profile and Settings</h2>
-    <p></p>
+    <p>Here you can update User Profile & App Settings</p>
   </div>
    <div class="main-panel-layout">
   <!-- Sidebar with navigation options -->
@@ -48,37 +48,102 @@
   <!-- Dynamic content area -->
   <div class="main-content-area">
     <div *ngIf="currentView === 'profile'">
-      <h3>Profile</h3>
+      <h2>Profile</h2>
       <img src="reshot-icon-user-ZXFJAEQURK.svg" alt="User image" class="profile-img"/>
 
       <p>Username: {{currentUser}}</p>
       <p>Email Address:</p>
-      <p>Priveleges:</p>
-    </div>
-    <div *ngIf="currentView === 'settings'">
-      <h3>Settings<mat-icon>settings</mat-icon></h3>
-      <p>Theme</p>
-      <label>
-      <input 
-        type="checkbox" 
-        [checked]="selectedTheme === 'light'"
-        (change)="selectTheme('light')"
-      /> Light
-    </label>
-    <label>
-      <input 
-        type="checkbox" 
-        [checked]="selectedTheme === 'dark'"
-        (change)="selectTheme('dark')"
-      /> Dark
-    </label>
-    <p>Font Size</p>
-    <p>Font Size</p>
-    </div>
+
+      <h3>Select User Privileges</h3>
+
+      <div *ngFor="let privilege of allPrivileges">
+        <label>
+          <input
+            type="checkbox"
+            [checked]="isSelected(privilege)"
+            (change)="togglePrivilege(privilege)"
+          />
+          {{ privilege }}
+        </label>
+      </div>
+
+<hr />
+
+
+  </div>
+
+
+
+
+  <div *ngIf="currentView === 'settings'">
+      <h2>Settings<mat-icon>settings</mat-icon></h2>
+  <p></p>
+  <h3>Font Size</h3>
+  <div style="margin-bottom: 16px;">
+  <label for="fontSizeSelect">Select font size: </label>
+  <select id="fontSizeSelect" [(ngModel)]="fontSize">
+    <option *ngFor="let size of fontSizes" [value]="size">
+      {{ size }}px
+    </option>
+  </select>
+</div>
+<div [ngStyle]="{ 'font-size.px': fontSize }" class="text-preview">
+  This is a preview of your selected font size.
+</div>
+
+<h3>Colour Theme</h3>
+<div style="margin-bottom: 16px;">
+  <label for="themeSelector">Select Color Theme: </label>
+  <select id="themeSelector" [(ngModel)]="selectedTheme2">
+    <option *ngFor="let theme of colorThemes" [ngValue]="theme">
+      {{ theme.name }}
+    </option>
+  </select>
+</div>
+
+<div
+  [ngStyle]="{
+    'background-color': selectedTheme2.background,
+    'color': selectedTheme2.text,
+    'padding': '20px',
+    'border-radius': '8px'
+  }"
+>
+  <h2>Preview Area</h2>
+  <p>This content will change color based on the selected theme.</p>
+</div>
+
+<h3>Node Colour Palette</h3>
+<div style="display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 24px;">
+  <div
+    *ngFor="let palette of palettes"
+    (click)="selectedPalette = palette"
+    [style.border]="selectedPalette === palette ? '3px solid #000' : '2px solid #ccc'"
+    style="cursor: pointer; border-radius: 6px; padding: 4px; display: flex;"
+  >
+    <div
+      *ngFor="let color of palette.colors"
+      [style.background]="color"
+      style="width: 24px; height: 24px; margin-right: 4px; border-radius: 4px;"
+    ></div>
+  </div>
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+
     <div *ngIf="currentView === 'notifications'">
-      <h3>Notifications</h3>
+      <h4>Notifications</h4>
       <p>Notification preferences here.</p>
     </div>
+    <button class= "update-button">Update</button>
   </div>
 </div>
  </div>
