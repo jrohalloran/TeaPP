@@ -91,11 +91,35 @@ gp <- create.gpData(pedigree=ped)
 summary(gp)
 
 message("Performing Kinship Matrix")
-kinship.mx <- kin(gp)
+## Synbreed 
+#kinship.mx <- kin(gp)
 
 
-file<- paste0(temp_dir,"/kinship_matrix.txt")
+
+#file<- paste0(temp_dir,"/kinship_matrix.txt")
 #write.csv(kinship.mx, file, row.names = TRUE)
 
-write.table(kinship.mx, file, sep = "\t", quote = FALSE, row.names = TRUE, col.names = NA)
+#write.table(kinship.mx, file, sep = "\t", quote = FALSE, row.names = TRUE, col.names = NA)
 
+library(AGHmatrix)
+pedigree <- data.frame(
+  ID=df$correct_id,
+  Par1=df$correct_female,
+  Par2=df$correct_male,
+)
+
+# Compute additive kinship matrix
+A_matrix <- Amatrix(pedigree, ploidy = 2, dominance = FALSE)
+## Tea Trees are Diploid
+## A Matrix - pedigree-based 
+
+
+# Save it
+
+
+#write.csv(A_matrix, "A_matrix.csv")
+
+##write.table(A_matrix, "A_matrix.txt")
+
+file<- paste0(temp_dir,"/kinship_matrix.txt")
+write.table(A_matrix, file, sep = "\t", quote = FALSE, row.names = TRUE, col.names = NA)
