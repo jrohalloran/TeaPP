@@ -79,9 +79,8 @@ export class Kinship {
     try {
       const response = await firstValueFrom(this.backendApiService.performKinship());
       console.log('Response from backend:', response);
-    } catch (error) {
-      console.error('Error:', error);
-          this.images = [
+      
+      this.images = [
       { url: this.backendApiService.getKinshipUrl('kinship_clustermap.png'), name: 'clustermap', gridArea: 'hero' },
       { url: this.backendApiService.getKinshipUrl('kinship_histogram.png'), name: 'histogram', gridArea: 'thumb1' },
       { url: this.backendApiService.getKinshipUrl('pca_pc1_pc2_colored_by_generation.png'), name: 'pca', gridArea: 'thumb2' },
@@ -90,6 +89,8 @@ export class Kinship {
       { name: 'stats-box', url: '', gridArea: 'stats' } // stats box without URL
     ];
     this.loading = false;
+    } catch (error) {
+      console.error('Error:', error);
 
     }
 
