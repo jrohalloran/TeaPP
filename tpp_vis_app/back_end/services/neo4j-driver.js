@@ -49,6 +49,25 @@ function safeProperties(props) {
 }
 
 
+export async function getNeo4jStatus(){
+    let statusFlag = false;
+    const session = driver.session();
+
+  try {
+    const result = await session.run('RETURN 1');
+    console.log('Neo4j connected successfully:', result);
+    statusFlag = true;
+  } catch (error) {
+    console.error('Neo4j connection failed:', error.message);
+    statusFlag = false;
+  } finally {
+  if (session) await session.close();
+  }
+
+  return statusFlag;
+
+}
+
 // Querying for NodeID/IDs (Array) from front-end
 // Returns Family nodes 
 export async function fetchNuclearFamilyData(nodeIDs) {

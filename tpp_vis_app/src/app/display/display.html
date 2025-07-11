@@ -37,7 +37,7 @@
     <aside class="side-panel">
 
       <!-- Controls section -->
-      <div class="top-half">
+      <div class="top-fixed">
         <h2>Controls</h2>
         <button (click)="zoomIn()">Zoom In</button>
         <button (click)="zoomOut()">Zoom Out</button>
@@ -125,6 +125,7 @@
 
       <button (click)="updateDiagram()">Update</button>
       </div>
+      <div class="side-scrollable">
 
       <div class='my-legend' *ngIf="legend.length > 0">
         <h2>Legend</h2>
@@ -152,6 +153,7 @@
             <li *ngFor="let item of filteredData" (click)="selectItem(item)">{{ item }} 
             </li>
           </ul>
+        </div>
               <!-- Stats section -->
       <div class="bottom-half">
         <h3>Statistics</h3>
@@ -159,6 +161,8 @@
         <p>Edges: {{ stats.edges }}</p>
       </div>
       </div>
+
+
 
     </aside>
 

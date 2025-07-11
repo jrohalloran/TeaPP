@@ -4,12 +4,10 @@
  * // IBIX Thesis Project - TPP Visualisation
 ***/
 
-//import {joinPlants} from "tpp_vis_app/back_end/services/login_db.service.js"
 import path, { join } from 'path';
 import { exec, spawn } from 'child_process';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-//import fs_promise from 'fs/promises';
 import fs from 'fs';
 import db from '../services/postgres_db.js';
 
@@ -178,7 +176,6 @@ export const performKinship= async (req, res) => {
         await getPCA();
 
     
-
     }catch(error){
 
     }

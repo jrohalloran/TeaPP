@@ -1,12 +1,12 @@
   
-<div class="main-content vertical-split">
+<div class="main-content vertical-split content-wrapper">
       <!-- Loading overlay -->
   <div class="loading-overlay" *ngIf="loading">
     <mat-progress-spinner mode="indeterminate" diameter="60" color="primary"></mat-progress-spinner>
     <div style="margin-top: 10px; font-size: 1.2rem; color: #333;">Loading data...</div>
   </div>
     <!-- Bottom two side-by-side containers -->
-    <div class="bottom-section two-panels">
+  <div class="bottom-section two-panels">
       <!-- Upload New Dataset -->
       <div class="panel">
         <button mat-raised-button color="primary" (click)="getRainfallData()" >Rainfall Analysis</button>
@@ -16,7 +16,7 @@
       </div>
 </div>
 
-<div class="custom-grid">
+<div class="custom-grid" *ngIf="selectedAnalysis === 'rainfall'">
   <div
     *ngFor="let item of imagesRainfall"
     class="grid-item"
@@ -30,7 +30,7 @@
   </div>
 </div>
 
-<div class="custom-grid">
+<div class="custom-grid" *ngIf="selectedAnalysis === 'temperature'">
   <div
     *ngFor="let item of imagesTemp"
     class="grid-item"

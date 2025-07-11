@@ -1,8 +1,18 @@
-<div class="stats-tables-container">
-  <div class="table-wrapper">
-  <h2>PostgresSQL DB Statistics</h2>
+  <div class="button-wrapper global-refresh">
+    <button class = "refresh-button" (click)="refreshAll()"><mat-icon>refresh</mat-icon></button>
+  </div>
 
-  <h5>Status:</h5>
+  <div class="loading-overlay" *ngIf="loading">
+    <mat-progress-spinner mode="indeterminate" diameter="60" color="primary"></mat-progress-spinner>
+    <div style="margin-top: 10px; font-size: 1.2rem; color: #333;">Loading data...</div>
+  </div>
+
+<div class="stats-tables-container">
+  
+  <div class="table-wrapper">
+  <h2>PostgresSQL DB</h2>
+
+  <h4>Status: {{pgStatusMessage}}</h4>
 
   <table mat-table [dataSource]="postgreSQLTableData" class="mat-elevation-z8">
 
@@ -31,9 +41,9 @@
 </div>
 
 <div class="table-wrapper">
-<h2>Neo4j Graph Statistics</h2>
+<h2>Neo4j Graph DB</h2>
 
-<h5>Status:</h5>
+<h4>Status:  {{neoStatusMessage}}</h4>
 
 
 <table mat-table [dataSource]="neo4jDataSource" class="mat-elevation-z8" style="width: 100%; margin-top: 20px;">
