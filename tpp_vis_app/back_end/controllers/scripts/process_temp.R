@@ -137,6 +137,8 @@ g<-ggplot(mean_df, aes(x = year, y = value)) +
         panel.background = element_rect(fill = "white", color = NA))
 ggsave(file, plot = g, width = 6, height = 6, dpi = 300)
 
+
+
 ## MINIMUM
 file<- paste0(temp_dir,"/temperature_boxplot_MIN.png")
 g<-ggplot(min_df, aes(x = year, y =value)) +
