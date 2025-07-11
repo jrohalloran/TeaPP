@@ -61,6 +61,12 @@ async function writeFile(data){
 // Running Kinship R Script
 async function getKinship() {
     console.log("Performing Kinship")
+
+    console.log('========== KINSHIP Script Execution ==========');
+    console.log(`[INFO] Timestamp: ${new Date().toISOString()}`);
+    console.log(`[INFO] Script path: ${scriptPath}`);
+    console.log(`[INFO] Working directory: ${process.cwd()}`);
+    console.log(`[INFO] Spawning Python process...\n`);
     
     const scriptPath = path.join(__dirname, 'scripts', 'perform_kinship.R');
 
@@ -90,7 +96,7 @@ async function getHeatmap() {
     const command = 'python3';
     const args = [scriptPath];
 
-    console.log('========== PCA Script Execution ==========');
+    console.log('========== HEATMAP Script Execution ==========');
     console.log(`[INFO] Timestamp: ${new Date().toISOString()}`);
     console.log(`[INFO] Script path: ${scriptPath}`);
     console.log(`[INFO] Working directory: ${process.cwd()}`);
