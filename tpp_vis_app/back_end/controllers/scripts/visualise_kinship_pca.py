@@ -130,5 +130,43 @@ plt.tight_layout()
 plt.savefig(f"{OUTDIR}/pca_variance_explained.png", dpi=300)
 plt.close()
 
+# === Scree Plot ===
+print("Plotting Scree Plot...")
+plt.figure(figsize=(8, 6))
+components = np.arange(1, N_COMPONENTS + 1)
+plt.plot(components, explained_var * 100, marker='o', linestyle='-', color='blue')
+plt.xticks(components)
+plt.xlabel("Principal Component")
+plt.ylabel("Explained Variance (%)")
+plt.title("Scree Plot of PCA on Kinship Matrix")
+plt.grid(True)
+plt.tight_layout()
+plt.savefig(f"{OUTDIR}/scree_plot.png", dpi=300)
+plt.close()
+print("Scree plot saved.")
+
+# === Scree Plot using Eigenvalues ===
+print("Plotting Scree Plot (Eigenvalues)...")
+eigenvalues = pca.explained_variance_
+
+plt.figure(figsize=(8, 6))
+components = np.arange(1, len(eigenvalues) + 1)
+plt.plot(components, eigenvalues, marker='o', linestyle='-', color='darkorange')
+plt.xticks(components)
+plt.xlabel("Principal Component")
+plt.ylabel("Eigenvalue")
+plt.title("Scree Plot (Eigenvalues) of PCA on Kinship Matrix")
+plt.grid(True)
+plt.tight_layout()
+plt.savefig(f"{OUTDIR}/scree_plot_eigenvalues.png", dpi=300)
+plt.close()
+print("Scree plot (eigenvalues) saved.")
+
+
+
+
+
+
+
 print("✅ PCA completed and plots saved to:", os.path.abspath(OUTDIR))
 

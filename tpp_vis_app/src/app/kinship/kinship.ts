@@ -83,7 +83,7 @@ export class Kinship {
       this.images = [
       { url: this.backendApiService.getKinshipUrl('kinship_clustermap.png'), name: 'clustermap', gridArea: 'hero' },
       { url: this.backendApiService.getKinshipUrl('kinship_histogram.png'), name: 'histogram', gridArea: 'thumb1' },
-      { url: this.backendApiService.getKinshipUrl('pca_pc1_pc2_colored_by_generation.png'), name: 'pca', gridArea: 'thumb2' },
+      { url: this.backendApiService.getKinshipUrl('pca_by_generation_pc1_pc2.png'), name: 'pca', gridArea: 'thumb2' },
       { url: this.backendApiService.getKinshipUrl('kinship_mean_histogram.png'), name: 'mean_histogram', gridArea: 'thumb3' },
       { url: this.backendApiService.getKinshipUrl('scree_plot.png'), name: 'scree', gridArea: 'thumb4' },
       { name: 'stats-box', url: '', gridArea: 'stats' } // stats box without URL
