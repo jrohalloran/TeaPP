@@ -97,9 +97,11 @@ export class EnvironmentalData {
         try{
         
         this.imagesTemp = [
-                { url: this.backendApiService.getTempUrl('temperature_boxplot_year.png'), name: 'clustermap', gridArea: 'hero' },
                 { url: this.backendApiService.getTempUrl('temperature_year_layered.png'), name: 'histogram', gridArea: 'thumb1' },
                 { url: this.backendApiService.getTempUrl('temperature_year_month.png'), name: 'pca', gridArea: 'thumb2' },
+                { url: this.backendApiService.getTempUrl('temperature_boxplot_MIN.png'), name: 'pca', gridArea: 'thumb3' },
+                { url: this.backendApiService.getTempUrl('temperature_boxplot_MAX.png'), name: 'pca', gridArea: 'thumb4' },
+                { url: this.backendApiService.getTempUrl('temperature_boxplot_MEAN.png'), name: 'pca', gridArea: 'thumb5' },
                 { name: 'stats-box', url: '', gridArea: 'stats' }
               ];
       this.loading = false;}

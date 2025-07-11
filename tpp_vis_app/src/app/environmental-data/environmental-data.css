@@ -75,7 +75,8 @@
     grid-template-areas:
         "hero thumb1"
         "thumb2 stats"
-        "thumb3 thumb4";
+        "thumb3 thumb4"
+        "thumb5 thumb6";
     gap: 1rem;
 }
 
