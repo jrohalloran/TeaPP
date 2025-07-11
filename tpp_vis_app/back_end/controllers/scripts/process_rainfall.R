@@ -6,6 +6,9 @@ library(dplyr)
 library(tibble)
 library(tidyr)
 library(lubridate)
+library(plotly)
+library(htmlwidgets)
+library(pandoc)
 
 
 args <- commandArgs(trailingOnly = TRUE)
@@ -85,6 +88,15 @@ g<-ggplot(df_long, aes(x = date, y = rainfall)) +
 # Explicitly draw the grob to the device
 ggsave(file, plot = g, width = 6, height = 4, dpi = 300)
 
+file<- paste0(temp_dir,"/Month_Rain_lineplot.html")
+g_plotly <- ggplotly(g)
+# Save as standalone HTML
+saveWidget(g_plotly, file, selfcontained = FALSE)
+
+
+
+
+
 
 file<- paste0(temp_dir,"/Seg_Year_Rain_lineplot.png")
 # Open the PNG device
@@ -108,6 +120,13 @@ g<-ggplot(df_long, aes(x = month, y = rainfall, group = 1)) +
 # Explicitly draw the grob to the device
 
 ggsave(file, plot = g, width = 6, height = 4, dpi = 300)
+file<- paste0(temp_dir,"/Seg_Year_Rain_lineplot.html")
+g_plotly <- ggplotly(g)
+# Save as standalone HTML
+saveWidget(g_plotly, file, selfcontained = FALSE)
+
+
+
 
 
 file<- paste0(temp_dir,"/Rain_Heatmap.png")
@@ -129,6 +148,11 @@ g<-ggplot(df_long, aes(x = month, y = factor(year), fill = rainfall)) +
     panel.background = element_rect(fill = "white", color = NA))
 
 ggsave(file, plot = g, width = 6, height = 4, dpi = 300)
+
+file<- paste0(temp_dir,"/Rain_Heatmap.html")
+g_plotly <- ggplotly(g)
+# Save as standalone HTML
+saveWidget(g_plotly, file, selfcontained = FALSE)
 
 
 
@@ -157,6 +181,12 @@ g<-ggplot(df_long, aes(x = month, y = rainfall)) +
 
 ggsave(file, plot = g, width = 6, height = 4, dpi = 300)
 
+file<- paste0(temp_dir,"/Rain_boxplot.html")
+g_plotly <- ggplotly(g)
+# Save as standalone HTML
+saveWidget(g_plotly, file, selfcontained = FALSE)
+
+
 
 
 file<- paste0(temp_dir,"/annual_Rain_boxplot_Hist.png")
@@ -179,7 +209,10 @@ g<-ggplot(annual_rainfall, aes(x = factor(year), y = total_rainfall)) +
 
 ggsave(file, plot = g, width = 6, height = 4, dpi = 300)
 
-
+file<- paste0(temp_dir,"/annual_Rain_boxplot_Hist.html")
+g_plotly <- ggplotly(g)
+# Save as standalone HTML
+saveWidget(g_plotly, file, selfcontained = FALSE)
 
 # SEASONAL RAINFAILL - BOXPLOT 
 df_long <- df_long %>%
@@ -203,11 +236,15 @@ g<-ggplot(df_long, aes(x = season, y = rainfall)) +
 
 ggsave(file, plot = g, width = 6, height = 4, dpi = 300)
 
+file<- paste0(temp_dir,"/seasonal_rainfall.html")
+g_plotly <- ggplotly(g)
+# Save as standalone HTML
+saveWidget(g_plotly, file, selfcontained = FALSE)
+
 
 
 file<- paste0(temp_dir,"/layered_all_rainfall.png")
 # Open the PNG device
-
 # OVERLAPPING LINE GRAPH PER YEAR
 
 df_long <- df_long %>%
@@ -230,4 +267,7 @@ g<-ggplot(df_long, aes(x = month, y = rainfall, group = factor(year), color = fa
 
 ggsave(file, plot = g, width = 6, height = 6, dpi = 300)
 
-
+file<- paste0(temp_dir,"/layered_all_rainfall.html")
+g_plotly <- ggplotly(g)
+# Save as standalone HTML
+saveWidget(g_plotly, file, selfcontained = FALSE)

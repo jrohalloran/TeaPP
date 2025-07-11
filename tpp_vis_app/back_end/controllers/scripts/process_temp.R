@@ -17,6 +17,9 @@ library(janitor)
 library(stringr)
 library(zoo) 
 library(ggrepel)
+library(plotly)
+library(htmlwidgets)
+library(pandoc)
 
 
 args <- commandArgs(trailingOnly = TRUE)
@@ -82,6 +85,12 @@ g<-ggplot(df_long, aes(x = month, y = value, color = stat, group = stat)) +
 
 ggsave(file, plot = g, width = 6, height = 6, dpi = 300)
 
+file<- paste0(temp_dir,"/temperature_year_month.html")
+g_plotly <- ggplotly(g)
+# Save as standalone HTML
+saveWidget(g_plotly, file, selfcontained = FALSE)
+
+
 
 ## LAYERED LINE PLOT
 
@@ -96,6 +105,12 @@ g<-ggplot(df_long, aes(x = month, y = value, group = interaction(year, stat), co
 
 
 ggsave(file, plot = g, width = 6, height = 6, dpi = 300)
+
+file<- paste0(temp_dir,"/temperature_year_layered.html")
+g_plotly <- ggplotly(g)
+# Save as standalone HTML
+saveWidget(g_plotly, file, selfcontained = FALSE)
+
 
 
 # BOX PLOT by year 
@@ -113,6 +128,11 @@ g<-ggplot(df_long, aes(x = stat, y = value, fill = as.factor(year))) +
         panel.background = element_rect(fill = "white", color = NA))
 
 ggsave(file, plot = g, width = 6, height = 6, dpi = 300)
+
+file<- paste0(temp_dir,"/temperature_boxplot_year.html")
+g_plotly <- ggplotly(g)
+# Save as standalone HTML
+saveWidget(g_plotly, file, selfcontained = FALSE)
 
 
 print(head(df_long))
@@ -137,6 +157,10 @@ g<-ggplot(mean_df, aes(x = year, y = value)) +
         panel.background = element_rect(fill = "white", color = NA))
 ggsave(file, plot = g, width = 6, height = 6, dpi = 300)
 
+file<- paste0(temp_dir,"/temperature_boxplot_MEAN.html")
+g_plotly <- ggplotly(g)
+# Save as standalone HTML
+saveWidget(g_plotly, file, selfcontained = FALSE)
 
 
 ## MINIMUM
@@ -154,6 +178,11 @@ g<-ggplot(min_df, aes(x = year, y =value)) +
         panel.background = element_rect(fill = "white", color = NA))
 ggsave(file, plot = g, width = 6, height = 6, dpi = 300)
 
+file<- paste0(temp_dir,"/temperature_boxplot_MIN.html")
+g_plotly <- ggplotly(g)
+# Save as standalone HTML
+saveWidget(g_plotly, file, selfcontained = FALSE)
+
 
 
 ## MAXIMUM
@@ -170,3 +199,8 @@ g<-ggplot(max_df, aes(x = year, y =value)) +
   theme(legend.position = "none",plot.background = element_rect(fill = "white", color = NA),  # White background
         panel.background = element_rect(fill = "white", color = NA))
 ggsave(file, plot = g, width = 6, height = 6, dpi = 300)
+
+file<- paste0(temp_dir,"/temperature_boxplot_MAX.html")
+g_plotly <- ggplotly(g)
+# Save as standalone HTML
+saveWidget(g_plotly, file, selfcontained = FALSE)
