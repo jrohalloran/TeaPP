@@ -195,6 +195,7 @@ export class DisplayComponent implements AfterViewInit {
     this.getSelectedNode();
 
   }
+  
 
   loadNewGraph(): void {
     this.showBottomOverlay = false;

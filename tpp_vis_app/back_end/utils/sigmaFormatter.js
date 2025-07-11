@@ -410,9 +410,6 @@ export function layerByGeneration(graphData, height, space) {
 }
 
 
-
-
-
 // Layering by year and adapting node spacing to the number of nodes in the layer 
 export function layerByYearBoundedSpacing(graphData) {
   console.log("------------------------------")
