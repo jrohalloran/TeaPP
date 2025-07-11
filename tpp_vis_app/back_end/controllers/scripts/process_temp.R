@@ -113,3 +113,58 @@ g<-ggplot(df_long, aes(x = stat, y = value, fill = as.factor(year))) +
         panel.background = element_rect(fill = "white", color = NA))
 
 ggsave(file, plot = g, width = 6, height = 6, dpi = 300)
+
+
+print(head(df_long))
+
+mean_df <- subset(df_long, stat == "MEAN")
+min_df<-subset(df_long, stat == "MINIMUM")
+max_df<-subset(df_long, stat == "MAXIMUM")
+
+## MEAN
+
+
+file<- paste0(temp_dir,"/temperature_boxplot_MEAN.png")
+g<-ggplot(mean_df, aes(x = year, y = value)) +
+  geom_boxplot(fill = "pink", position = position_dodge(width = 0.8)) +
+  labs(
+    title = "Monthly MEAN Temperature Summary by Year",
+    x = "Year",
+    y = "Temperature (°C)"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none",plot.background = element_rect(fill = "white", color = NA),  # White background
+        panel.background = element_rect(fill = "white", color = NA))
+ggsave(file, plot = g, width = 6, height = 6, dpi = 300)
+
+## MINIMUM
+file<- paste0(temp_dir,"/temperature_boxplot_MIN.png")
+g<-ggplot(min_df, aes(x = year, y =value)) +
+  geom_boxplot(fill="skyblue",position = position_dodge(width = 0.8)) +
+  labs(
+    title = "Monthly MINIMUM Temperature Summary by Year",
+    x = "Year",
+    y = "Temperature (°C)",
+    fill = "Year"
+  ) +
+  theme_minimal()+
+  theme(legend.position = "none",plot.background = element_rect(fill = "white", color = NA),  # White background
+        panel.background = element_rect(fill = "white", color = NA))
+ggsave(file, plot = g, width = 6, height = 6, dpi = 300)
+
+
+
+## MAXIMUM
+file<- paste0(temp_dir,"/temperature_boxplot_MAX.png")
+g<-ggplot(max_df, aes(x = year, y =value)) +
+  geom_boxplot(fill = "lightgreen",position = position_dodge(width = 0.8)) +
+  labs(
+    title = "Monthly MAXIMUM Temperature Summary by Year",
+    x = "Year",
+    y = "Temperature (°C)",
+    fill = "Year"
+  ) +
+  theme_minimal()+
+  theme(legend.position = "none",plot.background = element_rect(fill = "white", color = NA),  # White background
+        panel.background = element_rect(fill = "white", color = NA))
+ggsave(file, plot = g, width = 6, height = 6, dpi = 300)
