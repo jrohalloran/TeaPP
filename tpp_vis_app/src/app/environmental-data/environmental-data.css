@@ -66,7 +66,21 @@
     justify-content: space-between;
 }
 
-.custom-grid {
+.custom-grid-temp {
+    padding: 1rem;
+    border-radius: 5px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    grid-template-areas:
+        "hero thumb1"
+        "boxplotArea stats"
+        "thumb2 thumb3"
+        "thumb5 thumb6";
+    gap: 1rem;
+}
+
+.custom-grid-rain {
     padding: 1rem;
     border-radius: 5px;
     display: grid;

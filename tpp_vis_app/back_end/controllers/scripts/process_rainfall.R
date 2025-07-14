@@ -271,3 +271,57 @@ file<- paste0(temp_dir,"/layered_all_rainfall.html")
 g_plotly <- ggplotly(g)
 # Save as standalone HTML
 saveWidget(g_plotly, file, selfcontained = FALSE)
+
+
+
+file<- paste0(temp_dir,"/layered_all_rainfall_boxplot.png")
+
+df_long_clean <- df_long %>% filter(is.finite(rainfall))
+
+
+g<-ggplot(df_long, aes(x = year, y = rainfall, group = month)) +
+  geom_boxplot(fill = "skyblue", alpha = 0.7) +
+  labs(
+    title = "Rainfall Distribution by Year",
+    x = "Year",
+    y = "Rainfall (mm)"
+  ) +
+  theme_minimal(base_size = 14) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+
+ggsave(file, plot = g, width = 6, height = 6, dpi = 300)
+
+file<- paste0(temp_dir,"/layered_all_rainfall_boxplot.html")
+g_plotly <- ggplotly(g)
+
+saveWidget(g_plotly, file, selfcontained = FALSE)
+
+
+
+
+
+
+file<- paste0(temp_dir,"/year_rainfall_boxplot.png")
+
+g<-ggplot(df_long, aes(x = month, y = rainfall, group = year)) +
+  geom_boxplot(fill = "yellow", alpha = 0.7) +
+  labs(
+    title = "Rainfall Distribution by Month",
+    x = "Month",
+    y = "Rainfall (mm)"
+  ) +
+  theme_minimal(base_size = 14) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+
+
+ggsave(file, plot = g, width = 6, height = 6, dpi = 300)
+
+
+file<- paste0(temp_dir,"/year_rainfall_boxplot.html")
+g_plotly <- ggplotly(g)
+
+saveWidget(g_plotly, file, selfcontained = FALSE)

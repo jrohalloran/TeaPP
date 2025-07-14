@@ -18,6 +18,7 @@ import { MatTableDataSource } from '@angular/material/table';
 
 
 
+
 export interface postgreSQLTableData {
   table_name: string;
   seq_scan: string;
@@ -75,6 +76,7 @@ export class DatabasePage {
 
     postgresSearchColumns  = ['correct_id', 'correct_female', 'correct_male', 'year', 'generation'];
     neo4jSearchColumns = ['source', 'relation', 'target'];
+    groupedSearchColumns = ['expand', 'female_parent', 'male_parent', 'year', 'entries'];
 
         // Search Attributes 
     searchInput: string = '';
@@ -84,7 +86,10 @@ export class DatabasePage {
    // neo4jSearch: any[] = [];
     postgresSearch = new MatTableDataSource<any>([]);  // initialize with empty array
     neo4jSearch = new MatTableDataSource<any>([]); 
-    groupedSearch: any[] = [];
+    groupedPGSearch: any[] = [];
+
+    expandedElement:  any | null = null;
+
 
     @ViewChild('postgresSort') postgresSort!: MatSort;
     @ViewChild('neo4jSort') neo4jSort!: MatSort;
@@ -135,7 +140,6 @@ export class DatabasePage {
     }
 
     populateNeo4jTable(response: any[]){
-
       this.neo4jTableData = response;
 
     }
@@ -223,7 +227,7 @@ export class DatabasePage {
       console.log('Search Response from backend:', response);
       this.postgresSearch.data = response['postgres'] || [];
       this.neo4jSearch.data = response['neo4j'] || [];
-      this.groupedSearch = response['grouped'] || [];
+      this.groupedPGSearch = response['grouped'] || [];
       
     }
     catch(error){
@@ -263,5 +267,10 @@ export class DatabasePage {
 
 
     }
+
+    toggleRow(row: any) {
+    console.log(this.expandedElement);
+    this.expandedElement = this.expandedElement === row ? null : row;
+  }
 
 }

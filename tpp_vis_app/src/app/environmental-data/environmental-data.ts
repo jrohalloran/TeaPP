@@ -11,6 +11,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CommonModule } from '@angular/common';
 import { SafeUrlPipe } from '../services/safe-url.pipe';
+import { MatButtonModule } from '@angular/material/button';
 
 
 interface GridItem {
@@ -29,7 +30,8 @@ interface GridItem {
       MatMenuModule,
       MatProgressSpinnerModule,
       CommonModule,
-    SafeUrlPipe ],
+      SafeUrlPipe,
+      MatButtonModule ],
   standalone: true,
   templateUrl: './environmental-data.html',
   styleUrl: './environmental-data.css'
@@ -38,6 +40,8 @@ interface GridItem {
 
 export class EnvironmentalData {
 
+
+    selectedTempPlot: 'mean' | 'min' | 'max' = 'mean'; 
     imagesRainfall: GridItem[] = [];
     imagesTemp: GridItem[] = [];
     selectedAnalysis: 'rainfall' | 'temperature' | null = null;
@@ -71,6 +75,8 @@ export class EnvironmentalData {
                 { url: this.backendApiService.getRainfallUrl('Month_Rain_lineplot.html'), name: 'pca', gridArea: 'thumb2',type: 'html'  },
                 { url: this.backendApiService.getRainfallUrl('Rain_Heatmap.html'), name: 'mean_histogram', gridArea: 'thumb3',type: 'html'  },
                 { url: this.backendApiService.getRainfallUrl('seasonal_rainfall.html'), name: 'scree', gridArea: 'thumb4',type: 'html' },
+                { url: this.backendApiService.getRainfallUrl('layered_all_rainfall_boxplot.html'), name: 'histogram', gridArea: 'thumb5',type: 'html'  },
+                { url: this.backendApiService.getRainfallUrl('year_rainfall_boxplot.html'), name: 'histogram', gridArea: 'thumb6',type: 'html'  },
                 { name: 'stats-box', url: '', gridArea: 'stats',type: 'stats'}
               ];
       this.loading = false;}
@@ -98,11 +104,11 @@ export class EnvironmentalData {
         try{
         
         this.imagesTemp = [
-                { url: this.backendApiService.getTempUrl('temperature_year_layered.html'), name: 'histogram', gridArea: 'thumb1', type: 'html' },
-                { url: this.backendApiService.getTempUrl('temperature_year_month.html'), name: 'pca', gridArea: 'thumb2', type: 'html' },
-                { url: this.backendApiService.getTempUrl('temperature_boxplot_MIN.html'), name: 'pca', gridArea: 'thumb3' , type: 'html'},
-                { url: this.backendApiService.getTempUrl('temperature_boxplot_MAX.html'), name: 'pca', gridArea: 'thumb4', type: 'html' },
-                { url: this.backendApiService.getTempUrl('temperature_boxplot_MEAN.html'), name: 'pca', gridArea: 'thumb5', type: 'html' },
+                { url: this.backendApiService.getTempUrl('temperature_year_layered.html'), name: 'histogram', gridArea: 'hero', type: 'html' },
+                { url: this.backendApiService.getTempUrl('temperature_year_month.html'), name: 'pca', gridArea: 'thumb1', type: 'html' },
+                { url: this.backendApiService.getTempUrl('temperature_boxplot_MIN.html'), name: 'minBox', gridArea: 'boxplotArea' , type: 'html'},
+                { url: this.backendApiService.getTempUrl('temperature_boxplot_MAX.html'), name: 'maxBox', gridArea: 'boxplotArea', type: 'html' },
+                { url: this.backendApiService.getTempUrl('temperature_boxplot_MEAN.html'), name: 'meanBox', gridArea: 'boxplotArea', type: 'html' },
                 { name: 'stats-box', url: '', gridArea: 'stats', type: 'stats' }
               ];
 
@@ -139,6 +145,20 @@ export class EnvironmentalData {
       this.selectedImageUrl = null;
     }
 
+    get maxBoxplotUrl(): string {
+      return this.imagesTemp.find(i => i.name === 'maxBox')?.url || '';
+    }
+
+    get minBoxplotUrl(): string {
+      return this.imagesTemp.find(i => i.name === 'minBox')?.url || '';
+    }
+
+    get meanBoxplotUrl(): string {
+      return this.imagesTemp.find(i => i.name === 'meanBox')?.url || '';
+    }
+  selectPlot(plot: 'min' | 'max' | 'mean') {
+    this.selectedTempPlot = plot;
+  }
 
 
 }

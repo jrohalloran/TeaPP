@@ -153,6 +153,7 @@ g<-ggplot(mean_df, aes(x = year, y = value)) +
     y = "Temperature (°C)"
   ) +
   theme_minimal() +
+  scale_y_continuous(limits = c(5, 40), breaks = seq(5, 40, by = 5))+
   theme(legend.position = "none",plot.background = element_rect(fill = "white", color = NA),  # White background
         panel.background = element_rect(fill = "white", color = NA))
 ggsave(file, plot = g, width = 6, height = 6, dpi = 300)
@@ -174,6 +175,7 @@ g<-ggplot(min_df, aes(x = year, y =value)) +
     fill = "Year"
   ) +
   theme_minimal()+
+  scale_y_continuous(limits = c(5, 40), breaks = seq(5, 40, by = 5))+
   theme(legend.position = "none",plot.background = element_rect(fill = "white", color = NA),  # White background
         panel.background = element_rect(fill = "white", color = NA))
 ggsave(file, plot = g, width = 6, height = 6, dpi = 300)
@@ -196,6 +198,7 @@ g<-ggplot(max_df, aes(x = year, y =value)) +
     fill = "Year"
   ) +
   theme_minimal()+
+  scale_y_continuous(limits = c(5, 40), breaks = seq(5, 40, by = 5))+
   theme(legend.position = "none",plot.background = element_rect(fill = "white", color = NA),  # White background
         panel.background = element_rect(fill = "white", color = NA))
 ggsave(file, plot = g, width = 6, height = 6, dpi = 300)
