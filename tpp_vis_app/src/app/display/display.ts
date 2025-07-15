@@ -357,13 +357,14 @@ export class DisplayComponent implements AfterViewInit {
       this.legend.forEach(item => {
         yearColorMap.set(Number(item.element), item.colour);
       });
-
+    /*
     this.nuclearFamilyData.nodes.forEach(element =>{
       for (let i=0;i<nodeID.length;i++){
         if (element.id == nodeID[i]){
           console.log("match")
           console.log(element);
           element.color = '#fe6100';
+          console.log(element);
 
         }else {
               if (this.selectedColour == "generation"){
@@ -377,6 +378,19 @@ export class DisplayComponent implements AfterViewInit {
             
               }
               else{continue}
+        }
+      }
+    });*/
+
+    this.nuclearFamilyData.nodes.forEach(node => {
+      if (nodeID.includes(node.id)) {
+        console.log("match");
+        node.color = '#fe6100';
+      } else {
+        if (this.selectedColour === "generation") {
+          node.color = yearColorMap.get(Number(node.gener)) || '#1B9E77';
+        } else if (this.selectedColour === "year") {
+          node.color = yearColorMap.get(Number(node.year)) || '#1B9E77';
         }
       }
     });
