@@ -42,8 +42,10 @@ export class FileUploadComponent {
  selectedGenomFile: File | null = null;
  uploadStatus: string = 'waiting';
 
- selectedEnvType: string = '';
+ processing = false;
 
+ selectedEnvType: string = '';
+  userIDInput: string = '';
  
  processedData : any[] = [];
 
@@ -159,23 +161,16 @@ export class FileUploadComponent {
       return;
     }
 
-    const isTextFile = file.name.endsWith('.txt');
+    const isTextFile = (file.name.endsWith('.fastq')||file.name.endsWith('.fq'));
     if (!isTextFile) {
-      alert("Please select a .txt file.");
-      this.selectedFile = null;
-      return;
-    }
-
-    const isTabDelimited = await this.checkIfTabDelimited(file);
-    if (!isTabDelimited) {
-      alert("The selected file is not tab-delimited.");
+      alert("Please select a fastQ file.");
       this.selectedFile = null;
       return;
     }
 
     // ✅ All checks passed — safe to assign and show info
-    this.selectedFile = file;
-    console.log('Selected file:', this.selectedFile.name);
+    this.selectedGenomFile = file;
+    console.log('Selected file:', this.selectedGenomFile.name);
     console.log("clicked?: " + this.clicked);
   }
 
@@ -300,6 +295,41 @@ export class FileUploadComponent {
 
   async uploadGenomFile() {
     this.loadingChange.emit(true);
+
+    console.log(this.userIDInput);
+
+    if (!this.selectedGenomFile) {
+      alert("Please select a file before uploading.");
+      return;
+    }
+    if (!this.userIDInput || this.userIDInput== null || this.userIDInput==''|| this.userIDInput==' ') {
+      alert("Please Enter Clone ID for the Fastq file.");
+      return;
+    }
+    if (this.userIDInput){
+          console.log("Sending File for Upload")
+          this.uploadService.uploadGENOMFile(this.selectedGenomFile).subscribe({
+          next: (response) => {
+            console.log('Upload response:', response);
+            try{
+              this.processGenomFile()
+            }catch (error){
+              console.error('Error:', error);
+            }
+
+            this.uploadStatus = 'completed';
+            this.processing = true;
+
+
+          },
+          error: (error) => {
+            console.error('Upload error:', error);
+            this.uploadStatus = 'error';
+          }
+        });
+        this.loadingChange.emit(false);
+      }
+
   }
 
 
@@ -362,6 +392,25 @@ export class FileUploadComponent {
     }
   }
 
+
+  async processGenomFile(){
+    this.loadingChange.emit(true);
+        console.log("Requesting File Process....");
+    const clone_id = this.userIDInput;
+    try {
+      const response = await firstValueFrom(this.backendApiService.processGenomFile(clone_id));
+      console.log('Response from backend:', response);
+      if (response){
+        this.loadingChange.emit(false);
+        //this.router.navigate(['/home']);
+      }
+
+      } catch (error) {
+      console.error('Error:', error);
+    }
+
+  }
+
   onUploadComplete(response: any) {
     this.loadingChange.emit(true);
 
@@ -373,6 +422,16 @@ export class FileUploadComponent {
 
   toggleBottomTab(): void {
     this.isBottomTabExpanded = !this.isBottomTabExpanded;
+  }
+
+  onUserChoice(uploadAgain: boolean) {
+    this.processing = false;
+    if (uploadAgain) {
+      this.selectedGenomFile = null;
+    } else {
+      // Process GENOM FILES
+      console.log('User chose not to upload another file.');
+    }
   }
   
 

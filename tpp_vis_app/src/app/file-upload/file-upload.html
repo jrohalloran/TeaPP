@@ -126,6 +126,7 @@
   <div class="upload-wrapper">
   <h3>Upload Your Genomic Data File</h3>
   <input type="file" class="upload-input" (change)="handleFileGenomSelection($event)" #fileInput />
+
   <div *ngIf="selectedGenomFile">
     <!-- Display file details -->
     <section class="file-details">
@@ -136,9 +137,11 @@
         <li><strong>File Size:</strong> {{selectedGenomFile.size}} bytes</li>
       </ul>
     </section>
+    <h3>Please Specify Clone ID:</h3>
+    <input class = "ID-input-box" type="text" [(ngModel)]="userIDInput" placeholder="Clone ID" />
 
     <!-- Upload button -->
-    <button (click)="uploadEnvFile(); actionMethod($event)">Start Upload</button>
+    <button (click)="uploadGenomFile(); actionMethod($event)">Start Upload</button>
 
     <!-- Display upload status -->
     <section [ngSwitch]="uploadStatus">
@@ -149,7 +152,16 @@
     </section>
    </div>
 
-
+    <div class="modal-overlay" *ngIf="processing">
+      <div class="modal-content">
+        <h2>Upload Another File?</h2>
+        <p>Do you want to upload another file?</p>
+        <div class="modal-buttons">
+          <button (click)="onUserChoice(false)">No</button>
+          <button (click)="onUserChoice(true)">Yes</button>
+        </div>
+      </div>
+    </div>
 
 
   </div>

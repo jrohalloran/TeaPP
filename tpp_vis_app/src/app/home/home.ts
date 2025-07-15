@@ -8,6 +8,7 @@ import { DisplayComponent } from '../display/display';
 import { Kinship } from '../kinship/kinship';
 import { Overview } from '../overview/overview';
 import { EnvironmentalData } from '../environmental-data/environmental-data';
+import { GenomicData } from '../genomic-data/genomic-data';
 import { DatabasePage } from '../database-page/database-page';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
@@ -22,7 +23,8 @@ import { AuthService } from '../services/auth.service';
             Kinship,
             Overview,
             DatabasePage,
-            EnvironmentalData ],
+            EnvironmentalData,
+            GenomicData ],
   templateUrl: './home.html',
   styleUrl: './home.css'
 })

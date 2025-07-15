@@ -97,86 +97,15 @@ plt.ylabel("Frequency")
 plt.savefig(f"{OUTDIR}/kinship_histogram.png", dpi=300)
 plt.close()
 
-# 3. KDE plot of kinship values
-#plt.figure(figsize=(8,5))
-#sns.kdeplot(K.flatten(), bw_adjust=0.5)
-#plt.title("Density of Kinship Values")
-#plt.xlabel("Kinship")
-#plt.savefig(f"{outdir}/kinship_density.png", dpi=300)
-#plt.close()
 
-# 4. Clustered heatmap
+# 3. Clustered heatmap
 sns.clustermap(K_small, cmap="viridis", figsize=(12, 12))
 plt.suptitle("Clustered Kinship Heatmap")
 plt.savefig(f"{OUTDIR}/kinship_clustermap.png", dpi=300)
 plt.close()
 
-# 5. PCA plot
-#pca = PCA(n_components=2)
-#coords = pca.fit_transform(K)
-#plt.figure(figsize=(8,6))
-#plt.scatter(coords[:,0], coords[:,1], s=5)
-#plt.title("PCA of Kinship Matrix")
-#plt.xlabel("PC1")
-#plt.ylabel("PC2")
-#plt.savefig(f"{outdir}/kinship_pca.png", dpi=300)
-#plt.close()
 
-
-#meta_df = pd.read_table(GENERATION_FILE, dtype={'ID': str})
-#meta_df = meta_df.set_index('ID')
-#IDs = [...]
-#assert len(IDs) == K.shape[0], "Mismatch between IDs and kinship matrix shape"
-
-#missing = [i for i in IDs if i not in meta_df.index]
-#if missing:
-    #raise ValueError(f"Missing IDs in metadata: {missing}")
-
-# Get generations in order
-#generations_ordered = meta_df.loc[IDs, 'gener'].astype(str).values
-
-# Encode generation labels
-#le = LabelEncoder()
-#generation_labels = le.fit_transform(generations_ordered)
-
-# Perform PCA
-#pca = PCA(n_components=2)
-#coords = pca.fit_transform(K)
-
-# PCA
-#pca = PCA(n_components=2)
-#coords = pca.fit_transform(K)
-
-# Plot
-#plt.figure(figsize=(8, 6))
-#scatter = plt.scatter(coords[:, 0], coords[:, 1], c=generation_labels, cmap='tab10', s=5)
-#plt.title("PCA of Kinship Matrix")
-#plt.xlabel("PC1")
-#plt.ylabel("PC2")
-
-# Legend
-#handles, _ = scatter.legend_elements(prop="colors", alpha=0.6)
-#plt.legend(handles, le.classes_, title="Generation", bbox_to_anchor=(1.05, 1), loc='upper left')
-
-# Save
-#plt.tight_layout()
-#plt.savefig(f"{OUTDIR}/kinship_pca_coloured.png", dpi=300)
-#plt.close()
-
-#
-# 6. MDS plot
-#mds = MDS(n_components=2, dissimilarity='precomputed', random_state=42)
-#dist_matrix = 1 - K  # convert kinship to distance-like metric
-#mds_coords = mds.fit_transform(dist_matrix)
-#plt.figure(figsize=(8,6))
-#plt.scatter(mds_coords[:,0], mds_coords[:,1], s=5)
-#plt.title("MDS of Kinship Matrix")
-#plt.xlabel("Dimension 1")
-#plt.ylabel("Dimension 2")
-#plt.savefig(f"{outdir}/kinship_mds.png", dpi=300)
-#plt.close()
-
-# 7. Distribution of mean kinship per individual
+# 4. Distribution of mean kinship per individual
 means = np.nanmean(K, axis=1)
 plt.figure(figsize=(8,5))
 plt.hist(means, bins=50, color='salmon', edgecolor='black')

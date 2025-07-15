@@ -41,6 +41,7 @@ import getStatsRoutes from './routes/getStats.js'
 import searchRoutes from './routes/searchID.js'
 import authenticationRoutes from './routes/getUserDetails.js'
 import envStatsRoutes from './routes/envStats.js'
+import genomicDataRoutes from './routes/genomicAnalysis.js'
 
 const app = express();
 
@@ -99,6 +100,18 @@ const env_storage = multer.diskStorage({
  }
 });
 const env_upload = multer({ storage: env_storage });
+
+
+const genom_storage = multer.diskStorage({
+ destination: function (req, file, cb) {
+   cb(null, 'genom_uploads/'); // Upload directory
+ },
+ filename: function (req, file, cb) {
+   cb(null, file.originalname); // Keep the original file name
+ }
+});
+const genom_upload = multer({ storage: genom_storage });
+
 
 
 const env_temp_storage = multer.diskStorage({
@@ -246,10 +259,35 @@ app.post('/uploadEnvTEMPfile', (req, res) => {
 });
 
 
+app.post('/uploadGENOMfile', (req, res) => {
+  console.log('Starting Genomic File Upload...');
+
+  genom_upload.single('file')(req, res, function (err) {
+    if (err instanceof multer.MulterError) {
+      return res.status(500).json({ message: 'Multer error occurred during upload.', error: err.message });
+    } else if (err) {
+      return res.status(500).json({ message: 'An unknown error occurred during upload.', error: err.message });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({ message: 'No file uploaded.' });
+    }
+
+    const filePath = path.join('genom_uploads', req.file.originalname);
+
+    console.log('File uploaded successfully with valid headers:', req.file);
+    return res.status(200).json({ message: 'File uploaded and validated successfully.' });
+
+    });
+  });
+
+
+
+
 // Serve uploaded files
 app.use('/uploads', express.static('uploads'));
 
-
+app.use('/genom_uploads', express.static('genom_uploads'));
 // USER LOGIN + AUTHENTICATION ROUTES
 
 
@@ -277,6 +315,13 @@ app.use('/api', updateParentsRoutes);
 app.use('/api', getStatsRoutes);
 
 app.use('/api', searchRoutes);
+
+
+app.use('/api', genomicDataRoutes);
+
+
+
+
 
 
 // NEO4J Routes
@@ -315,16 +360,7 @@ app.use('/calculatedKinship', express.static(path.join(__dirname, '/controllers/
 
 
 
-/*
-app.get('/api/images', (req, res) => {
-  const imagesPath = path.join(__dirname, '/kinship');
-  console.log(imagesPath);
-  fs.readdir(imagesPath, (err, files) => {
-    if (err) return res.status(500).json({ error: 'Error reading images directory' });
-    const imageFiles = files.filter(f => /\.(png|jpg|jpeg|gif)$/i.test(f));
-    res.json(imageFiles);
-  });
-});*/
+
 
 app.use('/diagramImages', express.static(path.join(__dirname, '/controllers/temp')));
 

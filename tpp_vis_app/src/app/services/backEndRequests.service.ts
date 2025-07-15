@@ -248,5 +248,17 @@ export class backendApiService {
     return `${this.temperatureBaseUrl}/${fileName}`;
   }
 
+    // ------------ GENOMIC DATA  ---------------
+
+
+  getGenomicData(): Observable<any> {
+    console.log("Getting Genomic Table Entries");
+    return this.http.get(`${this.apiUrl}/getGenomicData`);
+  }
+
+  processGenomFile(clone_ID: string): Observable<any> {
+    console.log("Retrieving all Nodes and Edges");
+    return this.http.post(`${this.apiUrl}/processGenomFile`, clone_ID);
+  }
   
 }
