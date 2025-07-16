@@ -256,9 +256,15 @@ export class backendApiService {
     return this.http.get(`${this.apiUrl}/getGenomicData`);
   }
 
-  processGenomFile(clone_ID: string): Observable<any> {
-    console.log("Retrieving all Nodes and Edges");
-    return this.http.post(`${this.apiUrl}/processGenomFile`, clone_ID);
+  processGenomFile(data: any): Observable<any> {
+    console.log("Processing Genomic Data File");
+    return this.http.post(`${this.apiUrl}/processGenomFile`, data);
   }
+
+  performFastQC(data: any): Observable<any> {
+    console.log("Performing FastQC");
+    return this.http.post(`${this.apiUrl}/performFastQC`, data);
+  }
+
   
 }

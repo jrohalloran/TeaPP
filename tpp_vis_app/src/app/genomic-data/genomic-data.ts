@@ -46,10 +46,11 @@ export class GenomicData {
 
 
   loading: boolean = false;
-  genomicTableColumns = ['clone_id', 'add_info', 'select'];
+  genomicTableColumns = ['clone_id','file_name', 'add_info', 'select'];
   genomicTableData: any = [];
 
 
+  selectedGenomicRows: any[] = [];
 
 
   async ngAfterViewInit(): Promise<void> {
@@ -75,11 +76,46 @@ export class GenomicData {
         const response = await firstValueFrom(this.backendApiService.getGenomicData());
         console.log('Response from backend:', response);
         this.genomicTableData = response;
+        console.log(this.genomicTableData);
+        //this.genomicTableData[1].file_name;
 
       } catch (error) {
         console.error('Error:', error);
 
       }
   }
+
+
+  async performFastQC(){
+    this.loading = true;
+    console.log(this.selectedGenomicRows);
+    const data = this.selectedGenomicRows;
+    try {
+        const response = await firstValueFrom(this.backendApiService.performFastQC(data));
+        console.log('Response from backend:', response);
+    } catch (error) {
+        console.error('Error:', error);
+
+    }finally{
+      this.loading = false;
+    }
+  }
+
+
+toggleSelection(row: any) {
+  const index = this.selectedGenomicRows.findIndex(r => r.id === row.id);
+  if (index >= 0) {
+    this.selectedGenomicRows.splice(index, 1);
+    //console.log(this.selectedGenomicRows);
+  } else {
+    this.selectedGenomicRows.push(row);
+    //console.log(this.selectedGenomicRows);
+  }
+}
+
+isRowSelected(row: any): boolean {
+  return this.selectedGenomicRows.some(r => r.id === row.id);
+}
+
 
 }

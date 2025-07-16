@@ -276,7 +276,7 @@ app.post('/uploadGENOMfile', (req, res) => {
     const filePath = path.join('genom_uploads', req.file.originalname);
 
     console.log('File uploaded successfully with valid headers:', req.file);
-    return res.status(200).json({ message: 'File uploaded and validated successfully.' });
+    return res.status(200).json(true);
 
     });
   });

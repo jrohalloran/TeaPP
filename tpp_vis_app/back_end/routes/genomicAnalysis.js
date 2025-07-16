@@ -7,11 +7,14 @@
 import express from 'express';
 import {getGenomicData} from '../controllers/getGenomicDataController.js';
 import {processGenomFile} from '../controllers/processGenomeFileController.js';
+import {performFastQC} from '../controllers/performFastQCController.js';
 
 const router = express.Router();
 
 router.get('/getGenomicData', getGenomicData)
 
 router.post('/processGenomFile', processGenomFile)
+
+router.post('/performFastQC', performFastQC)
 
 export default router;

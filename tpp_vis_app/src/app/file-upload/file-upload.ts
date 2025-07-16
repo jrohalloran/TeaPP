@@ -91,7 +91,14 @@ export class FileUploadComponent {
   }
 
 
+  selectedGenomFiles: File[] = [];
 
+onFileSelected(event: Event) {
+  const input = event.target as HTMLInputElement;
+  if (input.files && input.files.length > 0) {
+    this.selectedGenomFiles = Array.from(input.files);
+  }
+}
 
   async handleFileSelection(event: any) {
     const file: File = event.target.files[0];
@@ -153,7 +160,7 @@ export class FileUploadComponent {
     console.log("clicked?: " + this.clicked);
   }
 
-
+/*
   async handleFileGenomSelection(event: any) {
     const file: File = event.target.files[0];
 
@@ -173,6 +180,39 @@ export class FileUploadComponent {
     console.log('Selected file:', this.selectedGenomFile.name);
     console.log("clicked?: " + this.clicked);
   }
+*/
+
+async handleFileGenomSelection(event: any) {
+  const files: FileList = event.target.files;
+
+  if (!files || files.length === 0) {
+    return;
+  }
+
+  const validFiles: File[] = [];
+
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    const isTextFile = file.name.endsWith('.fastq') || file.name.endsWith('.fq');
+
+    if (!isTextFile) {
+      alert(`Invalid file: ${file.name} — Only .fastq or .fq files are allowed.`);
+      continue; // skip invalid files
+    }
+
+    validFiles.push(file);
+  }
+
+  if (validFiles.length === 0) {
+    alert("No valid FASTQ files were selected.");
+    return;
+  }
+
+  this.selectedGenomFiles = validFiles;
+
+  // ✅ Log selected files
+  console.log('Selected files:', this.selectedGenomFiles.map(f => f.name));
+}
 
 
 
@@ -292,12 +332,14 @@ export class FileUploadComponent {
 }
 
 
-
+/*
   async uploadGenomFile() {
     this.loadingChange.emit(true);
 
     console.log(this.userIDInput);
-
+    //console.log(this.selectedGenomFile);
+    const filename = this.selectedGenomFile?.name;
+    console.log("Filename: "+filename);
     if (!this.selectedGenomFile) {
       alert("Please select a file before uploading.");
       return;
@@ -332,12 +374,54 @@ export class FileUploadComponent {
 
   }
 
+*/
 
 
 
-  actionMethod(event: any) {
-    //event.target.disabled = true;
+async uploadGenomFiles() {
+  this.loadingChange.emit(true);
+
+  if (!this.selectedGenomFiles || this.selectedGenomFiles.length === 0) {
+    alert("Please select at least one file before uploading.");
+    this.loadingChange.emit(false);
+    return;
   }
+
+  if (!this.userIDInput || this.userIDInput.trim() === '') {
+    alert("Please enter Clone ID for the FASTQ files.");
+    this.loadingChange.emit(false);
+    return;
+  }
+
+  const clone_id = this.userIDInput;
+  const uploadPromises = this.selectedGenomFiles.map(async (file) => {
+    console.log("Uploading file:", file.name);
+    try {
+      const response = await firstValueFrom(this.uploadService.uploadGENOMFile(file));
+      console.log('Upload response:', response);
+      if (response) {
+        await this.processGenomFile(clone_id, file.name);
+      } else {
+        throw new Error(`Empty response for ${file.name}`);
+      }
+    } catch (error) {
+      console.error(`Upload or processing error for ${file.name}:`, error);
+      throw error;
+    }
+  });
+
+  try {
+    await Promise.all(uploadPromises);
+    this.uploadStatus = 'completed';
+    this.processing = true;
+  } catch (error) {
+    this.uploadStatus = 'error';
+    console.error("At least one file failed to upload or process.");
+  } finally {
+    this.loadingChange.emit(false);
+  }
+}
+
 
 
   async processFile(){
@@ -357,7 +441,7 @@ export class FileUploadComponent {
     }
   }
 
-    async processRainfallFile(){
+  async processRainfallFile(){
     this.loadingChange.emit(true);
 
     console.log("Requesting File Process....");
@@ -373,7 +457,6 @@ export class FileUploadComponent {
       console.error('Error:', error);
     }
   }
-
 
   async processTempFile(){
     this.loadingChange.emit(true);
@@ -392,13 +475,14 @@ export class FileUploadComponent {
     }
   }
 
-
-  async processGenomFile(){
+  async processGenomFile(clone_id: string, filename: string){
     this.loadingChange.emit(true);
         console.log("Requesting File Process....");
-    const clone_id = this.userIDInput;
+    //const clone_id = this.userIDInput;
+    //const filename = this.selectedGenomFile?.name;
+    const data = [clone_id, filename]
     try {
-      const response = await firstValueFrom(this.backendApiService.processGenomFile(clone_id));
+      const response = await firstValueFrom(this.backendApiService.processGenomFile(data));
       console.log('Response from backend:', response);
       if (response){
         this.loadingChange.emit(false);
