@@ -52,7 +52,7 @@ export class GenomicData {
   genomicTableData: any = [];
   htmlReports: string[] = [];
 
-  reportBaseUrl = `${environment.apiUrl}/reports`;
+  reportBaseUrl = `${environment.fastQCreportsURL}`;
   selectedGenomicRows: any[] = [];
 
 
