@@ -14,6 +14,7 @@ export class UploadService {
   private uploadUrl = environment.uploadUrl;
   private uploadEnvRAINUrl = environment.uploadEnvRAINUrl;
   private uploadEnvTEMPUrl = environment.uploadEnvTEMPUrl;
+  private uploadGENOMUrl = environment.uploadGENOMUrl;
 
 
 
@@ -32,10 +33,16 @@ export class UploadService {
    return this.httpClient.post(this.uploadEnvRAINUrl, formData);
  }
 
-
  uploadEnvTEMPFile(file: File): Observable<any> {
    const formData = new FormData();
    formData.append('file', file);
    return this.httpClient.post(this.uploadEnvTEMPUrl, formData);
+ }
+
+
+ uploadGENOMFile(file: File): Observable<any> {
+   const formData = new FormData();
+   formData.append('file', file);
+   return this.httpClient.post(this.uploadGENOMUrl, formData);
  }
 }

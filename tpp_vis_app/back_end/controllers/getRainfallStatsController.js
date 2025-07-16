@@ -61,9 +61,15 @@ async function writeFile(){
 async function performStatistics() {
 
     console.log("Performing statistics")
-    
+
     const scriptPath = path.join(__dirname, 'scripts', 'process_rainfall.R');
     const scriptDir = path.dirname(scriptPath);
+
+    console.log('========== RAINFALL STATS Script Execution ==========');
+    console.log(`[INFO] Timestamp: ${new Date().toISOString()}`);
+    console.log(`[INFO] Script path: ${scriptPath}`);
+    console.log(`[INFO] Working directory: ${process.cwd()}`);
+    console.log(`[INFO] Spawning Python process...\n`);
 
     // Escape quotes inside the JSON string for safe shell usage:
     const command = `Rscript "${scriptPath}" "${outputFile}" "${scriptDir}"`;

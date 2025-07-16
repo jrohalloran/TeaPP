@@ -261,5 +261,23 @@ export class backendApiService {
     return `${this.temperatureBaseUrl}/${fileName}`;
   }
 
+    // ------------ GENOMIC DATA  ---------------
+
+
+  getGenomicData(): Observable<any> {
+    console.log("Getting Genomic Table Entries");
+    return this.http.get(`${this.apiUrl}/getGenomicData`);
+  }
+
+  processGenomFile(data: any): Observable<any> {
+    console.log("Processing Genomic Data File");
+    return this.http.post(`${this.apiUrl}/processGenomFile`, data);
+  }
+
+  performFastQC(data: any): Observable<any> {
+    console.log("Performing FastQC");
+    return this.http.post(`${this.apiUrl}/performFastQC`, data);
+  }
+
   
 }

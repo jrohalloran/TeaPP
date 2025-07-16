@@ -16,33 +16,121 @@
       </div>
 </div>
 
-<div class="custom-grid" *ngIf="selectedAnalysis === 'rainfall'">
-  <div
-    *ngFor="let item of imagesRainfall"
-    class="grid-item"
-    [ngStyle]="{ 'grid-area': item.gridArea }"
-  >
-    <img *ngIf="item.url" [src]="item.url" [alt]="item.name" [ngClass]="getImageClass(item.name)" (click)="openModal(item.url)" />
-    <div *ngIf="!item.url" class="stats-box">
-      <h3>Rainfall Statistics</h3>
-      <p>Here will display any relevant statistics and comments for Rainfall Analysis.</p>
-    </div>
+<div class="custom-grid-rain" *ngIf="selectedAnalysis === 'rainfall'">
+<div
+  *ngFor="let item of imagesRainfall"
+  class="grid-item"
+  [ngStyle]="{ 'grid-area': item.gridArea }"
+>
+  <!-- Render image -->
+  <img
+    *ngIf="item.type === 'image' && item.url"
+    [src]="item.url"
+    [alt]="item.name"
+    [ngClass]="getImageClass(item.name)"
+    (click)="openModal(item.url)"
+  />
+
+  <!-- Render HTML (e.g., interactive Plotly) in iframe -->
+  <iframe
+    *ngIf="item.type === 'html' && item.url"
+    [src]="item.url | safeUrl"
+    width="100%"
+    height="400"
+    frameborder="0"
+  ></iframe>
+
+  <!-- Fallback stats box -->
+  <div *ngIf="!item.url" class="stats-box">
+    <h3>Rainfall Statistics</h3>
+    <p>Here will display any relevant statistics and comments for Rainfall Analysis.</p>
+  </div>
+</div>
+</div>
+
+<div class="custom-grid-temp" *ngIf="selectedAnalysis === 'temperature'">
+<div
+  *ngFor="let item of imagesTemp"
+  class="grid-item"
+  [ngStyle]="{ 'grid-area': item.gridArea }"
+>
+  <!-- Render image -->
+  <img
+    *ngIf="item.type === 'image' && item.url"
+    [src]="item.url"
+    [alt]="item.name"
+    [ngClass]="getImageClass(item.name)"
+    (click)="openModal(item.url)"
+  />
+
+  <!-- Render HTML (e.g., interactive Plotly) in iframe -->
+  <iframe
+    *ngIf="item.type === 'html' && item.url"
+    [src]="item.url | safeUrl"
+    width="100%"
+    height="400"
+    frameborder="0"
+  ></iframe>
+
+    <!-- Single grid-item for layered boxplots -->
+
+
+  <!-- Fallback stats box -->
+  <div *ngIf="!item.url" class="stats-box">
+    <h3>Temperature Statistics</h3>
+    <p>Here will display any relevant statistics and comments for Temperature Analysis.</p>
   </div>
 </div>
 
-<div class="custom-grid" *ngIf="selectedAnalysis === 'temperature'">
-  <div
-    *ngFor="let item of imagesTemp"
-    class="grid-item"
-    [ngStyle]="{ 'grid-area': item.gridArea }"
-  >
-    <img *ngIf="item.url" [src]="item.url" [alt]="item.name" [ngClass]="getImageClass(item.name)" (click)="openModal(item.url)" />
-    <div *ngIf="!item.url" class="stats-box">
-      <h3>Temperature Statistics</h3>
-      <p>Here will display any relevant statistics and comments for Temperature Analysis.</p>
-    </div>
+    <!-- Single grid-item for layered boxplots -->
+     
+  <div class="grid-item" [ngStyle]="{ 'grid-area': 'boxplotArea' }">
+
+    <!-- Buttons to select boxplot -->
+  <div class="plot-selector" style="margin-bottom: 10px;">
+      <button
+      mat-raised-button
+      [color]="selectedTempPlot === 'mean' ? 'primary' : null"
+      (click)="selectedTempPlot = 'mean'">
+      Mean
+    </button>
+    <button
+      mat-raised-button
+      [color]="selectedTempPlot === 'max' ? 'primary' : null"
+      (click)="selectedTempPlot = 'max'">
+      Max
+    </button>
+    <button
+      mat-raised-button
+      [color]="selectedTempPlot === 'min' ? 'primary' : null"
+      (click)="selectedTempPlot = 'min'">
+      Min
+    </button>
+
+  </div>
+
+    <!-- Conditionally render iframe based on selection -->
+    <iframe
+  *ngIf="selectedTempPlot === 'mean'"
+  [src]="meanBoxplotUrl | safeUrl"
+  width="100%" height="400" frameborder="0"
+  ></iframe>
+
+  <iframe
+    *ngIf="selectedTempPlot === 'min'"
+    [src]="minBoxplotUrl | safeUrl"
+    width="100%" height="400" frameborder="0"
+  ></iframe>
+
+  <iframe
+    *ngIf="selectedTempPlot === 'max'"
+    [src]="maxBoxplotUrl | safeUrl"
+    width="100%" height="400" frameborder="0"
+  ></iframe>
+
   </div>
 </div>
+
 </div>
 
 <div class="modal" *ngIf="selectedImageUrl" (click)="closeModal()">

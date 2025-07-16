@@ -22,6 +22,59 @@ const backend_dir = path.dirname(__dirname);
 
 
 
+function aggregateNeo4j(){
+
+
+
+}
+
+
+function aggregatePostgres(results){
+    // Aggregating results that have the same parents and year 
+    /*for (let i=0; i>results.length;i++){
+      console.log(i);
+
+
+    }*/
+   //console.log(results.length);
+   for (let i=0; i<results.length;i++){
+      let clone_id = results[i].clone_id;
+      let F_par = results[i].correct_female;
+      let M_par = results[i].correct_male;
+      let year = results[i].year;
+      //console.log(clone_id);
+      //console.log(F_par);
+      //console.log(M_par);
+      //console.log(year);
+
+   }
+
+  const grouped = {};
+
+  for (const row of results) {
+    const key = `${row.year}-${row.correct_female}-${row.correct_male}`;
+    if (!grouped[key]) {
+      grouped[key] = [];
+    }
+    grouped[key].push(row);
+  }
+
+  const groupedArray = Object.entries(grouped).map(([key, items]) => {
+    const [year, correct_female, correct_male] = key.split('-');
+    return {
+      year: parseInt(year),
+      female_parent: correct_female,
+      male_parent: correct_male,
+      items: items
+    };
+  });
+
+  console.log(groupedArray);
+  return groupedArray;
+
+}
+
+
 
 
 
@@ -77,9 +130,13 @@ export async function searchID(req, res){
 
     await session.close();
 
+    const groupedArray = aggregatePostgres(pgResult.rows);
+
+
     res.json({
       postgres: pgResult.rows,
-      neo4j: neoFormatted
+      neo4j: neoFormatted,
+      grouped: groupedArray
     });
 
   } catch (error) {
