@@ -180,11 +180,12 @@ export const performKinship= async (req, res) => {
         await getKinship(); // Performing new synbreed pedigree and kinship matrix
         await getHeatmap(); 
         await getPCA();
+        res.json("Kinship Retrieved");
 
     
     }catch(error){
+        res.json("Kinship Retrieved");
 
     }
-
-    res.json("Kinship Retrieved");
+    
 }

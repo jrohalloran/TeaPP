@@ -288,9 +288,10 @@ app.post('/uploadGENOMfile', (req, res) => {
 app.use('/uploads', express.static('uploads'));
 
 app.use('/genom_uploads', express.static('genom_uploads'));
+
+
+
 // USER LOGIN + AUTHENTICATION ROUTES
-
-
 app.use('/api', authenticationRoutes)
 
 
