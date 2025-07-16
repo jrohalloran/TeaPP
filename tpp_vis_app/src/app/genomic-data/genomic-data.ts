@@ -48,6 +48,7 @@ export class GenomicData {
   loading: boolean = false;
   genomicTableColumns = ['clone_id','file_name', 'add_info', 'select'];
   genomicTableData: any = [];
+  htmlReports: string[] = [];
 
 
   selectedGenomicRows: any[] = [];
@@ -93,6 +94,17 @@ export class GenomicData {
     try {
         const response = await firstValueFrom(this.backendApiService.performFastQC(data));
         console.log('Response from backend:', response);
+
+        // Retrieving FastQC Reports 
+        this.backendApiService.getHtmlReports().subscribe({
+                next: (files) => {
+                  this.htmlReports = files;
+                },
+                error: (err) => {
+                  console.error('Failed to load reports:', err);
+                }
+              });
+          
     } catch (error) {
         console.error('Error:', error);
 

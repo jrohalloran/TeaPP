@@ -360,6 +360,20 @@ app.use('/calculatedKinship', express.static(path.join(__dirname, '/controllers/
 
 
 
+app.use('/fastQCReports', express.static(path.join(__dirname, '/fastQC_reports')));
+
+app.get('/api/fastQCreports', (req, res) => {
+  const reportsDir = path.join(__dirname, '/fastQC_reports');
+
+  fs.readdir(reportsDir, (err, files) => {
+    if (err) {
+      return res.status(500).json({ error: 'Failed to read directory' });
+    }
+
+    const htmlFiles = files.filter(file => file.endsWith('.html'));
+    res.json(htmlFiles);
+  });
+});
 
 
 app.use('/diagramImages', express.static(path.join(__dirname, '/controllers/temp')));
