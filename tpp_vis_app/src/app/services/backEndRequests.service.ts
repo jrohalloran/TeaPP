@@ -279,5 +279,9 @@ export class backendApiService {
     return this.http.post(`${this.apiUrl}/performFastQC`, data);
   }
 
+  getHtmlReports() {
+    return this.http.get<string[]>(`${this.apiUrl}/fastQCreports`);
+  }
+
   
 }

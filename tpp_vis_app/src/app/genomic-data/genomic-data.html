@@ -51,4 +51,14 @@
       (click)="performFastQC()">
       Run FastQC
     </button>
+
+  <h3>FastQC Results</h3>
+  <p>Please select a fastQC resport to view in an external tab</p>
+  <ul *ngIf="htmlReports.length > 0">
+    <li *ngFor="let file of htmlReports">
+      <a [href]="reportBaseUrl + '/' + file" target="_blank" rel="noopener noreferrer">
+        {{ file }}
+      </a>
+    </li>
+  </ul>
   </div>
