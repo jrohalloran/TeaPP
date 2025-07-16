@@ -27,8 +27,10 @@ cur.execute("DROP TABLE IF EXISTS genomicData CASCADE;")
 
 cur.execute("""
     CREATE TABLE IF NOT EXISTS genomicData (
-        clone_id TEXT PRIMARY KEY,
+        id SERIAL PRIMARY KEY,
+        clone_id TEXT NOT NULL,
         file_location TEXT,
+        file_name TEXT,
         additional_data TEXT
     );
 """)
