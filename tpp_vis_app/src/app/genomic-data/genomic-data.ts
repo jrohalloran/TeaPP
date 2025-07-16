@@ -96,6 +96,7 @@ export class GenomicData {
     try {
         const response = await firstValueFrom(this.backendApiService.performFastQC(data));
         console.log('Response from backend:', response);
+        console.log(this.reportBaseUrl);
 
         // Retrieving FastQC Reports 
         this.backendApiService.getHtmlReports().subscribe({

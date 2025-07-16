@@ -357,9 +357,6 @@ app.use('/kinshipImages', express.static(path.join(__dirname, '/kinship')));
 
 app.use('/calculatedKinship', express.static(path.join(__dirname, '/controllers/kinship_plots')));
 
-
-
-
 app.use('/fastQCReports', express.static(path.join(__dirname, '/fastQC_reports')));
 
 app.get('/api/fastQCreports', (req, res) => {
