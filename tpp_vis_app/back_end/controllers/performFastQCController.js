@@ -13,7 +13,7 @@ import { Client } from 'pg';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import fs from 'fs/promises';
-
+import { promisify } from 'util';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -22,30 +22,29 @@ const genomfile_dir = path.join(backend_dir,"genom_uploads")
 const report_dir = path.join(backend_dir,"fastQC_reports")
 
 
+
+
+const execPromise = promisify(exec);
+
 async function runFastQC(filePaths){
 
-    console.log('========== FASTQC Script Execution ==========');
-    console.log(`[INFO] Timestamp: ${new Date().toISOString()}`);
-    console.log(`[INFO] Working directory: ${process.cwd()}`);
-    console.log(`[INFO] Attempting to run bash script...\n`);
+  console.log('========== FASTQC Batch Execution Started ==========');
+  console.log(`[INFO] Timestamp: ${new Date().toISOString()}`);
 
+  /*const promises = filePaths.map(path => {
+    const command = `fastqc "${path}" -o "${report_dir}"`;
+    console.log(`Running: ${command}`);
+    return execPromise(command)
+      .then(() => ({ path, success: true }))
+      .catch(error => ({ path, success: false, error: error.stderr || error.message }));
+  });
 
-    filePaths.forEach(path => {
-        console.log('========== FASTQC Script Execution for '+path+' ==========');
-        console.log(`[INFO] Timestamp: ${new Date().toISOString()}`);
-        
-        exec(`fastqc "${path}" -o "${report_dir}"`, (err, stdout, stderr) => {
-            if (err) {
-            console.error(`Error running FastQC on ${path}:`, stderr);
-            } else {
-            console.log(`FastQC completed for ${path}`);
-            }
-        });
-    });
-
-
-
+  const results = await Promise.all(promises);*/
+  const results = true;
+  console.log('========== FASTQC Batch Execution Finished ==========');
+  return results;
 }
+
 
 function getDirectories(data){
 
@@ -75,9 +74,9 @@ export const performFastQC =  async (req, res) => {
   try{
     const directory_list = getDirectories(data);
     console.log(directory_list);
-    await runFastQC(directory_list);
+    const results = await runFastQC(directory_list);
 
-    res.json("This path works");
+    res.json(results);
   }catch (err) {
     console.error('Controller error:', err);
     res.status(500).json({ error: 'Failed to process data' });
