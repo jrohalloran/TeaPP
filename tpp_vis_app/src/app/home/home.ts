@@ -57,6 +57,7 @@ export class HomeComponent {
         console.warn('No data received');
       }
     console.log('Welcome to the home page');
+    /*
     const user = await this.authService.getCurrentUser();
     if (user){
       console.log(user);
@@ -64,7 +65,7 @@ export class HomeComponent {
     }else{
       this.router.navigate(['/login'])
 
-    }
+    }*/
 
   }
 
