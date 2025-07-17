@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 
 interface GridItem {
@@ -24,7 +25,8 @@ interface GridItem {
       MatIconModule,
       MatMenuModule,
       MatProgressSpinnerModule,
-      CommonModule 
+      CommonModule,
+      FormsModule 
   ],
   standalone: true,
   templateUrl: './kinship.html',
@@ -37,7 +39,7 @@ export class Kinship {
   images: GridItem[] = [];
 
   loading: boolean = false;
-  //images: { url: string, name: string }[] = [];
+  email: string = '';
 
 
   constructor(private backendApiService: backendApiService,
@@ -74,10 +76,11 @@ export class Kinship {
 
   async startNewAnalysis(){
     this.loading = true;
+    console.log('Email entered:', this.email);
 
     // Send data // request (use data already in back-end)
     try {
-      const response = await firstValueFrom(this.backendApiService.performKinship());
+      const response = await firstValueFrom(this.backendApiService.performKinship(this.email));
       console.log('Response from backend:', response);
       
       this.images = [

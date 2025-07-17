@@ -14,6 +14,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { AuthService } from '../services/auth.service';
+import { firstValueFrom } from 'rxjs';
+import { backendApiService } from 'app/services/backEndRequests.service';
 
 
 @Component({
@@ -35,15 +37,35 @@ import { AuthService } from '../services/auth.service';
 export class LandingPage {
 
   constructor(private router: Router,
-    private authService: AuthService){}
+    private authService: AuthService,
+    private backendApiService: backendApiService){}
   
   isHelpOpen = false;
   currentUser = '';
+  username = '';
 
 
   async ngOnInit() {
 
     console.log('Welcome to the home page');
+
+    // Get username 
+
+    try {
+      const response = await firstValueFrom(this.backendApiService.getUsername());
+      console.log('Response from backend:', response);
+      this.username = response;
+      this.authService.setCurrentUser(this.username);
+      this.currentUser = response;
+
+
+    } catch (error) {
+      console.error('Error:', error);
+
+    }
+
+
+
     /*const user = await this.authService.getCurrentUser();
     if (user){
       console.log(user);

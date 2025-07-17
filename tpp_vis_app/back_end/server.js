@@ -431,6 +431,15 @@ app.use('/rainfallImages', express.static(path.join(__dirname, 'controllers/temp
 app.use('/temperatureImages', express.static(path.join(__dirname, 'controllers/temp_envir_temp')));
 
 
+// Authentication 
+
+app.get('/api/user', (req, res) => {
+  const username = req.headers['x-remote-user'] || 'Guest';
+  res.json({ username });
+});
+
+
+
 
 
 // NEO4J CONNECTION TEST

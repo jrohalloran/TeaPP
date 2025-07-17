@@ -62,6 +62,13 @@ export class backendApiService {
 
   }*/
 
+
+  getUsername(): Observable<any>{
+        console.log("Getting Username");
+        return this.http.get(`${this.apiUrl}/user`);
+
+  }
+
   /// -------------- File processing requests ------------------
 
   processUploadFile(): Observable<any>{
@@ -196,9 +203,9 @@ export class backendApiService {
     return this.http.get(`${this.apiUrl}/getKinship`);
   }
 
-  performKinship(): Observable<any> {
+  performKinship(email: string): Observable<any> {
     console.log("Requesting Kinhsip Analysis");
-    return this.http.get(`${this.apiUrl}/performKinship`);
+    return this.http.post(`${this.apiUrl}/performKinship`, email);
   }
 
 

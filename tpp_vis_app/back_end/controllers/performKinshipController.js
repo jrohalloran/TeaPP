@@ -175,6 +175,9 @@ async function getPCA() {
 export const performKinship= async (req, res) => {
 
     console.log("Performing Kinship Analysis ")
+    const email = res.body;
+    console.log("Email: "+email);
+    
 
     // get Data 
 
