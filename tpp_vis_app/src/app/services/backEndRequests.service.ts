@@ -33,11 +33,13 @@ export class backendApiService {
   constructor(private http: HttpClient) {}
 
 
+
   /// --------------- AUTHENTICATION -------------------------
 
 /*
   checkUserDetails(data:any[]): Observable<any>{
         console.log("Sending Inputed Details to back-end");
+        console.log(this.apiUrl);
         return this.http.post(`${this.apiUrl}/getUserDetails`,data);
 
   }
@@ -48,6 +50,13 @@ export class backendApiService {
         return this.http.post(`${this.apiUrl}/setUserDetails`,data);
 
   }*/
+
+
+  getUsername(): Observable<any>{
+        console.log("Getting Username");
+        return this.http.get(`${this.apiUrl}/user`);
+
+  }
 
   /// -------------- File processing requests ------------------
 
@@ -183,9 +192,9 @@ export class backendApiService {
     return this.http.get(`${this.apiUrl}/getKinship`);
   }
 
-  performKinship(): Observable<any> {
+  performKinship(email: string): Observable<any> {
     console.log("Requesting Kinhsip Analysis");
-    return this.http.get(`${this.apiUrl}/performKinship`);
+    return this.http.post(`${this.apiUrl}/performKinship`, email);
   }
 
 
@@ -265,3 +274,4 @@ export class backendApiService {
 
   
 }
+

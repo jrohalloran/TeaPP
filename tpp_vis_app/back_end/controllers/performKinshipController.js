@@ -174,6 +174,9 @@ async function getPCA() {
 
 export const performKinship= async (req, res) => {
 
+    const email = req.body;
+    console.log("Email: "+email);
+
     console.log("Performing Kinship Analysis ")
 
     // get Data 
@@ -183,17 +186,17 @@ export const performKinship= async (req, res) => {
         await writeFile(data); // Write to a data text file to parse to the R script
         console.log("Perform Kinship");
         let date = new Date().toISOString();
-        sendEmail('jennifer.ohalloran@hotmail.co.uk', 'Kinship Pipeline Started', 'Kinship Analysis started!');
+        sendEmail(email, 'Kinship Pipeline Started', 'Kinship Analysis started!');
         await getKinship(); // Performing new synbreed pedigree and kinship matrix
         await getHeatmap(); 
         await getPCA();
         date = new Date().toISOString();
-        sendEmail('jennifer.ohalloran@hotmail.co.uk', 'Kinship Pipeline Ended', 'Kinship Analysis Finished!');
+        sendEmail(email, 'Kinship Pipeline Ended', 'Kinship Analysis Finished!');
 
+        res.json(true);
     
     }catch(error){
+        res.json(false);
 
     }
-
-    res.json("Kinship Retrieved");
 }

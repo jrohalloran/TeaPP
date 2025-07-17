@@ -49,6 +49,7 @@ export class GenomicData {
   genomicTableColumns = ['clone_id','file_name', 'add_info', 'select'];
   genomicTableData: any = [];
   htmlReports: string[] = [];
+  email: string = '';
 
 
   selectedGenomicRows: any[] = [];
@@ -70,6 +71,8 @@ export class GenomicData {
 
   async getGenomicData(){
 
+    console.log(this.email);
+
 
     console.log("Retrieving Uploading Genomic Data Records")
 
@@ -78,7 +81,7 @@ export class GenomicData {
         console.log('Response from backend:', response);
         this.genomicTableData = response;
         console.log(this.genomicTableData);
-        //this.genomicTableData[1].file_name;
+
 
       } catch (error) {
         console.error('Error:', error);
