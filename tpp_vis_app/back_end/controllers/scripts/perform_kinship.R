@@ -102,13 +102,13 @@ message("Performing Kinship Matrix")
 
 #library(AGHmatrix)
 
-#pedigree <- gp$pedigree
+pedigree <- gp$pedigree
 
-#pedigree <- data.frame(
-  #ID = pedigree$ID,
-  #Par1 = pedigree$Par1,
-  ##Par2 = pedigree$Par2
-#)
+pedigree <- data.frame(
+  ID = pedigree$ID,
+  Par1 = pedigree$Par1,
+  Par2 = pedigree$Par2
+)
 
 
 # Compute additive kinship matrix

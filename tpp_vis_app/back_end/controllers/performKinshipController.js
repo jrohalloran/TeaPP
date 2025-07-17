@@ -11,6 +11,7 @@ import { dirname } from 'path';
 import fs from 'fs';
 import db from '../services/postgres_db.js';
 import { sendEmail } from '../services/email.service.js';
+import os from 'os';
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -171,6 +172,32 @@ async function getPCA() {
     });
 }
 
+let totalRAM;
+
+
+
+function checkMem(){
+// Minimum RAM required (in GB)
+    const MIN_RAM_GB = 64;
+    let flag;
+
+// Get total system memory in GB
+    totalRAM = os.totalmem() / (1024 ** 3);
+
+    console.log(`Detected RAM: ${totalRAM.toFixed(2)} GB`);
+
+    if (totalRAM >= MIN_RAM_GB) {
+    console.log(`✅ Enough RAM. Running script...`);
+    flag = true;
+
+    } else {
+    console.error(`❌ Not enough RAM. Need at least ${MIN_RAM_GB} GB.`);
+    flag = false;
+    }
+
+    return flag;
+}
+
 
 export const performKinship= async (req, res) => {
 
@@ -180,6 +207,9 @@ export const performKinship= async (req, res) => {
     console.log("Performing Kinship Analysis ")
 
     // get Data 
+
+    const flag = checkMem();
+    if (flag){
 
     try{
         const data = await joinPlants(); // Getting all Data from the DB
@@ -198,5 +228,9 @@ export const performKinship= async (req, res) => {
     }catch(error){
         res.json(false);
 
+    }}
+    else{
+        res.json(["Memory",totalRAM]);
     }
+
 }

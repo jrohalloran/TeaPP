@@ -89,17 +89,28 @@ export class Kinship {
     try {
       const response = await firstValueFrom(this.backendApiService.performKinship(this.email));
       console.log('Response from backend:', response);
+      if (response[0] == "Memory"){
+        console.log("Not enough Memory");
+        console.log(response[1]);
+        this.loading=false;
+        alert('RAM too low! '+response[1]+'GB detected, 64GB required');
+        
+
+      }
+      if (response == true){
+          this.images = [
+          { url: this.backendApiService.getKinshipUrl('kinship_clustermap.png'), name: 'clustermap', gridArea: 'hero' },
+          { url: this.backendApiService.getKinshipUrl('kinship_histogram.png'), name: 'histogram', gridArea: 'thumb1' },
+          { url: this.backendApiService.getKinshipUrl('pca_pc1_pc2_colored_by_generation.png'), name: 'pca', gridArea: 'thumb2' },
+          { url: this.backendApiService.getKinshipUrl('kinship_mean_histogram.png'), name: 'mean_histogram', gridArea: 'thumb3' },
+          { url: this.backendApiService.getKinshipUrl('scree_plot.png'), name: 'scree', gridArea: 'thumb4' },
+          { name: 'stats-box', url: '', gridArea: 'stats' } // stats box without URL
+        ];
+          this.loading = false;
+      }
     } catch (error) {
       console.error('Error:', error);
-          this.images = [
-      { url: this.backendApiService.getKinshipUrl('kinship_clustermap.png'), name: 'clustermap', gridArea: 'hero' },
-      { url: this.backendApiService.getKinshipUrl('kinship_histogram.png'), name: 'histogram', gridArea: 'thumb1' },
-      { url: this.backendApiService.getKinshipUrl('pca_pc1_pc2_colored_by_generation.png'), name: 'pca', gridArea: 'thumb2' },
-      { url: this.backendApiService.getKinshipUrl('kinship_mean_histogram.png'), name: 'mean_histogram', gridArea: 'thumb3' },
-      { url: this.backendApiService.getKinshipUrl('scree_plot.png'), name: 'scree', gridArea: 'thumb4' },
-      { name: 'stats-box', url: '', gridArea: 'stats' } // stats box without URL
-    ];
-    this.loading = false;
+      this.loading = false;
 
     }
 

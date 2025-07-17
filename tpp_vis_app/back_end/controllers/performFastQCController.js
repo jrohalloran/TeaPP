@@ -14,6 +14,7 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import fs from 'fs/promises';
 import { promisify } from 'util';
+import { sendEmail } from '../services/email.service.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -30,6 +31,7 @@ async function runFastQC(filePaths){
 
   console.log('========== FASTQC Batch Execution Started ==========');
   console.log(`[INFO] Timestamp: ${new Date().toISOString()}`);
+  sendEmail(email, 'FastQC Analysis Started', 'FastQC Analysis started!');
 
   /*const promises = filePaths.map(path => {
     const command = `fastqc "${path}" -o "${report_dir}"`;
@@ -42,6 +44,7 @@ async function runFastQC(filePaths){
   const results = await Promise.all(promises);*/
   const results = true;
   console.log('========== FASTQC Batch Execution Finished ==========');
+  sendEmail(email, 'FastQC Analysis Ended', 'FastQC Analysis Ended!');
   return results;
 }
 
@@ -63,13 +66,17 @@ function getDirectories(data){
 
 }
 
-
+let email;
 
 export const performFastQC =  async (req, res) => {
 
   console.log(req.body);
 
-    const data = req.body;
+  const data = req.body[0];
+  console.log(data);
+  email = req.body[1];
+  console.log(email);
+
 
   try{
     const directory_list = getDirectories(data);
