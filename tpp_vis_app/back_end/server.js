@@ -39,7 +39,6 @@ import getKinshipRoutes  from './routes/getKinship.js';
 import performKinshipfromRoutes from './routes/performKinship.js';
 import getStatsRoutes from './routes/getStats.js'
 import searchRoutes from './routes/searchID.js'
-import authenticationRoutes from './routes/getUserDetails.js'
 import envStatsRoutes from './routes/envStats.js'
 import genomicDataRoutes from './routes/genomicAnalysis.js'
 
@@ -288,10 +287,8 @@ app.post('/uploadGENOMfile', (req, res) => {
 app.use('/uploads', express.static('uploads'));
 
 app.use('/genom_uploads', express.static('genom_uploads'));
-// USER LOGIN + AUTHENTICATION ROUTES
 
 
-app.use('/api', authenticationRoutes)
 
 
 
