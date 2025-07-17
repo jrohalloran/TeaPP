@@ -12,6 +12,7 @@ library(synbreed)
 library(jsonlite)
 library(VennDiagram)
 library(grid)
+library(AGHmatrix)
 
 args <- commandArgs(trailingOnly = TRUE)
 

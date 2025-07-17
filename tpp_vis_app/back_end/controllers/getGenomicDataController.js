@@ -29,7 +29,6 @@ async function getPostgresEntries(){
 
 
 export const getGenomicData= async (req, res) => {
-
     try {
         await getPostgresEntries();
 

@@ -11,6 +11,7 @@ import { dirname } from 'path';
 import fs from 'fs';
 import db from '../services/postgres_db.js';
 import { sendEmail } from '../services/email.service.js';
+import os from 'os';
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -171,8 +172,37 @@ async function getPCA() {
     });
 }
 
+let totalRAM;
+
+
+
+function checkMem(){
+// Minimum RAM required (in GB)
+    const MIN_RAM_GB = 64;
+    let flag;
+
+// Get total system memory in GB
+    totalRAM = os.totalmem() / (1024 ** 3);
+
+    console.log(`Detected RAM: ${totalRAM.toFixed(2)} GB`);
+
+    if (totalRAM >= MIN_RAM_GB) {
+    console.log(`✅ Enough RAM. Running script...`);
+    flag = true;
+
+    } else {
+    console.error(`❌ Not enough RAM. Need at least ${MIN_RAM_GB} GB.`);
+    flag = false;
+    }
+
+    return flag;
+}
+
 
 export const performKinship= async (req, res) => {
+
+    const email = req.body;
+    console.log("Email: "+email);
 
     console.log("Performing Kinship Analysis ")
     const email = res.body;
@@ -181,22 +211,29 @@ export const performKinship= async (req, res) => {
 
     // get Data 
 
+    const flag = checkMem();
+    if (flag){
+
     try{
         const data = await joinPlants(); // Getting all Data from the DB
         await writeFile(data); // Write to a data text file to parse to the R script
         console.log("Perform Kinship");
         let date = new Date().toISOString();
-        sendEmail('jennifer.ohalloran@hotmail.co.uk', 'Kinship Pipeline Started', 'Kinship Analysis started!');
+        sendEmail(email, 'Kinship Pipeline Started', 'Kinship Analysis started!');
         await getKinship(); // Performing new synbreed pedigree and kinship matrix
         await getHeatmap(); 
         await getPCA();
         date = new Date().toISOString();
-        sendEmail('jennifer.ohalloran@hotmail.co.uk', 'Kinship Pipeline Ended', 'Kinship Analysis Finished!');
+        sendEmail(email, 'Kinship Pipeline Ended', 'Kinship Analysis Finished!');
 
+        res.json(true);
     
     }catch(error){
+        res.json(false);
 
+    }}
+    else{
+        res.json(["Memory",totalRAM]);
     }
 
-    res.json("Kinship Retrieved");
 }

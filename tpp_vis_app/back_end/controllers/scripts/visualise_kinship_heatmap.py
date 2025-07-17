@@ -109,17 +109,35 @@ plt.ylabel("Frequency")
 plt.savefig(f"{OUTDIR}/kinship_histogram.png", dpi=300)
 plt.close()
 
+# Flatten and clean data
+kinship_vals = K.flatten()
+kinship_vals = kinship_vals[np.isfinite(kinship_vals)]
+
+# Downsample for performance
+if len(kinship_vals) > 1_000_000:
+    print(f"Sampling from {len(kinship_vals):,} kinship values for plotting...")
+    kinship_vals = np.random.choice(kinship_vals, size=1_000_000, replace=False)
+
+# Create DataFrame
+kinship_df = pd.DataFrame({'Kinship': kinship_vals})
+
+# Plot
 fig = px.histogram(
-    K.flatten(),
+    kinship_df,
+    x='Kinship',
     nbins=100,
-    title="Histogram of Kinship Values",
-    labels={'value': 'Kinship'},
+    title="Histogram of Kinship Values (Sampled)",
     color_discrete_sequence=['skyblue']
 )
 fig.update_traces(marker_line_color="black", marker_line_width=1)
-fig.update_layout(xaxis_title="Kinship", yaxis_title="Frequency")
+fig.update_layout(
+    xaxis_title="Kinship",
+    yaxis_title="Frequency",
+    height=500,
+    width=800
+)
 fig.write_html(f"{OUTDIR}/kinship_histogram.html")
-#fig.show()
+fig.show()
 
 
 # 3. Clustered heatmap

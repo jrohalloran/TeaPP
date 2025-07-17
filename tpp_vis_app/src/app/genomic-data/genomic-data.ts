@@ -51,6 +51,7 @@ export class GenomicData {
   genomicTableColumns = ['clone_id','file_name', 'add_info', 'select'];
   genomicTableData: any = [];
   htmlReports: string[] = [];
+  email: string = '';
 
   reportBaseUrl = `${environment.fastQCreportsURL}`;
   selectedGenomicRows: any[] = [];
@@ -73,6 +74,7 @@ export class GenomicData {
   async getGenomicData(){
 
 
+
     console.log("Retrieving Uploading Genomic Data Records")
 
       try {
@@ -80,7 +82,7 @@ export class GenomicData {
         console.log('Response from backend:', response);
         this.genomicTableData = response;
         console.log(this.genomicTableData);
-        //this.genomicTableData[1].file_name;
+
 
       } catch (error) {
         console.error('Error:', error);
@@ -91,8 +93,9 @@ export class GenomicData {
 
   async performFastQC(){
     this.loading = true;
+    console.log(this.email);
     console.log(this.selectedGenomicRows);
-    const data = this.selectedGenomicRows;
+    const data = [this.selectedGenomicRows, this.email];
     try {
         const response = await firstValueFrom(this.backendApiService.performFastQC(data));
         console.log('Response from backend:', response);
