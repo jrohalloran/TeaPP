@@ -17,6 +17,7 @@ from sklearn.decomposition import PCA
 from sklearn.manifold import MDS
 import os
 
+import plotly.express as px
 
 chunk_size = 1000  # rows per chunk
 matrix_chunks = []
@@ -88,6 +89,17 @@ plt.title(f"Downsampled Kinship Matrix (block size={block_size})")
 plt.savefig(f"{OUTDIR}/kinship_heatmap.png", dpi=300)
 plt.close()
 
+
+fig = px.imshow(
+    K_small,
+    color_continuous_scale="viridis",
+    title=f"Downsampled Kinship Matrix (block size={block_size})",
+    aspect="auto"
+)
+fig.update_layout(margin=dict(l=40, r=40, t=60, b=40))
+fig.write_html(f"{OUTDIR}/kinship_heatmap.html")
+#fig.show()
+
 # 2. Histogram of kinship values
 plt.figure(figsize=(8,5))
 plt.hist(K.flatten(), bins=100, color='skyblue', edgecolor='black')
@@ -97,12 +109,48 @@ plt.ylabel("Frequency")
 plt.savefig(f"{OUTDIR}/kinship_histogram.png", dpi=300)
 plt.close()
 
+fig = px.histogram(
+    K.flatten(),
+    nbins=100,
+    title="Histogram of Kinship Values",
+    labels={'value': 'Kinship'},
+    color_discrete_sequence=['skyblue']
+)
+fig.update_traces(marker_line_color="black", marker_line_width=1)
+fig.update_layout(xaxis_title="Kinship", yaxis_title="Frequency")
+fig.write_html(f"{OUTDIR}/kinship_histogram.html")
+#fig.show()
+
 
 # 3. Clustered heatmap
 sns.clustermap(K_small, cmap="viridis", figsize=(12, 12))
 plt.suptitle("Clustered Kinship Heatmap")
 plt.savefig(f"{OUTDIR}/kinship_clustermap.png", dpi=300)
 plt.close()
+
+
+from scipy.cluster.hierarchy import linkage, leaves_list
+
+# Cluster rows and columns
+row_linkage = linkage(K_small, method='ward')
+col_linkage = linkage(K_small.T, method='ward')
+
+row_order = leaves_list(row_linkage)
+col_order = leaves_list(col_linkage)
+
+K_clustered = K_small[np.ix_(row_order, col_order)]
+
+fig = px.imshow(
+    K_clustered,
+    color_continuous_scale="viridis",
+    title="Clustered Kinship Heatmap",
+    aspect="auto"
+)
+fig.update_layout(margin=dict(l=40, r=40, t=60, b=40))
+fig.write_html(f"{OUTDIR}/kinship_clustermap.html")
+#fig.show()
+
+
 
 
 # 4. Distribution of mean kinship per individual
@@ -114,6 +162,20 @@ plt.xlabel("Mean Kinship")
 plt.ylabel("Frequency")
 plt.savefig(f"{OUTDIR}/kinship_mean_histogram.png", dpi=300)
 plt.close()
+
+means = np.nanmean(K, axis=1)
+fig = px.histogram(
+    means,
+    nbins=50,
+    title="Distribution of Mean Kinship per Individual",
+    labels={'value': 'Mean Kinship'},
+    color_discrete_sequence=['salmon']
+)
+fig.update_traces(marker_line_color="black", marker_line_width=1)
+fig.update_layout(xaxis_title="Mean Kinship", yaxis_title="Frequency")
+fig.write_html(f"{OUTDIR}/kinship_mean_histogram.html")
+#fig.show()
+
 
 print(f"All plots saved in folder: {OUTDIR}")
 

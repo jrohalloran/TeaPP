@@ -62,7 +62,6 @@ export class Overview {
 
     async ngAfterViewInit(): Promise<void> {
 
-
       await this.getPedigreeStats();
       await this.getDiagrams();
 
@@ -128,4 +127,5 @@ export class Overview {
   closeModal(): void {
     this.selectedImageUrl = null;
   }
+
 }
