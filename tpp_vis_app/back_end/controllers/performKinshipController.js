@@ -199,14 +199,14 @@ function checkMem(){
 }
 
 
+
 export const performKinship= async (req, res) => {
 
     const email = req.body;
     console.log("Email: "+email);
 
     console.log("Performing Kinship Analysis ")
-    const email = res.body;
-    console.log("Email: "+email);
+
     
 
     // get Data 
