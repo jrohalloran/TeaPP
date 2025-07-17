@@ -10,6 +10,7 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import fs from 'fs';
 import db from '../services/postgres_db.js';
+import { sendEmail } from '../services/email.service.js';
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -18,6 +19,8 @@ const backend_dir = path.dirname(__dirname);
 const tempDir = path.join(__dirname, 'temp');
 //const outputFile = path.join(tempDir, '');
 const outputTextFile = path.join(tempDir, 'temp_cleanData.txt');
+
+
 
 
 // Fetching all Data from PostgresDatabase
@@ -62,13 +65,14 @@ async function writeFile(data){
 async function getKinship() {
     console.log("Performing Kinship")
 
+    const scriptPath = path.join(__dirname, 'scripts', 'perform_kinship.R');
+
     console.log('========== KINSHIP Script Execution ==========');
     console.log(`[INFO] Timestamp: ${new Date().toISOString()}`);
     console.log(`[INFO] Script path: ${scriptPath}`);
     console.log(`[INFO] Working directory: ${process.cwd()}`);
     console.log(`[INFO] Spawning Python process...\n`);
     
-    const scriptPath = path.join(__dirname, 'scripts', 'perform_kinship.R');
 
     const scriptDir = path.dirname(scriptPath);
 
@@ -89,7 +93,7 @@ async function getKinship() {
     });
 }
 
-// Visualisation Scripts
+
 
 async function getHeatmap() {
     const scriptPath = path.join(__dirname, 'scripts', 'visualise_kinship_heatmap.py');
@@ -167,6 +171,7 @@ async function getPCA() {
     });
 }
 
+
 export const performKinship= async (req, res) => {
 
     console.log("Performing Kinship Analysis ")
@@ -177,15 +182,18 @@ export const performKinship= async (req, res) => {
         const data = await joinPlants(); // Getting all Data from the DB
         await writeFile(data); // Write to a data text file to parse to the R script
         console.log("Perform Kinship");
+        let date = new Date().toISOString();
+        sendEmail('jennifer.ohalloran@hotmail.co.uk', 'Kinship Pipeline Started', 'Kinship Analysis started!');
         await getKinship(); // Performing new synbreed pedigree and kinship matrix
         await getHeatmap(); 
         await getPCA();
-        res.json("Kinship Retrieved");
+        date = new Date().toISOString();
+        sendEmail('jennifer.ohalloran@hotmail.co.uk', 'Kinship Pipeline Ended', 'Kinship Analysis Finished!');
 
     
     }catch(error){
-        res.json("Kinship Retrieved");
 
     }
-    
+
+    res.json("Kinship Retrieved");
 }

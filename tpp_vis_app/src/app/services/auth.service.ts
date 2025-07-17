@@ -8,7 +8,7 @@ export class AuthService {
   private currentUser: any = null;
 
   constructor() {
-    // You might load this from localStorage or an API call
+
     this.currentUser = JSON.parse(localStorage.getItem('user') || 'null');
   }
 
@@ -22,5 +22,4 @@ export class AuthService {
     console.log("User Set: "+user);
   }
 
-  // Optionally provide an observable if user info might change
 }

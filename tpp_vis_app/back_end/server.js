@@ -39,7 +39,6 @@ import getKinshipRoutes  from './routes/getKinship.js';
 import performKinshipfromRoutes from './routes/performKinship.js';
 import getStatsRoutes from './routes/getStats.js'
 import searchRoutes from './routes/searchID.js'
-import authenticationRoutes from './routes/getUserDetails.js'
 import envStatsRoutes from './routes/envStats.js'
 import genomicDataRoutes from './routes/genomicAnalysis.js'
 
@@ -54,10 +53,13 @@ app.use(express.json({ limit: '10mb' }));
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const backend_dir = path.dirname(__dirname);
+const backend_dir = __dirname;
+const controller_dir = path.join(backend_dir,"controllers");
+const temp_dir = path.join(controller_dir,"temp");
+const temp_envir_dir = path.join(controller_dir,"temp_envir");
+const temp_envir_temp_dir = path.join(controller_dir,"temp_envir_temp");
 
-
-/// ------------ FILE UPLOAD --------------
+/// ------------ DIRECTORY HANDLING --------------
 
 // Setting up Upload Directory in Back-end 
 const uploadDir = 'uploads';
@@ -70,6 +72,52 @@ if (!fs.existsSync(uploadDir)) {
   console.log("---- Making Directory ----");
   fs.mkdirSync(uploadDir);
 }
+
+const upload_tempDir = 'env_temp_uploads';
+const upload_rainDir = 'env_uploads';
+
+if (fs.existsSync(upload_tempDir)){
+  console.log("/env_temp_uploads directory exists");
+  console.log("---- Removing Directory ----");
+  //fs.rmSync(upload_tempDir, { recursive: true, force: true })
+}
+if (!fs.existsSync(upload_tempDir)) {
+  console.log("---- Making Directory ----");
+  fs.mkdirSync(upload_tempDir);
+}
+
+
+if (fs.existsSync(upload_rainDir)){
+  console.log("/env_uploads directory exists");
+  console.log("---- Removing Directory ----");
+  //fs.rmSync(upload_rainDir, { recursive: true, force: true })
+}
+if (!fs.existsSync(upload_rainDir)) {
+  console.log("---- Making Directory ----");
+  fs.mkdirSync(upload_rainDir);
+}
+
+
+
+console.log("Backend Directory: "+backend_dir);
+console.log("Controller Directory: "+controller_dir);
+console.log("Temp Directory: "+temp_dir);
+console.log("Temp Envir Directory: "+temp_envir_dir);
+console.log("Temp Envir Temp Directory: "+temp_envir_temp_dir);
+
+// ------ Re-establising TEMP files --------
+
+if (fs.existsSync(temp_dir)){
+  console.log("/temp_dir directory exists");
+  console.log("---- Removing Directory ----");
+  fs.rmSync(upload_tempDir, { recursive: true, force: true })
+}
+if (!fs.existsSync(temp_dir)) {
+  console.log("---- Making Directory ----");
+  fs.mkdirSync(temp_dir);
+}
+
+/// ------------ FILE UPLOAD --------------
 
 
 const EXPECTED_HEADERS = ['ID', 'Female_parent', 'Male_parent'];
@@ -290,9 +338,6 @@ app.use('/uploads', express.static('uploads'));
 app.use('/genom_uploads', express.static('genom_uploads'));
 
 
-
-// USER LOGIN + AUTHENTICATION ROUTES
-app.use('/api', authenticationRoutes)
 
 
 

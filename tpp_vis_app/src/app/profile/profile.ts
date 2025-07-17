@@ -73,6 +73,7 @@ export class Profile {
   async ngOnInit() {
 
     console.log('Welcome to the home page');
+    /*
     const user = await this.authService.getCurrentUser();
     if (user){
       console.log(user);
@@ -80,7 +81,7 @@ export class Profile {
     }else{
       this.router.navigate(['/login'])
 
-    }
+    }*/
   }
 
   selectedPrivileges: string[] = [];

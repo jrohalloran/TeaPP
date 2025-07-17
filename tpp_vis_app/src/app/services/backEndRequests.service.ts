@@ -27,7 +27,6 @@ export class backendApiService {
   
   /*
   private apiUrl = 'http://localhost:3333/api';
-  private imageListUrl = 'http://localhost:3333/api/images';
   private imageBaseUrl = 'http://localhost:3333/kinshipImages';
   private imageKinshipBaseUrl = 'http://localhost:3333/calculatedKinship';
   private diagramsBaseUrl = 'http://localhost:3333/diagramImages';
@@ -48,7 +47,7 @@ export class backendApiService {
 
   /// --------------- AUTHENTICATION -------------------------
 
-
+/*
   checkUserDetails(data:any[]): Observable<any>{
         console.log("Sending Inputed Details to back-end");
         console.log(this.apiUrl);
@@ -61,7 +60,7 @@ export class backendApiService {
         console.log("Sending Inputed Details to back-end");
         return this.http.post(`${this.apiUrl}/setUserDetails`,data);
 
-  }
+  }*/
 
   /// -------------- File processing requests ------------------
 
@@ -202,14 +201,6 @@ export class backendApiService {
     return this.http.get(`${this.apiUrl}/performKinship`);
   }
 
-  // Get stored images 
-
-  /*
-  getImages(): Observable<string[]> {
-    return this.http.get<string[]>(this.imageListUrl);
-  }*/
-
-  
 
   getImageUrl(fileName: string): string {
     return `${this.imageBaseUrl}/${fileName}`;
@@ -229,6 +220,8 @@ export class backendApiService {
 
 
   // ------------ ENVIRONMENTAL DATA  ---------------
+
+
 
   // RAINFALL
   getRainfallStats(): Observable<any> {
