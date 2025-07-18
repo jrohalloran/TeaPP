@@ -9,31 +9,17 @@
     <div style="margin-top: 10px; font-size: 1.2rem; color: #333;">Loading data...</div>
 </div>
 
-<div class = "instructions">
-
-<h3>Please select genomic data files to analyse</h3>
-
-<label for="email">Please enter your email:</label>
-  <input
-    type="email"
-    id="email"
-    name="email"
-    [(ngModel)]="email"
-    placeholder="user@example.com"
-  />
-
-</div>
-
 
 <div class="main-content">
 
 
 <div class="stats-tables-container">
+  <h1>FastQC Analysis</h1>
   
 <div class="table-wrapper">
-  <h2>Genomic Data Records</h2>
+<h2>Genomic Data Records</h2>
   
-
+<p>Select records you wish to analyse</p>
 <table mat-table [dataSource]="genomicTableData" class="mat-elevation-z8">
 
   <ng-container matColumnDef="clone_id">
@@ -61,22 +47,44 @@
   <tr mat-header-row *matHeaderRowDef="genomicTableColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: genomicTableColumns;"></tr>
 </table>
-    <button
+
+<div class="input-panel">
+<div class = "run-button-wrapper">
+
+
+<label for="email">Please enter your email to recieve notifications:</label>
+  <input
+    type="email"
+    id="email"
+    name="email"
+    [(ngModel)]="email"
+    placeholder="user@example.com"
+  /></div>
+  <div class = "parameter-selection">
+
+  <p>Trim Length:</p>
+  <p>K-mer Content:</p>
+
+
+  <button class="button"
       mat-raised-button
       (click)="performFastQC()">
-      Run FastQC
+      Run FastQC<mat-icon>arrow_right_alt</mat-icon>
     </button>
+  </div>
+  </div>
 
+<div class = "results" *ngIf="htmlReports.length>0">
   <h3>FastQC Results</h3>
-  <p>Please select a fastQC resport to view in an external tab <mat-icon>launch</mat-icon></p>
+  <p>Please select a FastQC report to view in an external tab:</p>
   <ul *ngIf="htmlReports.length > 0">
     <li *ngFor="let file of htmlReports">
       <a [href]="'http://localhost:3333/fastQCReports/' + file" target="_blank" rel="noopener noreferrer">
-        {{ file }}
+        {{ file }}<mat-icon>launch</mat-icon>
       </a>
     </li>
   </ul>
-  </div>
-  </div>
 </div>
+  </div>
+  </div>
 </div>
