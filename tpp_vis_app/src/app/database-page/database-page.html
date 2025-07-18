@@ -1,10 +1,12 @@
-  <div class="button-wrapper global-refresh">
-    <button class = "refresh-button" (click)="refreshAll()"><mat-icon>refresh</mat-icon></button>
-  </div>
-
+  <div class="main-wrapper">
   <div class="loading-overlay" *ngIf="loading">
     <mat-progress-spinner mode="indeterminate" diameter="60" color="primary"></mat-progress-spinner>
     <div style="margin-top: 10px; font-size: 1.2rem; color: #333;">Loading data...</div>
+  </div>
+  <div class="button-wrapper">
+    <h2>Database Status</h2>
+
+    <button class = "refresh-button" (click)="refreshAll()"><mat-icon>refresh</mat-icon></button>
   </div>
 
 <div class="stats-tables-container">
@@ -178,4 +180,5 @@
     </div>
   </div>
 
+</div>
 </div>

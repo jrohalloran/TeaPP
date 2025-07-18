@@ -1,4 +1,5 @@
 <div class="app-wrapper">
+
   <!-- Top bar -->
 <header class="top-bar">
   <div class="top-bar-content">
@@ -8,16 +9,15 @@
       Menu <mat-icon>arrow_drop_down</mat-icon>
     </button>
 
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="onProfile()">Profile<mat-icon>account_circle</mat-icon></button>
+      <button mat-menu-item (click)="onSettings()">Settings<mat-icon>settings</mat-icon></button>
+    </mat-menu>
+
     <div class = "user-details">
        <h4><mat-icon>account_circle</mat-icon> {{currentUser}}</h4>
        <h4><mat-icon>folder</mat-icon> Dataset</h4>
     </div>
-
-    <mat-menu #menu="matMenu">
-      <button mat-menu-item (click)="onProfile()">Profile<mat-icon>account_circle</mat-icon></button>
-      <button mat-menu-item (click)="onSettings()">Settings<mat-icon>settings</mat-icon></button>
-      <button mat-menu-item (click)="onLogout()">Logout<mat-icon>logout</mat-icon></button>
-    </mat-menu>
 
     <button class="help-button" (click)="toggleHelpPanel()">
       <mat-icon>question_mark</mat-icon>
@@ -51,6 +51,9 @@
       <!-- Upload New Dataset -->
       <div class="panel">
         <h3>Upload New Dataset</h3>
+        <div class="icon-container">
+          <mat-icon class="big-icon">create_new_folder</mat-icon>
+        </div>
         <p>Instructions</p>
         <p>- Images</p>
         <button mat-raised-button color="primary" (click)="uploadNewData()">Upload New Data</button>
@@ -59,6 +62,9 @@
       <!-- Analyse Existing Data -->
       <div class="panel">
         <h3>Analyse Existing Data</h3>
+        <div class="icon-container">
+          <mat-icon class="big-icon">desktop_windows</mat-icon>
+        </div>
         <p>Select from dropdown to analyse existing dataset</p>
         <p>- Images</p>
         <button mat-raised-button color="primary" (click)="analyseExisting()">Analyse Existing Data</button>

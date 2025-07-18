@@ -1,4 +1,9 @@
-  
+<div class="main-wrapper">
+<div class="title-wrapper">
+    <h2>Environmental Data Analysis</h2>
+
+</div>
+
 <div class="main-content vertical-split content-wrapper">
       <!-- Loading overlay -->
   <div class="loading-overlay" *ngIf="loading">
@@ -72,7 +77,6 @@
     frameborder="0"
   ></iframe>
 
-  <!-- Fallback stats box -->
   <div *ngIf="!item.url" class="stats-box">
     <h3>Temperature Statistics</h3>
     <p>Here will display any relevant statistics and comments for Temperature Analysis.</p>
@@ -132,4 +136,5 @@
 
 <div class="modal" *ngIf="selectedImageUrl" (click)="closeModal()">
   <img [src]="selectedImageUrl" alt="Enlarged Image" />
+</div>
 </div>

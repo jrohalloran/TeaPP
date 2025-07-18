@@ -1,3 +1,9 @@
+.main-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem; /* space between the stats and grid */
+}
+
 .loading-overlay {
   position: absolute;
   top: 0;
@@ -10,6 +16,16 @@
   justify-content: center;
   align-items: center;
   z-index: 10; /* Make sure it's above other content inside the container */
+}
+
+.title-wrapper{
+  background-color: #f9f9f9;
+  padding: 2rem;
+  border-radius: 10px;
+  border: 1px solid #c1d1c1;
+  margin-bottom: 2rem;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  
 }
 
 .main-content {
@@ -75,7 +91,8 @@
     grid-template-areas:
         "hero thumb1"
         "thumb2 stats"
-        "thumb3 thumb4";
+        "thumb3 thumb4"
+        "thumb5 thumb6";
     gap: 1rem;
 }
 

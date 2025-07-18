@@ -7,6 +7,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatIcon } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -32,7 +33,8 @@ interface GridItem {
       ReactiveFormsModule,
       MatCheckboxModule,
       MatProgressSpinnerModule,
-      MatTabsModule],
+      MatTabsModule,
+      MatIcon ],
   standalone: true,
   templateUrl: './overview.html',
   styleUrls: ['./overview.css']
@@ -41,6 +43,8 @@ interface GridItem {
 
 export class Overview {
 
+
+    loading = false;
 
     siblingCount: any[] = [];
     rankedCount: any[] = [];
@@ -61,10 +65,11 @@ export class Overview {
 
 
     async ngAfterViewInit(): Promise<void> {
+      this.loading = true;
 
       await this.getPedigreeStats();
       await this.getDiagrams();
-
+      this.loading = false;
 
     }
 

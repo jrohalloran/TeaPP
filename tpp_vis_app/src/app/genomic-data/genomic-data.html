@@ -1,3 +1,13 @@
+<div class="main-wrapper">
+  <div class="title-wrapper">
+    <h2>Genomic Data Analysis</h2>
+
+</div>
+
+<div class="loading-overlay" *ngIf="loading">
+    <mat-progress-spinner mode="indeterminate" diameter="60" color="primary"></mat-progress-spinner>
+    <div style="margin-top: 10px; font-size: 1.2rem; color: #333;">Loading data...</div>
+</div>
 
 <div class = "instructions">
 
@@ -17,10 +27,6 @@
 
 <div class="main-content">
 
-  <div class="loading-overlay" *ngIf="loading">
-    <mat-progress-spinner mode="indeterminate" diameter="60" color="primary"></mat-progress-spinner>
-    <div style="margin-top: 10px; font-size: 1.2rem; color: #333;">Loading data...</div>
-</div>
 
 <div class="stats-tables-container">
   
@@ -62,7 +68,7 @@
     </button>
 
   <h3>FastQC Results</h3>
-  <p>Please select a fastQC resport to view in an external tab</p>
+  <p>Please select a fastQC resport to view in an external tab <mat-icon>launch</mat-icon></p>
   <ul *ngIf="htmlReports.length > 0">
     <li *ngFor="let file of htmlReports">
       <a [href]="'http://localhost:3333/fastQCReports/' + file" target="_blank" rel="noopener noreferrer">
@@ -71,3 +77,6 @@
     </li>
   </ul>
   </div>
+  </div>
+</div>
+</div>

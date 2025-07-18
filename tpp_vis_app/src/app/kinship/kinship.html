@@ -1,4 +1,10 @@
-  
+<div class="main-wrapper">
+  <div class = "title-wrapper">
+  <h2>Kinship Analysis</h2>
+      <p>Kinship analysis can be performed...</p>
+
+  </div>
+
   
 <div class="main-content vertical-split content-wrapper">
       <!-- Loading overlay -->
@@ -10,11 +16,20 @@
     <div class="bottom-section two-panels">
       <!-- Upload New Dataset -->
       <div class="panel">
+        <p></p>
+        <p></p>
+        <p></p>
+        <p></p>
+        <p></p>
+        <p></p>
         <button mat-raised-button color="primary" (click)="getExistingKinship()" >Get stored Kinship Matrix Data</button>
       </div>
 
       <!-- Analyse Existing Data -->
       <div class="panel">
+        <p></p>
+        <p></p>
+        <p></p>
         <label for="email">Please enter your email:</label>
         <input
           type="email"
@@ -26,21 +41,42 @@
         <button mat-raised-button color="primary"(click)="startNewAnalysis()">Calculate Kinship Matrix</button>
       </div>
 </div>
+
 <div class="custom-grid">
-  <div
-    *ngFor="let item of images"
-    class="grid-item"
-    [ngStyle]="{ 'grid-area': item.gridArea }"
-  >
-    <img *ngIf="item.url" [src]="item.url" [alt]="item.name" [ngClass]="getImageClass(item.name)" (click)="openModal(item.url)" />
-    <div *ngIf="!item.url" class="stats-box">
-      <h3>Statistics</h3>
-      <p>Here will display any relevant statistics and comments for the Kinship Matris calculated.</p>
-    </div>
+<div
+  *ngFor="let item of images"
+  class="grid-item"
+  [ngStyle]="{ 'grid-area': item.gridArea }"
+>
+  <!-- Render image -->
+  <img
+    *ngIf="item.type === 'image' && item.url"
+    [src]="item.url"
+    [alt]="item.name"
+    [ngClass]="getImageClass(item.name)"
+    (click)="openModal(item.url)"
+  />
+
+  <!-- Render HTML (e.g., interactive Plotly) in iframe -->
+  <iframe
+    *ngIf="item.type === 'html' && item.url"
+    [src]="item.url | safeUrl"
+    width="100%"
+    height="600"
+    frameborder="0"
+  ></iframe>
+  <div *ngIf="!item.url" class="stats-box">
+    <h3>Kinship Statistics</h3>
+    <p>Here will display any relevant statistics and comments for Kinship Matrix Calculated.</p>
+    <p>Time taken: </p>
+    <p>Matrix Size: </p>
+    <p>File Size: </p>
   </div>
+
 </div>
 </div>
 
 <div class="modal" *ngIf="selectedImageUrl" (click)="closeModal()">
   <img [src]="selectedImageUrl" alt="Enlarged Image" />
+</div>
 </div>
