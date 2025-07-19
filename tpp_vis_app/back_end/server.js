@@ -435,7 +435,7 @@ app.use('/temperatureImages', express.static(path.join(__dirname, 'controllers/t
 
 app.get('/api/user', (req, res) => {
   const username = req.headers['x-remote-user'] || 'Guest';
-  res.json({ username });
+  res.json(username);
 });
 
 

@@ -33,7 +33,7 @@ async function runFastQC(filePaths){
   console.log(`[INFO] Timestamp: ${new Date().toISOString()}`);
   sendEmail(email, 'FastQC Analysis Started', 'FastQC Analysis started!');
 
-  /*const promises = filePaths.map(path => {
+  const promises = filePaths.map(path => {
     const command = `fastqc "${path}" -o "${report_dir}"`;
     console.log(`Running: ${command}`);
     return execPromise(command)
@@ -41,10 +41,8 @@ async function runFastQC(filePaths){
       .catch(error => ({ path, success: false, error: error.stderr || error.message }));
   });
 
-  const results = await Promise.all(promises);*/
-  const results = true;
+  const results = await Promise.all(promises);
   console.log('========== FASTQC Batch Execution Finished ==========');
-  sendEmail(email, 'FastQC Analysis Ended', 'FastQC Analysis Ended!');
   return results;
 }
 
@@ -82,6 +80,7 @@ export const performFastQC =  async (req, res) => {
     const directory_list = getDirectories(data);
     console.log(directory_list);
     const results = await runFastQC(directory_list);
+    sendEmail(email, 'FastQC Analysis Ended', 'FastQC Analysis Ended!');
 
     res.json(results);
   }catch (err) {
