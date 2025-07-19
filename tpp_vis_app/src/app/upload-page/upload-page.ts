@@ -95,7 +95,7 @@ export class UploadComponent {
 
   // Assigning Columns 
   displayedColumns: string[] = ['ID','used','female_parent', 'male_parent','correct_ID','removed'];
-  secondDisplayedColumns = ['ID','correct_ID','removed'];
+  secondDisplayedColumns = ['ID','correct_ID'];
 
   // Phase counter for tabs
   currentPhaseIndex: number = 0;

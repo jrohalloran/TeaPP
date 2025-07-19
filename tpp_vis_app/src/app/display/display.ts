@@ -481,13 +481,25 @@ export class DisplayComponent implements AfterViewInit {
     this.stats.nodes = noNodes;
 
   }
-
-  zoomIn() {
-    console.log('Zoom in clicked');
+  zoomIn(): void {
+    if (this.rendererTop) {
+      const camera = this.rendererTop.getCamera();
+      camera.animatedZoom({ duration: 200, factor: 1.2 }); // Zoom in 20%
+    }
   }
 
-  zoomOut() {
-    console.log('Zoom out clicked');
+  zoomOut(): void {
+    if (this.rendererTop) {
+      const camera = this.rendererTop.getCamera();
+      camera.animatedUnzoom({ duration: 200, factor: 1.2 }); // Zoom out 20%
+    }
+  }
+
+  resetZoom(): void {
+  if (this.rendererTop) {
+    const camera = this.rendererTop.getCamera();
+    camera.animatedReset({ duration: 300 });
+    }
   }
 
 

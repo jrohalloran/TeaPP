@@ -1,4 +1,12 @@
 
+
+.main-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem; /* space between the stats and grid */
+}
+
+
 .loading-overlay {
   position: absolute;
   top: 0;
@@ -12,6 +20,16 @@
   align-items: center;
   z-index: 10; /* Make sure it's above other content inside the container */
 }
+
+.button-wrapper{
+  background-color: #f9f9f9;
+  padding: 2rem;
+  border-radius: 10px;
+  border: 1px solid #c1d1c1;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  
+}
+
 
 
 .stats-tables-container {
@@ -51,17 +69,12 @@
   max-height: 300px;
   border: 1px solid #f0f0f0;
   padding: 1rem;
-  background-color: #fff;
+  background-color: rgba(0,0,0,0.05);
   border-radius: 4px;
   margin-bottom: 1rem; 
 }
 
-.global-refresh {
-  width: 100%;
-  display: flex;
-  justify-content: flex-end; /* ← this is causing the button to align left */
-  margin-bottom: 1rem;
-}
+
 
 .refresh-button {
   padding: 20px 120px;
@@ -75,6 +88,7 @@
 
 .refresh-button mat-icon {
   font-size: 28px;
+
 }
 
 
@@ -98,7 +112,7 @@
 }
 
 .search-results thead {
-  background-color: #f9f9f9;
+  background-color: rgba(0,0,0,0.05);
 }
 
 .search-results th,
@@ -111,7 +125,7 @@
 
 /* Optional: hover effect */
 .search-results tbody tr:hover {
-  background-color: #f5f5f5;
+  background-color: rgba(0,0,0,0.05);
 }
 
 /* Optional: visually distinguish Postgres vs Neo4j results if needed */

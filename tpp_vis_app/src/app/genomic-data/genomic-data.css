@@ -1,0 +1,92 @@
+.main-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem; /* space between the stats and grid */
+}
+
+.title-wrapper{
+  background-color: #f9f9f9;
+  padding: 2rem;
+  border-radius: 10px;
+  border: 1px solid #c1d1c1;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  
+}
+
+.run-button-wrapper{
+    overflow-x: auto;
+    max-height: 300px;
+    padding: 1rem;
+    background-color: 0 3px 8px rgba(0,0,0,0.1);
+    border-radius: 4px;
+    margin-bottom: 1rem; 
+
+}
+.input-panel {
+  display: flex;
+  flex-direction: row;
+  gap: 24px; /* space between the columns */
+  padding: 20px;
+  background: rgba(0,0,0,0.05);
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  margin-top: 20px;
+}
+
+/* Make each column flexible but neatly contained */
+.run-button-wrapper,
+.parameter-selection {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Optional input styling */
+.run-button-wrapper input[type="email"] {
+  padding: 10px 12px;
+  font-size: 14px;
+  border: 1.5px solid #ccc;
+  border-radius: 6px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Optional styling for parameter section */
+.parameter-selection p {
+  margin: 0;
+  padding: 4px 0;
+  font-size: 14px;
+}
+
+.results{
+  gap: 24px; /* space between the columns */
+  padding: 20px;
+  background: rgba(0,0,0,0.05);
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  margin-top: 20px;
+}
+
+/* Style buttons inside the panels */
+.button {
+  font-size: 1.1rem;
+  padding: 0.75rem 2rem;
+  border-radius: 8px;
+  background-color: #24588c;
+  color: white;
+  border: none;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+/* Flat hover effect with a slight lift */
+.button:hover {
+  background-color: #125ea6; /* darker blue */
+  transform: scale(1.03);
+}
+
+/* Optional: focus effect */
+.button:focus {
+  outline: none;
+  background-color: #125ea6;
+}

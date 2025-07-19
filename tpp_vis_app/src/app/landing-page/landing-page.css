@@ -9,7 +9,8 @@ html, body {
 .app-wrapper {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: auto;
+  min-height: 1050px;
   background-color: #d3e0d3;
 }
 
@@ -120,6 +121,8 @@ html, body {
   cursor: pointer;
 }
 
+
+
 /* ===== Main Content Layout ===== */
 .main-content {
   flex: 1;
@@ -179,6 +182,23 @@ html, body {
   color: #444;
 }
 
+.icon-wrapper {
+  display: block;
+  width: auto;
+  height: auto;
+  overflow: visible !important;
+}
+
+.big-icon {
+  font-size: 100px;
+  display: inline-block;
+  width: auto;
+  height: auto;
+  line-height: 1;
+  overflow: visible;
+  vertical-align: middle;
+}
+
 /* ===== Buttons ===== */
 button {
   margin-top: 1rem;
@@ -191,6 +211,7 @@ button {
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
+
 
 button:hover {
   background-color: #1e4a75;
