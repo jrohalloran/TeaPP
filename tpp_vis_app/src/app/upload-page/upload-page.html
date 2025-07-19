@@ -213,13 +213,6 @@
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="removed">
-          <th mat-header-cell *matHeaderCellDef> Remove </th>
-          <td mat-cell *matCellDef="let element">
-            <mat-checkbox [(ngModel)]="element.removed"></mat-checkbox>
-          </td>
-        </ng-container>
-
         <tr mat-header-row *matHeaderRowDef="secondDisplayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: secondDisplayedColumns;"></tr>
       </table>
@@ -227,8 +220,8 @@
 
     <!-- Buttons stay visible below table -->
     <div class="button-container">
-      <button mat-raised-button color="primary" (click)="finalise()">Next</button>
       <button mat-raised-button color="primary" (click)="onUpdate()">Update</button>
+      <button mat-raised-button color="primary" (click)="finalise()">Upload</button>
     </div>
   </div>
   </mat-tab> 
