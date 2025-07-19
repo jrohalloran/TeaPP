@@ -57,15 +57,10 @@ export class HomeComponent {
         console.warn('No data received');
       }
     console.log('Welcome to the home page');
-    /*
+    
     const user = await this.authService.getCurrentUser();
-    if (user){
-      console.log(user);
-      this.currentUser = user;
-    }else{
-      this.router.navigate(['/login'])
-
-    }*/
+    console.log(user);
+    this.currentUser = user;
 
   }
 
