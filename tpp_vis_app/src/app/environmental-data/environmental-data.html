@@ -45,13 +45,61 @@
     frameborder="0"
   ></iframe>
 
+
+
   <!-- Fallback stats box -->
   <div *ngIf="!item.url" class="stats-box">
     <h3>Rainfall Statistics</h3>
     <p>Here will display any relevant statistics and comments for Rainfall Analysis.</p>
   </div>
 </div>
+  <div class="grid-item" [ngStyle]="{ 'grid-area': 'boxplotArea' }">
+
+    <!-- Buttons to select boxplot -->
+  <div class="plot-selector" style="margin-bottom: 10px;">
+      <button
+      mat-raised-button
+      [color]="selectedRainPlot === 'season' ? 'primary' : null"
+      (click)="selectedRainPlot = 'season'">
+      Season
+    </button>
+    <button
+      mat-raised-button
+      [color]="selectedRainPlot === 'year' ? 'primary' : null"
+      (click)="selectedRainPlot = 'year'">
+      Year
+    </button>
+    <button
+      mat-raised-button
+      [color]="selectedRainPlot === 'month' ? 'primary' : null"
+      (click)="selectedRainPlot = 'month'">
+      Month
+    </button>
+
+  </div>
+
+    <!-- Conditionally render iframe based on selection -->
+  <iframe
+  *ngIf="selectedRainPlot === 'season'"
+  [src]="seasonBoxplotUrl | safeUrl"
+  width="100%" height="400" frameborder="0"
+  ></iframe>
+
+  <iframe
+    *ngIf="selectedRainPlot === 'year'"
+    [src]="yearBoxplotUrl | safeUrl"
+    width="100%" height="400" frameborder="0"
+  ></iframe>
+
+  <iframe
+    *ngIf="selectedRainPlot === 'month'"
+    [src]="monthBoxplotUrl | safeUrl"
+    width="100%" height="400" frameborder="0"
+  ></iframe>
+
+  </div>
 </div>
+
 
 <div class="custom-grid-temp" *ngIf="selectedAnalysis === 'temperature'">
 <div
@@ -76,6 +124,7 @@
     height="400"
     frameborder="0"
   ></iframe>
+
 
   <div *ngIf="!item.url" class="stats-box">
     <h3>Temperature Statistics</h3>

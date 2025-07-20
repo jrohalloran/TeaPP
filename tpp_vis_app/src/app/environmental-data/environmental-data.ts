@@ -42,6 +42,7 @@ export class EnvironmentalData {
 
 
     selectedTempPlot: 'mean' | 'min' | 'max' = 'mean'; 
+    selectedRainPlot: 'year' | 'month' | 'season' = 'year'; 
     imagesRainfall: GridItem[] = [];
     imagesTemp: GridItem[] = [];
     selectedAnalysis: 'rainfall' | 'temperature' | null = null;
@@ -74,9 +75,9 @@ export class EnvironmentalData {
                 { url: this.backendApiService.getRainfallUrl('layered_all_rainfall.html'), name: 'histogram', gridArea: 'thumb1',type: 'html'  },
                 { url: this.backendApiService.getRainfallUrl('Month_Rain_lineplot.html'), name: 'pca', gridArea: 'thumb2',type: 'html'  },
                 { url: this.backendApiService.getRainfallUrl('Rain_Heatmap.html'), name: 'mean_histogram', gridArea: 'thumb3',type: 'html'  },
-                { url: this.backendApiService.getRainfallUrl('seasonal_rainfall.html'), name: 'scree', gridArea: 'thumb4',type: 'html' },
-                { url: this.backendApiService.getRainfallUrl('layered_all_rainfall_boxplot.html'), name: 'histogram', gridArea: 'thumb5',type: 'html'  },
-                { url: this.backendApiService.getRainfallUrl('year_rainfall_boxplot.html'), name: 'histogram', gridArea: 'thumb6',type: 'html'  },
+                { url: this.backendApiService.getRainfallUrl('seasonal_rainfall.html'), name: 'seasonBox', gridArea: 'boxplotArea',type: 'html' },
+                { url: this.backendApiService.getRainfallUrl('layered_all_rainfall_boxplot.html'), name: 'yearBox', gridArea: 'boxplotArea',type: 'html'  },
+                { url: this.backendApiService.getRainfallUrl('year_rainfall_boxplot.html'), name: 'monthBox', gridArea: 'boxplotArea',type: 'html'  },
                 { name: 'stats-box', url: '', gridArea: 'stats',type: 'stats'}
               ];
       this.loading = false;}
@@ -156,8 +157,27 @@ export class EnvironmentalData {
     get meanBoxplotUrl(): string {
       return this.imagesTemp.find(i => i.name === 'meanBox')?.url || '';
     }
+
+    get yearBoxplotUrl(): string {
+      return this.imagesRainfall.find(i => i.name === 'yearBox')?.url || '';
+    }
+
+    get monthBoxplotUrl(): string {
+      return this.imagesRainfall.find(i => i.name === 'monthBox')?.url || '';
+    }
+
+    get seasonBoxplotUrl(): string {
+      return this.imagesRainfall.find(i => i.name === 'seasonBox')?.url || '';
+    }
+
+
   selectPlot(plot: 'min' | 'max' | 'mean') {
     this.selectedTempPlot = plot;
+  }
+
+  selectRainPlot(plot: 'season' | 'year' | 'month') {
+
+    this.selectedRainPlot = plot;
   }
 
 
