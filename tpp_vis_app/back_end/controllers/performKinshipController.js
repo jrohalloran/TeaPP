@@ -187,11 +187,11 @@ function checkMem(){
     console.log(`Detected RAM: ${totalRAM.toFixed(2)} GB`);
 
     if (totalRAM >= MIN_RAM_GB) {
-    console.log(`✅ Enough RAM. Running script...`);
+    console.log(`Enough RAM. Running script...`);
     flag = true;
 
     } else {
-    console.error(`❌ Not enough RAM. Need at least ${MIN_RAM_GB} GB.`);
+    console.error(`Not enough RAM. Need at least ${MIN_RAM_GB} GB.`);
     flag = false;
     }
 
