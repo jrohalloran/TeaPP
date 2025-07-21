@@ -61,7 +61,7 @@
     <!-- Section 1 -->
     <div class="stats-section">
       <h2>Entry Counts by Sibling</h2>
-      <p>Occurance of recorded siblings</p>
+      <p>Occurance of recorded siblings and number of unique parents.Defined by the presence of sibling nomeclature (Aa-Ff)</p>
       <div class="table-scroll-container">
         <table>
           <thead>
@@ -85,7 +85,7 @@
     <!-- Section 4 -->
     <div class="stats-section">
       <h2>Twin Statistics</h2>
-      <p>Occurance of twins.</p>
+      <p>Occurance of twins within the dataset population. Defined by the presence of twin nomeclature (1/2).</p>
       <div class="table-scroll-container">
         <table>
           <thead>
@@ -101,6 +101,28 @@
             </tr>
           </tbody>
         </table>
+      </div>
+    </div>
+
+    <div class="stats-section">
+      <h2>Years of breeding</h2>
+      <p>Years where breedinging took place for each generation.</p>
+      <div
+          *ngFor="let item of yearVenn"
+          class="grid-item"
+          [ngStyle]="{ 'grid-area': item.gridArea }"
+        >
+      <figure *ngIf="item.url" class="image-figure">
+      <figcaption>
+        <strong>{{ item.title || item.name }}</strong><br />
+      </figcaption>
+      <img 
+        [src]="item.url" 
+        [alt]="item.name" 
+        [ngClass]="getImageClass(item.name)" 
+        (click)="openModal(item.url)" 
+      />
+      </figure>
       </div>
     </div>
     </div>
@@ -155,12 +177,13 @@
           [ngStyle]="{ 'grid-area': item.gridArea }"
         >
       <figure *ngIf="item.url" class="image-figure">
-      <img 
-        [src]="item.url" 
-        [alt]="item.name" 
-        [ngClass]="getImageClass(item.name)" 
-        (click)="openModal(item.url)" 
-      />
+      <iframe
+      *ngIf="item.type === 'html' && item.url"
+      [src]="item.url | safeUrl"
+      width="100%"
+      height="400"
+      frameborder="0"
+      ></iframe>
       </figure>
     </div>
     </div>
@@ -185,18 +208,16 @@
         </table>
       </div>
     </div>
-  </div>
-  
 
-<div class="custom-grid">
-  <!-- Loop through each image item -->
-  <div
-    *ngFor="let item of images"
-    class="grid-item"
-    [ngStyle]="{ 'grid-area': item.gridArea }"
-  >
-    <!-- Show image figure if URL exists -->
-    <figure *ngIf="item.url" class="image-figure">
+    <div class="stats-section">
+      <h2>Parents Used Per Generation</h2>
+      <p>Overlapping parents used for each generation. Details which generations used the same breeding indviduals.</p>
+        <div
+        *ngFor="let item of parentVenn"
+        class="grid-item"
+        [ngStyle]="{ 'grid-area': item.gridArea }"
+      >
+      <figure *ngIf="item.url" class="image-figure">
       <figcaption>
         <strong>{{ item.title || item.name }}</strong><br />
       </figcaption>
@@ -208,14 +229,11 @@
       />
     </figure>
 
-    <!-- Fallback stats box if no image URL -->
-    <div *ngIf="!item.url" class="stats-box">
-      <h3>{{ item.title || 'Statistics' }}</h3>
-      <!-- You can add more stats content here if needed -->
+      </div>
     </div>
-    
   </div>
-</div>
+  
+
 
     <!-- Modal Viewer -->
   <div class="modal" *ngIf="selectedImageUrl" (click)="closeModal()">
