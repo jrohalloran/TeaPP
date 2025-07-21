@@ -1,8 +1,5 @@
   <div class="main-wrapper">
-  <div class="loading-overlay" *ngIf="loading">
-    <mat-progress-spinner mode="indeterminate" diameter="60" color="primary"></mat-progress-spinner>
-    <div style="margin-top: 10px; font-size: 1.2rem; color: #333;">Loading data...</div>
-  </div>
+
   <div class="button-wrapper">
     <h2>Database Status</h2>
 
@@ -10,6 +7,10 @@
   </div>
 
 <div class="stats-tables-container">
+    <div class="loading-overlay-database" *ngIf="loading">
+    <mat-progress-spinner mode="indeterminate" diameter="60" color="primary"></mat-progress-spinner>
+    <div style="margin-top: 10px; font-size: 1.2rem; color: #333;">Loading data...</div>
+  </div>
   
   <div class="table-wrapper">
   <h2>PostgresSQL DB</h2>
@@ -85,7 +86,11 @@
 
           <!-- Angular Material Table -->
         <div class = table-section >
-          <div *ngIf="groupedPGSearch.length > 0"  style="max-height: 400px; overflow-y: auto;">
+            <div class="loading-overlay" *ngIf="searchloading">
+            <mat-progress-spinner mode="indeterminate" diameter="60" color="primary"></mat-progress-spinner>
+            <div style="margin-top: 10px; font-size: 1.2rem; color: #333;">Loading Searched Results...</div>
+          </div>
+          <div *ngIf="groupedPGSearch.length > 0 && !searchloading"  style="max-height: 400px; overflow-y: auto;">
             <h3>Aggregated Postgres Results</h3>
 
             <table mat-table [dataSource]="groupedPGSearch" multiTemplateDataRows>
@@ -149,7 +154,7 @@
 
       <!-- Neo4j Search Results Table -->
   <div class = table-section >
-    <div *ngIf="neo4jSearch.data.length > 0" style="max-height: 400px; overflow-y: auto;">
+    <div *ngIf="neo4jSearch.data.length > 0 && !searchloading" style="max-height: 400px; overflow-y: auto;">
       <h3>Neo4j Results</h3>
 
       <table mat-table [dataSource]="neo4jSearch" matSort #neo4jSort="matSort">

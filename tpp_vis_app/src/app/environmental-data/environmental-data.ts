@@ -12,6 +12,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CommonModule } from '@angular/common';
 import { SafeUrlPipe } from '../services/safe-url.pipe';
 import { MatButtonModule } from '@angular/material/button';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatInputModule } from '@angular/material/input';
+
 
 
 interface GridItem {
@@ -31,7 +34,9 @@ interface GridItem {
       MatProgressSpinnerModule,
       CommonModule,
       SafeUrlPipe,
-      MatButtonModule ],
+      MatButtonModule,
+      MatExpansionModule,
+      MatInputModule ],
   standalone: true,
   templateUrl: './environmental-data.html',
   styleUrl: './environmental-data.css'

@@ -2,45 +2,61 @@
   <div class = "title-wrapper">
   <h2>Kinship Analysis</h2>
       <p>Kinship analysis can be performed...</p>
+    <mat-accordion class="kinship-bar">
+  <mat-expansion-panel [expanded]="true" class="custom-kinship-panel">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Analysis Options
+      </mat-panel-title>
+    </mat-expansion-panel-header>
 
-  </div>
-
-  
-<div class="main-content vertical-split content-wrapper">
-      <!-- Loading overlay -->
-  <div class="loading-overlay" *ngIf="loading">
-    <mat-progress-spinner mode="indeterminate" diameter="60" color="primary"></mat-progress-spinner>
-    <div style="margin-top: 10px; font-size: 1.2rem; color: #333;">Loading data...</div>
-  </div>
-    <!-- Bottom two side-by-side containers -->
-    <div class="bottom-section two-panels">
-      <!-- Upload New Dataset -->
-      <div class="panel">
+    <!-- Two-column layout -->
+    <div class="two-column-panel">
+      <!-- Left Panel -->
+      <div class="column">
+        <h3>Retrieve Stored Kinship</h3>
         <p></p>
         <p></p>
         <p></p>
-        <p></p>
-        <p></p>
-        <p></p>
-        <button mat-raised-button color="primary" (click)="getExistingKinship()" >Get stored Kinship Matrix Data</button>
+        <button mat-raised-button color="primary" (click)="getExistingKinship()">
+          Get stored Kinship Matrix Data
+        </button>
       </div>
 
-      <!-- Analyse Existing Data -->
-      <div class="panel">
-        <p></p>
-        <p></p>
-        <p></p>
-        <label for="email">Please enter your email:</label>
+      <!-- Right Panel -->
+      <div class="column">
+        <h3>Perform New Kinship Matrix Calculation</h3>
+        <label for="email">Enter your email to recieve notifications:</label>
         <input
+          matInput
           type="email"
           id="email"
           name="email"
           [(ngModel)]="email"
           placeholder="user@example.com"
         />
-        <button mat-raised-button color="primary"(click)="startNewAnalysis()">Calculate Kinship Matrix</button>
+        <br /><br />
+        <button mat-raised-button color="accent" (click)="startNewAnalysis()">
+          Calculate Kinship Matrix
+        </button>
       </div>
-</div>
+    </div>
+  </mat-expansion-panel>
+</mat-accordion>
+
+    <mat-accordion class="help-bar">
+  <mat-expansion-panel class="custom-help-panel">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Help
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+  </mat-expansion-panel>
+</mat-accordion>
+  </div>
+
+
+
 
 <div class="custom-grid">
 <div

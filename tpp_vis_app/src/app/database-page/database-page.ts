@@ -60,6 +60,7 @@ export interface Neo4jStatRow {
 
 export class DatabasePage {
   loading: boolean = false;
+  searchloading: boolean = false;
 
   //@Input() dataSource: postgreSQLTableData[] = [];
 
@@ -214,6 +215,7 @@ export class DatabasePage {
     }
 
     async performSearch() {
+    this.searchloading=true;
     const term = this.searchInput?.toLowerCase().trim();
     this.searchPerformed = true;
     console.log(this.searchInput);
@@ -228,7 +230,7 @@ export class DatabasePage {
       this.postgresSearch.data = response['postgres'] || [];
       this.neo4jSearch.data = response['neo4j'] || [];
       this.groupedPGSearch = response['grouped'] || [];
-      
+      this.searchloading=false;
     }
     catch(error){
       console.error('Error:', error);
