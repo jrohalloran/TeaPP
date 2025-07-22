@@ -12,6 +12,7 @@ import { dirname } from 'path';
 import { Client } from 'pg';
 import { emptyNeo4jDatabase } from '../services/neo4j-driver.js';
 import { exec } from 'child_process';
+import { promisify } from 'util';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -92,50 +93,45 @@ export const emptyNeo4j= async (req, res) => {
 }
 
 
-export const restartNeo4j= async (req, res) =>{
+const execAsync = promisify(exec);
 
+export const restartNeo4j = async (req, res) => {
   console.log("Restarting Neo4j database");
 
-  let restartflag;
-  exec('sudo neo4j restart || sudo neo4j start', (error, stdout, stderr) => {
-    if (error) {
-      restartflag = false;
-      console.error(`Error restarting Neo4j: ${error.message}`);
-      return;
-    }
+  try {
+    const { stdout, stderr } = await execAsync('sudo neo4j restart || sudo neo4j start');
 
     if (stderr) {
-      restartflag = false;
       console.error(`stderr: ${stderr}`);
+      return res.status(500).json({ success: false, message: 'Neo4j restart stderr', error: stderr });
     }
 
-    restartflag = true;
     console.log(`Neo4j restarted: ${stdout}`);
-  });
-  return restartflag;
-}
+    return res.status(200).json({ success: true, message: 'Neo4j restarted', output: stdout });
+
+  } catch (error) {
+    console.error(`Error restarting Neo4j: ${error.message}`);
+    return res.status(500).json({ success: false, message: 'Failed to restart Neo4j', error: error.message });
+  }
+};
 
 
-export const restartPostgreSQL = async (req, res)=>{
-
+export const restartPostgreSQL = async (req, res) => {
   console.log("Restarting PostgreSQL database");
 
-  let restartflag;
-  exec('sudo systemctl restart postgresql', (error, stdout, stderr) => {
-    if (error) {
-      restartflag = false;
-      console.error(`Error restarting PostgreSQL: ${error.message}`);
-      return;
-    }
+  try {
+    const { stdout, stderr } = await execAsync('sudo systemctl restart postgresql');
 
     if (stderr) {
-      restartflag = false;
       console.error(`stderr: ${stderr}`);
+      return res.status(500).json({ success: false, message: 'PostgreSQL restart stderr', error: stderr });
     }
 
-    restartflag = true;
     console.log(`PostgreSQL restarted: ${stdout}`);
-  });
+    return res.status(200).json({ success: true, message: 'PostgreSQL restarted', output: stdout });
 
-  return restartflag;
-}
+  } catch (error) {
+    console.error(`Error restarting PostgreSQL: ${error.message}`);
+    return res.status(500).json({ success: false, message: 'Failed to restart PostgreSQL', error: error.message });
+  }
+};
