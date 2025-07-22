@@ -8,9 +8,10 @@ html, body {
 .app-wrapper {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: auto;
   background-color: #d3e0d3;
 }
+
 
 .content-wrapper {
   padding: 1rem;      /* padding only around the main content */

@@ -1,7 +1,7 @@
 .main-wrapper {
   display: flex;
   flex-direction: column;
-  gap: 2rem; /* space between the stats and grid */
+  gap: 2rem; 
 }
 
 .loading-overlay {
@@ -10,12 +10,12 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(255, 255, 255, 0.8); /* Optional: semi-transparent background */
+  background: rgba(255, 255, 255, 0.8);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  z-index: 10; /* Make sure it's above other content inside the container */
+  z-index: 10; 
 }
 
 .title-wrapper{
@@ -23,7 +23,6 @@
   padding: 2rem;
   border-radius: 10px;
   border: 1px solid #c1d1c1;
-  margin-bottom: 2rem;
   box-shadow: 0 3px 8px rgba(0,0,0,0.1);
   
 }
@@ -42,10 +41,9 @@
 /* Welcome / Info section */
 .top-section {
   background-color: #f0f4f8;
-  padding: 2rem;
+
   border-radius: 10px;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
-  margin-bottom: 1rem;
   text-align: center;
 }
 
@@ -56,6 +54,48 @@
   flex: 0 0 auto;
   min-height: auto;
 }
+
+.kinship-bar {
+  width: 100%;
+  background-color: #f9f9f9;
+  margin-top: 20px;
+}
+/* Target the header of the custom panel */
+.custom-kinship-panel {
+  background-color: #d1dee8; /* light blue for full panel */
+  border-radius: 4px;
+}
+
+.custom-help-panel {
+  background-color: #d1dee8; /* light blue for full panel */
+  border-radius: 4px;
+  margin-top: 1rem;
+}
+
+.help-bar {
+  width: 100%;
+  background-color: #f9f9f9;
+  margin-top: 20px;
+}
+
+
+
+.two-column-panel {
+  display: flex;
+  justify-content: space-between;
+  gap: 40px;
+  padding: 16px 8px;
+  flex-wrap: wrap;
+}
+
+.column {
+  flex: 1;
+  min-width: 250px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 /* Individual panel (upload / analyse) */
 .panel {
   flex: 1;
@@ -139,21 +179,6 @@
   transform: translateY(-4px);
 }
 
-/* Style buttons inside the panels */
-.panel button {
-  font-size: 1.1rem;
-  padding: 0.75rem 2rem;
-  border-radius: 5px;
-  box-shadow: 0 1px 5px rgba(0,0,0,0.2);
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.panel button:hover {
-  background-color: #24588c; /* darker blue */
-  color: white;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-}
-
 /* Container for both buttons */
 .two-panels {
   display: flex;
@@ -164,15 +189,9 @@
 }
 
 /* Each panel (holds one button) */
-.panel {
-  background-color: transparent;
-  padding: 1rem;
-  flex: 1 1 200px;
-  text-align: center;
-}
 
 /* Style buttons inside the panels */
-.panel button {
+.column button {
   font-size: 1.1rem;
   padding: 0.75rem 2rem;
   border-radius: 8px;
@@ -183,13 +202,13 @@
 }
 
 /* Flat hover effect with a slight lift */
-.panel button:hover {
+.column button:hover {
   background-color: #125ea6; /* darker blue */
   transform: scale(1.03);
 }
 
 /* Optional: focus effect */
-.panel button:focus {
+.column button:focus {
   outline: none;
   background-color: #125ea6;
 }

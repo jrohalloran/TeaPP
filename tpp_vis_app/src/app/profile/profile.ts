@@ -114,13 +114,6 @@ export class Profile {
     this.router.navigate(['/upload-page']);
   }
 
-  onLogout() {
-    // logout logic here
-    console.log('Logout clicked');
-
-    this.router.navigate(['/login']);
-  }
-
   newAnalysis(){
 
     console.log('Directing to Land Page');
@@ -128,6 +121,14 @@ export class Profile {
     this.router.navigate(['/landing-page']);
 
   }
+
+  onHelp(){
+
+    console.log('Help Clicked');
+    this.isHelpOpen = !this.isHelpOpen;
+
+  }
+
 
   selectedTheme: string | null = null;
 

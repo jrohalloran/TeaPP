@@ -12,6 +12,8 @@ cat("✅ R script started...\n")
 
 library(jsonlite)
 library(ggplot2)
+library(plotly)
+library(htmlwidgets)
 
 
 
@@ -353,12 +355,12 @@ write.table(entry_counts, file, sep = "\t", row.names = FALSE, quote = FALSE)
 
 
 
-hist_file <- file.path(temp_dir, "year_histogram.png")
+file <- file.path(temp_dir, "year_histogram.png")
 
 # Create and save histogram plot
-png(filename = hist_file, width = 800, height = 600)
+png(filename = file, width = 800, height = 600)
 # Create enhanced histogram plot
-ggplot(entry_counts, aes(x = factor(year), y = entry_count)) +   # use factor for discrete bars
+g<-ggplot(entry_counts, aes(x = factor(year), y = entry_count)) +   # use factor for discrete bars
   geom_col(fill = "#4C72B0", color = "#2A437C", width = 0.7, alpha = 0.85) +  # navy blue bars with border and transparency
   geom_text(aes(label = entry_count), vjust = -0.5, size = 4, color = "#2A437C", fontface = "bold") +  # values on top of bars
   labs(
@@ -380,5 +382,11 @@ ggplot(entry_counts, aes(x = factor(year), y = entry_count)) +   # use factor fo
     plot.background = element_rect(fill = "#FFFFFF", color = NA)
   ) +
   coord_cartesian(clip = 'off')  # allow text labels to not be cut off
+ggsave(file, plot = g, width = 6, height = 6, dpi = 300)
 
-dev.off()
+
+file<- paste0(temp_dir,"/year_histogram.html")
+g_plotly <- ggplotly(g)
+# Save as standalone HTML
+saveWidget(g_plotly, file, selfcontained = FALSE)
+

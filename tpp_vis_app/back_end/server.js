@@ -41,6 +41,7 @@ import getStatsRoutes from './routes/getStats.js'
 import searchRoutes from './routes/searchID.js'
 import envStatsRoutes from './routes/envStats.js'
 import genomicDataRoutes from './routes/genomicAnalysis.js'
+import databaseRoutes from './routes/databaseRoutes.js'
 
 const app = express();
 
@@ -63,6 +64,9 @@ const temp_envir_temp_dir = path.join(controller_dir,"temp_envir_temp");
 
 // Setting up Upload Directory in Back-end 
 const uploadDir = 'uploads';
+const upload_tempDir = 'env_temp_uploads';
+const upload_rainDir = 'env_uploads';
+
 if (fs.existsSync(uploadDir)){
   console.log("/uploads directory exists");
   console.log("---- Removing Directory ----");
@@ -73,15 +77,14 @@ if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir);
 }
 
-const upload_tempDir = 'env_temp_uploads';
-const upload_rainDir = 'env_uploads';
 
 if (fs.existsSync(upload_tempDir)){
   console.log("/env_temp_uploads directory exists");
   console.log("---- Removing Directory ----");
-  //fs.rmSync(upload_tempDir, { recursive: true, force: true })
+  fs.rmSync(upload_tempDir, { recursive: true, force: true })
 }
 if (!fs.existsSync(upload_tempDir)) {
+  console.log("/env_temp_uploads making directory");
   console.log("---- Making Directory ----");
   fs.mkdirSync(upload_tempDir);
 }
@@ -90,7 +93,7 @@ if (!fs.existsSync(upload_tempDir)) {
 if (fs.existsSync(upload_rainDir)){
   console.log("/env_uploads directory exists");
   console.log("---- Removing Directory ----");
-  //fs.rmSync(upload_rainDir, { recursive: true, force: true })
+  fs.rmSync(upload_rainDir, { recursive: true, force: true })
 }
 if (!fs.existsSync(upload_rainDir)) {
   console.log("---- Making Directory ----");
@@ -122,7 +125,7 @@ if (!fs.existsSync(temp_dir)) {
 
 const EXPECTED_HEADERS = ['ID', 'Female_parent', 'Male_parent'];
 
-const EXPECTED_RAIN_HEADERS = ['year',	'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const EXPECTED_RAIN_HEADERS = ['year','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
 const EXPECTED_TEMP_HEADERS = ["YEAR","MONTH","JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC","Mean"];
 
@@ -338,7 +341,9 @@ app.use('/uploads', express.static('uploads'));
 app.use('/genom_uploads', express.static('genom_uploads'));
 
 
+// DATABASE HANDLING 
 
+app.use('/api', databaseRoutes);
 
 
 // File Processing Routes

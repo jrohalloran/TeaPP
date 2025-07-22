@@ -10,7 +10,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SafeUrlPipe } from '../services/safe-url.pipe';
-
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 
 interface GridItem {
   url: string;
@@ -29,7 +31,10 @@ interface GridItem {
       MatProgressSpinnerModule,
       CommonModule,
       FormsModule,
-      SafeUrlPipe 
+      SafeUrlPipe,
+      MatExpansionModule,
+      MatInputModule,
+      MatButtonModule,  
   ],
   standalone: true,
   templateUrl: './kinship.html',

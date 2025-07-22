@@ -90,11 +90,13 @@ export class HomeComponent {
     this.router.navigate(['/profile']);
   }
 
-  onLogout() {
-    // logout logic here
-    console.log('Logout clicked');
+  onHelp(){
 
-    this.router.navigate(['/login']);
+    console.log('Help Clicked');
+    this.isHelpOpen = !this.isHelpOpen;
+
+
+
   }
 
   newAnalysis(){

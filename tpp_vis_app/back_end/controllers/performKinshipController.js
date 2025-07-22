@@ -187,11 +187,11 @@ function checkMem(){
     console.log(`Detected RAM: ${totalRAM.toFixed(2)} GB`);
 
     if (totalRAM >= MIN_RAM_GB) {
-    console.log(`✅ Enough RAM. Running script...`);
+    console.log(`Enough RAM. Running script...`);
     flag = true;
 
     } else {
-    console.error(`❌ Not enough RAM. Need at least ${MIN_RAM_GB} GB.`);
+    console.error(`Not enough RAM. Need at least ${MIN_RAM_GB} GB.`);
     flag = false;
     }
 
@@ -219,13 +219,24 @@ export const performKinship= async (req, res) => {
         await writeFile(data); // Write to a data text file to parse to the R script
         console.log("Perform Kinship");
         let date = new Date().toISOString();
-        sendEmail(email, 'Kinship Pipeline Started', 'Kinship Analysis started!');
+        if (email){
+            try{
+                sendEmail(email, 'Kinship Pipeline Started', 'Kinship Analysis started!');
+            }catch(err){
+                console.log("Unable to send Email")
+            }
+        }
         await getKinship(); // Performing new synbreed pedigree and kinship matrix
         await getHeatmap(); 
         await getPCA();
         date = new Date().toISOString();
-        sendEmail(email, 'Kinship Pipeline Ended', 'Kinship Analysis Finished!');
-
+        if (email){
+            try{
+                sendEmail(email, 'Kinship Pipeline Ended', 'Kinship Analysis Finished!');
+            }catch(err){
+                console.log("Unable to send Email");
+            }
+        }
         res.json(true);
     
     }catch(error){

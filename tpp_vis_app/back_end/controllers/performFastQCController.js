@@ -31,9 +31,13 @@ async function runFastQC(filePaths){
 
   console.log('========== FASTQC Batch Execution Started ==========');
   console.log(`[INFO] Timestamp: ${new Date().toISOString()}`);
-  sendEmail(email, 'FastQC Analysis Started', 'FastQC Analysis started!');
-
-  const promises = filePaths.map(path => {
+  if (email){
+  try{
+    sendEmail(email, 'FastQC Analysis Started', 'FastQC Analysis started!');
+  }catch(err){
+    console.log("Unable to send Email/ Invalid Email given")
+  }}
+  /*const promises = filePaths.map(path => {
     const command = `fastqc "${path}" -o "${report_dir}"`;
     console.log(`Running: ${command}`);
     return execPromise(command)
@@ -43,6 +47,12 @@ async function runFastQC(filePaths){
 
   const results = await Promise.all(promises);
   console.log('========== FASTQC Batch Execution Finished ==========');
+  if(email){
+  try{
+    sendEmail(email, 'FastQC Analysis Ended', 'FastQC Analysis Ended!');
+  }catch(err){
+    console.log("Unable to send Email/ Invalid Email given")
+  }}
   return results;
 }
 

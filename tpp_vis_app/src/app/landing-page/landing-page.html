@@ -12,6 +12,9 @@
     <mat-menu #menu="matMenu">
       <button mat-menu-item (click)="onProfile()">Profile<mat-icon>account_circle</mat-icon></button>
       <button mat-menu-item (click)="onSettings()">Settings<mat-icon>settings</mat-icon></button>
+      <button mat-menu-item (click)="onUpload()">Upload<mat-icon>folder</mat-icon></button>
+      <button mat-menu-item (click)="newAnalysis()">New Analysis<mat-icon>add</mat-icon></button>
+      <button mat-menu-item (click)="onHelp()">Help<mat-icon>question_mark</mat-icon></button>
     </mat-menu>
 
     <div class = "user-details">
@@ -70,6 +73,20 @@
         <button mat-raised-button color="primary" (click)="analyseExisting()">Analyse Existing Data</button>
       </div>
     </div>
+  </div>
+  <div class="database-management-wrapper">
+      <div class="panel">
+        <h3>Manage Databases</h3>
+        <div class="icon-container">
+          <mat-icon class="big-icon">storage</mat-icon>
+        </div>
+        <p>Instructions</p>
+        <p>- Images</p>
+        <button mat-raised-button color="primary" (click)="emptyPostgreSQL()">Empty PostgreSQL Database</button>
+        <button mat-raised-button color="primary" (click)="emptyNeo4j()">Empty Neo4j Database</button>
+      </div>
+
+
   </div>
 
 </div>

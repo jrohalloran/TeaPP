@@ -21,6 +21,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { environment } from '../../environments/environment';
 
+import { MatExpansionModule } from '@angular/material/expansion';
+
+
 @Component({
   selector: 'app-genomic-data',
   imports: [MatTabsModule,
@@ -35,7 +38,8 @@ import { environment } from '../../environments/environment';
       MatCheckboxModule,
       MatIcon,
       FormsModule,
-      ReactiveFormsModule],
+      ReactiveFormsModule,
+      MatExpansionModule],
   templateUrl: './genomic-data.html',
   styleUrl: './genomic-data.css'
 })

@@ -13,7 +13,7 @@ import { convertToSigmaFormat,
     filterNodesWithoutHigherGenDescendants,
     removeIsolatedNodes,
     convertToSigmaFormatDynamic} from '../utils/sigmaFormatter.js';
-//import { saveJsonToFile } from '../utils/fileWriter.js';
+
 
 
 export const getAllNodesEdges = async (req, res) => {

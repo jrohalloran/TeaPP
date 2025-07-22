@@ -13,12 +13,14 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Router } from '@angular/router';
 import { DataTransferService } from '../services/dataTransferService';
+import { SafeUrlPipe } from '../services/safe-url.pipe';
 
 interface GridItem {
   url: string;
   name: string;
   gridArea: string; 
-  title: string; // <-- add this
+  title: string;
+  type: string;
 }
 
 
@@ -34,7 +36,8 @@ interface GridItem {
       MatCheckboxModule,
       MatProgressSpinnerModule,
       MatTabsModule,
-      MatIcon ],
+      MatIcon,
+      SafeUrlPipe ],
   standalone: true,
   templateUrl: './overview.html',
   styleUrls: ['./overview.css']
@@ -54,7 +57,8 @@ export class Overview {
     basicStats: any[] = [];
     formattedCount: any[] = [];
     genCount: any[] = [];
-    images: GridItem[] = [];
+    yearVenn:GridItem [] = [];
+    parentVenn:GridItem [] = [];
     statsImages:GridItem [] = [];
 
     
@@ -77,10 +81,11 @@ export class Overview {
       console.log("Getting Diagrams");
 
 
-      this.images = [
-      { url: this.backendApiService.getDiagramUrl('venn_parents_Gener_2.png'), name: 'clustermap', gridArea: 'hero',
-         title: "Parents per Generation" },
-      { url: this.backendApiService.getDiagramUrl('year_gen_venn_2.png'), name: 'clustermap', gridArea: 'thumb1', title: "Year of Breeding for Each Generation"  }
+      this.yearVenn = [
+      { url: this.backendApiService.getDiagramUrl('venn_parents_Gener_2.png'), name: 'vennParents', gridArea: 'hero', type: "image",
+         title: "Parents per Generation" }];
+      this.parentVenn = [
+      { url: this.backendApiService.getDiagramUrl('year_gen_venn_2.png'), name: 'vennYear', gridArea: 'thumb1', title: "Year of Breeding for Each Generation",type: "image"}
     ];
 
     }
@@ -100,12 +105,11 @@ export class Overview {
           this.basicStats = response[5];
           this.formattedCount = response[6];
           this.genCount = response[7];
-          //console.log(this.siblingCount);
-          //console.log(this.rankedCount);
-          //console.log(this.summaryCount);
-          //console.log(this.twinCount);
-          this.statsImages = [{ url: this.backendApiService.getDiagramUrl('year_histogram.png'), name: 'histogram', gridArea: 'hero',
-          title: "Parents per Generation" },]
+
+          this.statsImages = [/*{ url: this.backendApiService.getDiagramUrl('year_histogram.png'), name: 'histogram', gridArea: 'hero',
+          title: "Parents per Generation",type: "image" },*/
+        { url: this.backendApiService.getDiagramUrl('year_histogram.html'), name: 'histogram', gridArea: 'hero',
+          title: "Parents per Generation",type: "html" }]
 
           } catch (error) {
               console.error('Error:', error);
