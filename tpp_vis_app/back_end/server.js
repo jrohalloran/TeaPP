@@ -101,6 +101,10 @@ if (!fs.existsSync(upload_rainDir)) {
 }
 
 
+const uploadGenomDir = path.join(__dirname, 'genom_uploads');
+if (!fs.existsSync(uploadGenomDir)) {
+  fs.mkdirSync(uploadGenomDir, { recursive: true });
+}
 
 console.log("Backend Directory: "+backend_dir);
 console.log("Controller Directory: "+controller_dir);
@@ -130,6 +134,8 @@ const EXPECTED_RAIN_HEADERS = ['year','Jan','Feb','Mar','Apr','May','Jun','Jul',
 const EXPECTED_TEMP_HEADERS = ["YEAR","MONTH","JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC","Mean"];
 
 
+const MAX_SIZE = 10 * 1024 * 1024 * 1024;
+
 // Set up multer for file upload
 const storage = multer.diskStorage({
  destination: function (req, file, cb) {
@@ -139,7 +145,7 @@ const storage = multer.diskStorage({
    cb(null, file.originalname); // Keep the original file name
  }
 });
-const upload = multer({ storage: storage });
+const upload = multer({ storage: storage ,limits: { fileSize: MAX_SIZE }});
 
 
 const env_storage = multer.diskStorage({
@@ -150,7 +156,7 @@ const env_storage = multer.diskStorage({
    cb(null, file.originalname); // Keep the original file name
  }
 });
-const env_upload = multer({ storage: env_storage });
+const env_upload = multer({ storage: env_storage ,limits: { fileSize: MAX_SIZE }});
 
 
 const genom_storage = multer.diskStorage({
@@ -161,7 +167,7 @@ const genom_storage = multer.diskStorage({
    cb(null, file.originalname); // Keep the original file name
  }
 });
-const genom_upload = multer({ storage: genom_storage });
+const genom_upload = multer({ storage: genom_storage, limits: { fileSize: MAX_SIZE } });
 
 
 
@@ -173,7 +179,7 @@ const env_temp_storage = multer.diskStorage({
    cb(null, file.originalname); // Keep the original file name
  }
 });
-const env_temp_upload = multer({ storage: env_temp_storage });
+const env_temp_upload = multer({ storage: env_temp_storage , limits: { fileSize: MAX_SIZE }});
 
 
 
