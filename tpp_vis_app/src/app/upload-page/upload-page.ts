@@ -447,12 +447,35 @@ export class UploadComponent {
     this.router.navigate(['/profile']);
   }
 
-  onLogout() {
-    // logout logic here
-    console.log('Logout clicked');
 
-    this.router.navigate(['/login']);
+  onHelp(){
+
+    console.log('Help Clicked');
+    this.isHelpOpen = !this.isHelpOpen;
+
   }
+
+  newAnalysis(){
+
+    console.log('Directing to Land Page');
+
+    this.router.navigate(['/landing-page']);
+  }
+
+  onUpload() {
+    // navigate or show settings
+    console.log('Directing to Upload-Page');
+
+    this.router.navigate(['/upload-page']);
+  }
+
+  onHome() {
+    // navigate or show profile
+    console.log('Directing to Home');
+
+    this.router.navigate(['/home']);
+  }
+
 
 }
 

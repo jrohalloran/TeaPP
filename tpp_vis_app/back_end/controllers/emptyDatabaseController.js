@@ -16,12 +16,14 @@ import { exec } from 'child_process';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const client = new Client({
-        user: "jennyohalloran",
+    const client = new Client({
+        user: "postgres",
+        password: "liptontea",
         host: "localhost",
         database: "teapp_app_db",
         port: "5432",
     });
+
 
 
 // insert

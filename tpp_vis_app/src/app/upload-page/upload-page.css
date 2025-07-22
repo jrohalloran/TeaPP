@@ -25,12 +25,6 @@ html, body {
   height: 64px;
 }
 
-.menu-button {
-  font-weight: 800;
-  text-transform: none;
-  color: white;
-}
-
 .top-bar-content {
   display: flex;
   align-items: center;
@@ -39,9 +33,9 @@ html, body {
 }
 
 .menu-button {
-  font-weight: 800;
-  text-transform: none;
   color: white;
+
+
 }
 
 .user-details {
@@ -124,6 +118,16 @@ html, body {
   color: white;
   font-size: 1.5rem;
   cursor: pointer;
+}
+
+/* ===== Main Content Layout ===== */
+.content-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 1rem; /* Increased padding */
+  gap: 0.5rem;          /* Add space between top and bottom sections */
+
 }
 
 .loading-overlay {
@@ -334,5 +338,77 @@ td input.mat-input-element {
   background-color: #fafafa;
   border-radius: 8px;
   box-shadow: 0 0 6px rgb(0 0 0 / 0.05);
+}
+
+/* Top container overrides */
+.top-container {
+  background-color: #f9f9f9;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid #c1d1c1;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* Tab container overrides */
+.tab-container {
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ddd;
+  background-color: #f9f9f9;
+  flex: 1;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+}
+
+.top-container {
+  background-color: #f9f9f9;
+  padding: 2rem;
+  border-radius: 12px;
+  border: 1px solid #c1d1c1;
+  margin-bottom: 2rem;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+}
+
+/* Buttons styling */
+button {
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  background-color: #24588c;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #1e4a75;
+}
+
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .main-split {
+    flex-direction: column;
+    height: auto;
+  }
+  
+  .left-panel, .right-panel {
+    flex: none;
+    width: 100%;
+    height: auto;
+    border-right: none;
+    padding: 1rem 0;
+  }
+  
+  .top-container {
+    margin-bottom: 1rem;
+  }
 }
 
