@@ -125,7 +125,7 @@ if (!fs.existsSync(temp_dir)) {
 
 const EXPECTED_HEADERS = ['ID', 'Female_parent', 'Male_parent'];
 
-const EXPECTED_RAIN_HEADERS = ['year',	'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const EXPECTED_RAIN_HEADERS = ['year','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
 const EXPECTED_TEMP_HEADERS = ["YEAR","MONTH","JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC","Mean"];
 
