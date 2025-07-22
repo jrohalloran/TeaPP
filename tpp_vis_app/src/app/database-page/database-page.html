@@ -1,7 +1,7 @@
   <div class="main-wrapper">
 
   <div class="button-wrapper">
-    <h2>Database Status</h2>
+    <h1>Database Status <mat-icon>storage</mat-icon></h1>
 
     <button class = "refresh-button" (click)="refreshAll()"><mat-icon>refresh</mat-icon></button>
   </div>
@@ -15,7 +15,10 @@
   <div class="table-wrapper">
   <h2>PostgresSQL DB</h2>
 
-  <h4>Status: {{pgStatusMessage}}</h4>
+  <h4>Status: {{pgStatusMessage}}
+
+  </h4>
+  <button class = "restart-button" (click)="restartPostgres()">Restart</button>
   
 
   <table mat-table [dataSource]="postgreSQLTableData" class="mat-elevation-z8">
@@ -48,6 +51,7 @@
 <h2>Neo4j Graph DB</h2>
 
 <h4>Status:  {{neoStatusMessage}}</h4>
+  <button class = "restart-button" (click)="restartNeo4j()">Restart</button>
 
 
       <table mat-table [dataSource]="neo4jDataSource" class="mat-elevation-z8" style="width: 100%; margin-top: 20px;">

@@ -60,6 +60,32 @@ export class backendApiService {
 
   }
 
+  // Database Management 
+
+   emptyPostgreSQL(): Observable<any>{
+        console.log("Sending Emptying request to backend");
+        return this.http.get(`${this.apiUrl}/emptyPostgreSQL`);
+
+  }
+
+  restartPostgreSQL(): Observable<any>{
+        console.log("Sending PostgreSQL Restart request to backend");
+        return this.http.get(`${this.apiUrl}/restartPostgreSQL`);
+
+  }
+
+    emptyNeo4j(): Observable<any>{
+        console.log("Sending Emptying request to backend");
+        return this.http.get(`${this.apiUrl}/emptyNeo4j`);
+
+  }
+
+  restartNeo4j(): Observable<any>{
+        console.log("Sending Neo4j Restart request to backend");
+        return this.http.get(`${this.apiUrl}/restartNeo4j`);
+
+  }
+
   /// -------------- File processing requests ------------------
 
   processUploadFile(): Observable<any>{

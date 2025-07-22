@@ -92,6 +92,10 @@ export class DatabasePage {
     expandedElement:  any | null = null;
 
 
+    postgreRestartFlag: boolean | undefined;
+    neo4jRestartFlag: boolean | undefined;
+
+
     @ViewChild('postgresSort') postgresSort!: MatSort;
     @ViewChild('neo4jSort') neo4jSort!: MatSort;
 
@@ -273,6 +277,48 @@ export class DatabasePage {
     toggleRow(row: any) {
     console.log(this.expandedElement);
     this.expandedElement = this.expandedElement === row ? null : row;
+  }
+
+
+  async restartPostgres(){
+    this.loading = true;
+    console.log("Restart Postgres Selected");
+        try {
+        const response = await firstValueFrom(this.backendApiService.restartPostgreSQL());
+        console.log('Response from backend:', response);
+        this.postgreRestartFlag=response;
+        this.loading = false;
+        if(this.postgreRestartFlag){
+          alert('PostgreSQL Database Sucessfully Restarted - Please refresh the Database Tables.');
+        }else{
+          alert('Error in PostgreSQL Database Restart');
+        }
+    } catch (error) {
+            console.error('Error:', error);
+    
+    }
+
+  }
+
+  async restartNeo4j(){
+    this.loading = true;
+    console.log("Restart Neo4j Selected");
+    try {
+        const response = await firstValueFrom(this.backendApiService.restartNeo4j());
+        console.log('Response from backend:', response);
+        this.neo4jRestartFlag=response;
+        this.loading = false;
+        if(this.postgreRestartFlag){
+          alert('Neo4j Database Sucessfully Restarted - Please refresh the Database Tables.');
+        }else{
+          alert('Error in Neo4j Database Restart');
+        }
+    } catch (error) {
+            console.error('Error:', error);
+    
+    }
+
+
   }
 
 }

@@ -14,6 +14,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { AuthService } from '../services/auth.service';
+import { backendApiService } from '../services/backEndRequests.service';
+import { firstValueFrom } from 'rxjs';
 
 
 @Component({
@@ -35,11 +37,13 @@ import { AuthService } from '../services/auth.service';
 export class LandingPage {
 
   constructor(private router: Router,
+    private backendApiService: backendApiService,
     private authService: AuthService){}
   
   isHelpOpen = false;
   currentUser = '';
-
+  postgreEmptyFlag: boolean | undefined;
+  neo4jEmptyFlag: boolean | undefined;
 
   async ngOnInit() {
 
@@ -54,6 +58,45 @@ export class LandingPage {
     }*/
 
 
+  }
+
+  async emptyPostgreSQL(){
+    console.log("Empty Databases clicked");
+    try {
+        const response = await firstValueFrom(this.backendApiService.emptyPostgreSQL());
+        console.log('Response from backend:', response);
+        this.postgreEmptyFlag = response;
+        if(this.postgreEmptyFlag){
+          alert('PostgreSQL Database Cleared Successfully - All predigree data deleted.');
+        }else{
+          alert('Error in Database Emptying - Data removal unsuccessful');
+        }
+      
+        
+
+
+    } catch (error) {
+            console.error('Error:', error);
+    
+    }
+
+  }
+
+  async emptyNeo4j(){
+    console.log("Empty Neo4j clicked");
+    try {
+        const response = await firstValueFrom(this.backendApiService.emptyNeo4j());
+        console.log('Response from backend:', response);
+        this.neo4jEmptyFlag=response;
+        if(this.neo4jEmptyFlag){
+          alert('Neo4j Database Cleared Successfully - All graphing data deleted.');
+        }else{
+          alert('Error in Database Emptying - Data removal unsuccessful');
+        }
+    } catch (error) {
+            console.error('Error:', error);
+    
+    }
   }
   
   uploadNewData(){
@@ -87,12 +130,30 @@ export class LandingPage {
     this.router.navigate(['/profile']);
   }
 
-  onLogout() {
-    // logout logic here
-    console.log('Logout clicked');
+    onHelp(){
 
-    this.router.navigate(['/login']);
+    console.log('Help Clicked');
+    this.isHelpOpen = !this.isHelpOpen;
+
+
+
   }
+
+  newAnalysis(){
+
+    console.log('Directing to Land Page');
+
+    this.router.navigate(['/landing-page']);
+  }
+
+  onUpload() {
+    // navigate or show settings
+    console.log('Directing to Upload-Page');
+
+    this.router.navigate(['/upload-page']);
+  }
+
+
 
   
 }

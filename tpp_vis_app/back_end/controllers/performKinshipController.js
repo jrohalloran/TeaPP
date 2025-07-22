@@ -216,13 +216,24 @@ export const performKinship= async (req, res) => {
         await writeFile(data); // Write to a data text file to parse to the R script
         console.log("Perform Kinship");
         let date = new Date().toISOString();
-        sendEmail(email, 'Kinship Pipeline Started', 'Kinship Analysis started!');
+        if (email){
+            try{
+                sendEmail(email, 'Kinship Pipeline Started', 'Kinship Analysis started!');
+            }catch(err){
+                console.log("Unable to send Email")
+            }
+        }
         await getKinship(); // Performing new synbreed pedigree and kinship matrix
         await getHeatmap(); 
         await getPCA();
         date = new Date().toISOString();
-        sendEmail(email, 'Kinship Pipeline Ended', 'Kinship Analysis Finished!');
-
+        if (email){
+            try{
+                sendEmail(email, 'Kinship Pipeline Ended', 'Kinship Analysis Finished!');
+            }catch(err){
+                console.log("Unable to send Email");
+            }
+        }
         res.json(true);
     
     }catch(error){

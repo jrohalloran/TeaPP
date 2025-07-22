@@ -6,18 +6,10 @@
 
 import neo4j from 'neo4j-driver';
 
-// Neo4j connection setup
-
-/* // CLOUD HOST
-const URI = 'neo4j+s://a71c11d2.databases.neo4j.io';
-const USER = 'neo4j';
-const PASSWORD = 'KPoauq4gefxZaMGDId8t3lRtudtCCMJdM1gVDe84JiQ';
-*/
-
 // LOCAL DATABASE -- PRE AWS
 const URI = 'bolt://localhost:7687';
 const USER = 'neo4j';
-const PASSWORD = 'tAqsiv-tivfif-bomhe9'; // Replace with your actual password
+const PASSWORD = 'tAqsiv-tivfif-bomhe9'; 
 
 // Create a driver instance
 
@@ -47,6 +39,27 @@ function safeProperties(props) {
 
   return output;
 }
+
+
+export async function emptyNeo4jDatabase(){
+    const session = driver.session();
+    console.log("Starting emptying function....");
+    let emptyFlag;
+      try {
+            await session.run('MATCH (n) DETACH DELETE n');
+            console.log('All data deleted successfully.');
+            emptyFlag = true;
+        } catch (err) {
+            console.error('Error deleting data:', err);
+            emptyFlag = false;
+        } finally {
+            await session.close();
+            await driver.close();
+    }
+    console.log("Emptying Neo4j Databases successfully")
+    return emptyFlag;
+}
+
 
 
 export async function getNeo4jStatus(){

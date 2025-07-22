@@ -68,6 +68,19 @@
   margin-top: 20px;
 }
 
+.help-bar {
+  width: 100%;
+  background-color: #f9f9f9;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.custom-help-panel {
+  background-color: #d1dee8; 
+  border-radius: 4px;
+  margin-top: 1rem;
+}
+
+
 /* Style buttons inside the panels */
 .button {
   font-size: 1.1rem;
