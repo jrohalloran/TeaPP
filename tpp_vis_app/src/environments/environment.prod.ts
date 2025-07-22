@@ -11,7 +11,7 @@ export const environment = {
   uploadUrl:'/uploadFile',
   uploadEnvRAINUrl:'/uploadEnvRAINFile',
   uploadEnvTEMPUrl:'/uploadEnvTEMPFile',
-  uploadGENOMUrl:'/uploadGENOMfile',
+  uploadGENOMUrl:'/uploadGENOMFile',
   imageKinshipBaseUrl: '/calculatedKinship',
   fastQCreportsURL: '/fastQCReports'
 };

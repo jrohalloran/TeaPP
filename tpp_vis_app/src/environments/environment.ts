@@ -10,7 +10,7 @@ export const environment = {
   uploadUrl:'http://localhost:3333/uploadFile',
   uploadEnvRAINUrl:'http://localhost:3333/uploadEnvRAINFile',
   uploadEnvTEMPUrl:'http://localhost:3333/uploadEnvTEMPFile',
-  uploadGENOMUrl: 'http://localhost:3333/uploadGENOMfile',
+  uploadGENOMUrl: 'http://localhost:3333/uploadGENOMFile',
   imageKinshipBaseUrl:'http://localhost:3333/calculatedKinship',
   fastQCreportsURL: 'http://localhost:3333/fastQCReports'
 };

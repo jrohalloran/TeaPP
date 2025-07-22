@@ -108,15 +108,7 @@ export class Kinship {
 
       }
       if (response == true){
-        /*
-          this.images = [
-          { url: this.backendApiService.getKinshipUrl('kinship_clustermap.png'), name: 'clustermap', gridArea: 'hero', type: 'image' },
-          { url: this.backendApiService.getKinshipUrl('kinship_histogram.png'), name: 'histogram', gridArea: 'thumb1',type: 'image' },
-          { url: this.backendApiService.getKinshipUrl('pca_pc1_pc2_colored_by_generation.png'), name: 'pca', gridArea: 'thumb2',type: 'image' },
-          { url: this.backendApiService.getKinshipUrl('kinship_mean_histogram.png'), name: 'mean_histogram', gridArea: 'thumb3',type: 'image' },
-          { url: this.backendApiService.getKinshipUrl('scree_plot.png'), name: 'scree', gridArea: 'thumb4',type: 'image' },
-          { name: 'stats-box', url: '', gridArea: 'stats',type: 'image' } // stats box without URL
-        ];*/
+
             this.images = [
             { url: this.backendApiService.getImageUrl('kinship_heatmap.html'), name: 'clustermap', gridArea: 'hero', type: 'html' },
             { url: this.backendApiService.getImageUrl('kinship_histogram.html'), name: 'histogram', gridArea: 'thumb1',type: 'html' },
