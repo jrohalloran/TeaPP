@@ -10,7 +10,6 @@ html, body {
   display: flex;
   flex-direction: column;
   height: auto;
-  min-height: 1050px;
   background-color: #d3e0d3;
 }
 
@@ -33,10 +32,11 @@ html, body {
   width: 100%;
 }
 
+
 .menu-button {
+  color: white !important;
   font-weight: 800;
   text-transform: none;
-  color: white;
 }
 
 .user-details {
@@ -121,8 +121,6 @@ html, body {
   cursor: pointer;
 }
 
-
-
 /* ===== Main Content Layout ===== */
 .main-content {
   flex: 1;
@@ -139,6 +137,16 @@ html, body {
   border: 1px solid #c1d1c1;
   margin-bottom: 2rem;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.top-container,
+.top-section {
+  background-color: #f9f9f9;
+  padding: 2rem;
+  border-radius: 12px;
+  border: 1px solid #c1d1c1;
+  margin-bottom: 2rem;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
 }
 
 /* ===== Two Panels (Upload + Analyse) ===== */

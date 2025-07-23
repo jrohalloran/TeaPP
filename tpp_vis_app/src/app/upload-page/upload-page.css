@@ -25,12 +25,6 @@ html, body {
   height: 64px;
 }
 
-.menu-button {
-  font-weight: 800;
-  text-transform: none;
-  color: white;
-}
-
 .top-bar-content {
   display: flex;
   align-items: center;
@@ -38,10 +32,11 @@ html, body {
   width: 100%;
 }
 
+
 .menu-button {
+  color: white !important;
   font-weight: 800;
   text-transform: none;
-  color: white;
 }
 
 .user-details {
@@ -125,6 +120,9 @@ html, body {
   font-size: 1.5rem;
   cursor: pointer;
 }
+
+
+
 
 .loading-overlay {
   position: fixed;
@@ -336,3 +334,25 @@ td input.mat-input-element {
   box-shadow: 0 0 6px rgb(0 0 0 / 0.05);
 }
 
+/* ===== Buttons ===== */
+button {
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  background-color: #24588c;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+
+button:hover {
+  background-color: #1e4a75;
+}
+
+.panel button {
+  align-self: flex-start;
+  margin-top: auto;
+}

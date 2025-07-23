@@ -10,9 +10,12 @@
     </button>
 
     <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="onHome()">Home<mat-icon>home</mat-icon></button>
       <button mat-menu-item (click)="onProfile()">Profile<mat-icon>account_circle</mat-icon></button>
       <button mat-menu-item (click)="onSettings()">Settings<mat-icon>settings</mat-icon></button>
-      <button mat-menu-item (click)="onLogout()">Logout<mat-icon>logout</mat-icon></button>
+      <button mat-menu-item (click)="newAnalysis()">New Analysis<mat-icon>add</mat-icon></button>
+      <button mat-menu-item (click)="onHelp()">Help<mat-icon>question_mark</mat-icon></button>
+
     </mat-menu>
 
     <div class = "user-details">
