@@ -448,18 +448,19 @@ export class UploadComponent {
   }
 
 
+  
   onHelp(){
 
     console.log('Help Clicked');
     this.isHelpOpen = !this.isHelpOpen;
 
   }
+  
+  onHome() {
+    // navigate or show profile
+    console.log('Directing to Home');
 
-  newAnalysis(){
-
-    console.log('Directing to Land Page');
-
-    this.router.navigate(['/landing-page']);
+    this.router.navigate(['/home']);
   }
 
   onUpload() {
@@ -469,11 +470,12 @@ export class UploadComponent {
     this.router.navigate(['/upload-page']);
   }
 
-  onHome() {
-    // navigate or show profile
-    console.log('Directing to Home');
+  newAnalysis(){
 
-    this.router.navigate(['/home']);
+    console.log('Directing to Land Page');
+
+
+    this.router.navigate(['/login']);
   }
 
 

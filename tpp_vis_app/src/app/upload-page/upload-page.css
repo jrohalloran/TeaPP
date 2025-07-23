@@ -32,10 +32,11 @@ html, body {
   width: 100%;
 }
 
+
 .menu-button {
-  color: white;
-
-
+  color: white !important;
+  font-weight: 800;
+  text-transform: none;
 }
 
 .user-details {
