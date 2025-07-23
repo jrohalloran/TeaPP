@@ -96,9 +96,9 @@ async function importWithNeo4jAdmin(graphData) {
     const { stdout, stderr } = await execAsync(cmd);
 
     if (stderr) {
-      console.warn('⚠️ neo4j-admin import warnings:', stderr);
+      console.warn('neo4j-admin import warnings:', stderr);
     }
-    console.log('✅ neo4j-admin import output:', stdout);
+    console.log('neo4j-admin import output:', stdout);
 
     // Step 4: Start Neo4j again
     console.log('▶️ Starting Neo4j...');

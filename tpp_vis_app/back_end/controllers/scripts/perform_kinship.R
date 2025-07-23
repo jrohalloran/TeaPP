@@ -126,3 +126,5 @@ write.table(kinship.mx, file, sep = "\t", quote = FALSE, row.names = TRUE, col.n
 
 #file<- paste0(temp_dir,"/kinship_matrix.txt")
 #write.table(A_matrix, file, sep = "\t", quote = FALSE, row.names = TRUE, col.names = NA)
+#file<- paste0(temp_dir,"/kinship_matrix.txt")
+#write.table(A_matrix, file, sep = "\t", quote = FALSE, row.names = TRUE, col.names = NA)

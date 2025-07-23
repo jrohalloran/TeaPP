@@ -288,7 +288,7 @@ export class DatabasePage {
         console.log('Response from backend:', response);
         this.postgreRestartFlag=response;
         this.loading = false;
-        if(this.postgreRestartFlag){
+        if(response.message == "success"){
           alert('PostgreSQL Database Sucessfully Restarted - Please refresh the Database Tables.');
         }else{
           alert('Error in PostgreSQL Database Restart');
@@ -308,7 +308,7 @@ export class DatabasePage {
         console.log('Response from backend:', response);
         this.neo4jRestartFlag=response;
         this.loading = false;
-        if(this.postgreRestartFlag){
+        if(response.message == "success"){
           alert('Neo4j Database Sucessfully Restarted - Please refresh the Database Tables.');
         }else{
           alert('Error in Neo4j Database Restart');
