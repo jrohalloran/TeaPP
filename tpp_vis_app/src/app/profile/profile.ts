@@ -7,8 +7,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../services/auth.service';
-import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms'; 
+import { firstValueFrom } from 'rxjs';
 
 
 
@@ -55,6 +55,7 @@ export class Profile {
   selectedTheme2 = this.colorThemes[0];
   
   currentUser = '';
+  username = '';
   isHelpOpen = false;
 
 
@@ -74,10 +75,18 @@ export class Profile {
 
     console.log('Welcome to the home page');
 
-    const user = await this.authService.getCurrentUser();
+        try {
+      const response = await firstValueFrom(this.backendApiService.getUsername());
+      console.log('Response from backend:', response);
+      this.username = response;
+      this.authService.setCurrentUser(this.username);
+      this.currentUser = response;
 
-    console.log(user);
-    this.currentUser = user;
+
+    } catch (error) {
+      console.error('Error:', error);
+    }
+
 
   }
 

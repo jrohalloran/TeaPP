@@ -37,6 +37,7 @@ export class HomeComponent {
 
   data: any[]=[];
   currentUser = '';
+  username = '';
 
   constructor(private backendApiService: backendApiService,
               private dataTransferService: DataTransferService,
@@ -57,10 +58,19 @@ export class HomeComponent {
         console.warn('No data received');
       }
     console.log('Welcome to the home page');
-    
-    const user = await this.authService.getCurrentUser();
-    console.log(user);
-    this.currentUser = user;
+        try {
+      const response = await firstValueFrom(this.backendApiService.getUsername());
+      console.log('Response from backend:', response);
+      this.username = response;
+      this.authService.setCurrentUser(this.username);
+      this.currentUser = response;
+
+
+    } catch (error) {
+      console.error('Error:', error);
+
+    }
+
 
   }
 
