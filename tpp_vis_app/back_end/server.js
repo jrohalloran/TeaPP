@@ -393,7 +393,6 @@ app.use('/api', pedigreeRoutes);// Gets Pedigree of a selected node
 app.use('/api', allNodesEdgesRoutes); // Getting all nodes and edges for first visualisation 
 // Executes Filtering, Grouping and Sigma Conversion
 
-app.use('/api', getPartnerOfRoutes);
 
 
 // POSTGRESQL Routes

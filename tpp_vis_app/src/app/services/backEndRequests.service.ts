@@ -188,11 +188,6 @@ export class backendApiService {
     return this.http.post(`${this.apiUrl}/getPedigree`,nodeID);
   }
 
-  getPartnerOf(nodeID: string):Observable<any> {
-    console.log("Sending Data to /api/getPartnerOf");
-    return this.http.post(`${this.apiUrl}/getPartnerOf`,nodeID);
-  }
-
   getUpdatedNodesEdges(data: any[]): Observable<any> {
     console.log("Retrieving Updated Nodes and Edges");
     return this.http.post(`${this.apiUrl}/getUpdatedNodesEdges`,data);

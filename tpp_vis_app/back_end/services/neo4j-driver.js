@@ -23,6 +23,8 @@ const driver = neo4j.driver(
   }
 );
 
+
+
 // Function for converting Neo4j Integers
 // For handling Year and Gener attributes
 function safeProperties(props) {
@@ -54,7 +56,7 @@ export async function emptyNeo4jDatabase(){
             emptyFlag = false;
         } finally {
             await session.close();
-            await driver.close();
+            //await driver.close();
     }
     console.log("Emptying Neo4j Databases successfully")
     return emptyFlag;

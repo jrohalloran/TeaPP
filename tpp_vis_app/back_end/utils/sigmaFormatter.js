@@ -85,8 +85,6 @@ export async function formatForSigma2(data) {
     ...(Array.isArray(data.nodes) ? data.nodes : []),
     ...(Array.isArray(data.family) ? data.family : [])
   ];
-
-  //console.log("All Nodes: "+allNodes);
   
   allNodes.forEach(node => {
     //console.log(node.year);
@@ -145,14 +143,6 @@ export async function getSigmaEdges(data) {
   console.log("Number of Nodes:", allNodes.length);
   // Use empty arrays as defaults if data.nodes or data.family are missing or not arrays
 
-  //console.log("All Nodes: "+allNodes);
-  //console.log("Number of Nodes: "+allNodes.length);
-
-  /*
-  allNodes.forEach(node => {
-    //console.log(node.year);
-  });*/
-
   // Create Sigma.js node objects
   const sigmaNodes = allNodes.map(node => ({
     id: node.id,
@@ -197,8 +187,6 @@ export async function getSigmaEdges(data) {
     edges: sigmaEdges
   };
 }
-
-
 
 
 
@@ -669,13 +657,7 @@ export function convertToSigmaFormat(graphData) {
   
   function interpolateColor(gener) {
     if (gener == null) return '#00FF00';
-    //const colors = ['#e6194B', '#f58231', '#ffe119', '#3cb44b', '#4363d8', '#911eb4']; // original colours 
-    //const colors = ['#A8D5BA', '#F9D5E5', '#FCF5C7', '#C2E7E5', '#E5C3D1', '#D0C4DF']; // Pastel Colours 
-    //const colors = ['#A0522D', '#CD853F', '#DEB887', '#F4A460', '#D2B48C', '#BC8F8F']; // Brown Tones
-    //const colors = ['#E69F00', '#56B4E9', '#009E73', '#F0E442', '#0072B2', '#D55E00']; // Accessible tones
-    //const colors = ['#5DA5A4', '#CBA328', '#A97D60', '#666666', '#A2C4C9', '#B4A7D6', '#DD7E6B']; //Dashboard
-    //const colors = ['#E41A1C', '#377EB8', '#4DAF4A', '#984EA3', '#FF7F00', '#FFFF33', '#A65628']; // Bright 
-    //const colors = ['#6B8E23', '#2E8B57', '#3CB371', '#20B2AA', '#4682B4', '#9ACD32', '#D2B48C']; // Greens
+
     const colors = [
   '#1B9E77', // dark teal green
   '#E7298A', // magenta accent
@@ -760,13 +742,7 @@ export function convertToSigmaFormatDynamic(graphData, colourFlag) {
 
     function interpolateColor(gener) {
       if (gener == null) return '#00FF00';
-      //const colors = ['#e6194B', '#f58231', '#ffe119', '#3cb44b', '#4363d8', '#911eb4']; // original colours 
-      //const colors = ['#A8D5BA', '#F9D5E5', '#FCF5C7', '#C2E7E5', '#E5C3D1', '#D0C4DF']; // Pastel Colours 
-      //const colors = ['#A0522D', '#CD853F', '#DEB887', '#F4A460', '#D2B48C', '#BC8F8F']; // Brown Tones
-      //const colors = ['#E69F00', '#56B4E9', '#009E73', '#F0E442', '#0072B2', '#D55E00']; // Accessible tones
-      //const colors = ['#5DA5A4', '#CBA328', '#A97D60', '#666666', '#A2C4C9', '#B4A7D6', '#DD7E6B']; //Dashboard
-      //const colors = ['#E41A1C', '#377EB8', '#4DAF4A', '#984EA3', '#FF7F00', '#FFFF33', '#A65628']; // Bright 
-      //const colors = ['#6B8E23', '#2E8B57', '#3CB371', '#20B2AA', '#4682B4', '#9ACD32', '#D2B48C']; // Greens
+
       const colors = [
     '#1B9E77', // dark teal green
     '#E7298A', // magenta accent

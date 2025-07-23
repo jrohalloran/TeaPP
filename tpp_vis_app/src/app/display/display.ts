@@ -165,18 +165,6 @@ export class DisplayComponent implements AfterViewInit {
     }
   }
 
-  async getPartnerOf(nodeID: any): Promise<void> {
-    console.log('Retrieving Selected:');
-    console.log(nodeID);
-    try {
-      const response = await firstValueFrom(this.backendApiService.getPartnerOf(nodeID));
-      console.log('Postgres Response from getPartnerOf:', response);
-      //this.jsonData = response;
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  }
-
   loadGraph(): void {
     if (this.rendererTop) {
       this.rendererTop.kill();
@@ -269,7 +257,6 @@ export class DisplayComponent implements AfterViewInit {
       console.log("Gettig node value:")
       console.log(nodeData);
       this.getSelectPlantPG([node]);
-      //this.getPartnerOf([node]);
 
     });
 
@@ -357,30 +344,6 @@ export class DisplayComponent implements AfterViewInit {
       this.legend.forEach(item => {
         yearColorMap.set(Number(item.element), item.colour);
       });
-    /*
-    this.nuclearFamilyData.nodes.forEach(element =>{
-      for (let i=0;i<nodeID.length;i++){
-        if (element.id == nodeID[i]){
-          console.log("match")
-          console.log(element);
-          element.color = '#fe6100';
-          console.log(element);
-
-        }else {
-              if (this.selectedColour == "generation"){
-                const originalColor = yearColorMap.get(Number(element.gener));
-                element.color = originalColor || '#1B9E77'; // fallback color if year is missing
-            
-              }
-              if (this.selectedColour == "year"){
-                const originalColor = yearColorMap.get(Number(element.year));
-                element.color = originalColor || '#1B9E77'; // fallback color if year is missing
-            
-              }
-              else{continue}
-        }
-      }
-    });*/
 
     this.nuclearFamilyData.nodes.forEach(node => {
       if (nodeID.includes(node.id)) {
@@ -426,7 +389,6 @@ export class DisplayComponent implements AfterViewInit {
           console.log("Retrieving Data...");
           console.log(nodeID)
           this.getSelectPlantPG(nodeID); // Get entry for select clones
-          //this.getPartnerOf(nodeID);// Get partners of selected clones
 
           const data = [nodeID, this.selectedColour];
 
@@ -454,7 +416,6 @@ export class DisplayComponent implements AfterViewInit {
         try {
           console.log("Retrieving Data...");
           this.getSelectPlantPG([nodeID]); // Get entry for select clones
-          //this.getPartnerOf([nodeID]);// Get partners of selected clones
           const data = [nodeID, this.selectedColour];
           const response = await firstValueFrom(this.backendApiService.getPedigree(data));
           console.log('Response from backend:', response);

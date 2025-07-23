@@ -6,7 +6,6 @@
 
 // Thesis Project 
 
-import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import { Client } from 'pg';
