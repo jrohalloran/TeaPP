@@ -134,6 +134,7 @@
 
       <div class='my-legend' *ngIf="legend.length > 0">
         <h2>Legend</h2>
+        <p>{{selectedColour}}</p>
         <div class='legend-scale'>
           <ul class='legend-labels'>
             <li *ngFor="let item of legend">
@@ -145,6 +146,8 @@
       </div>
       <div class="search-panel">
           <!-- Search Input -->
+           <h2>Search</h2>
+           <p>Enter an individual ID:</p>
           <input
             type="text"
             placeholder="Search..."

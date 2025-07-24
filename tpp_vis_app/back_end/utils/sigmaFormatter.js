@@ -744,8 +744,8 @@ export function convertToSigmaFormatDynamic(graphData, colourFlag) {
     '#1B9E77', // dark teal green
     '#E7298A', // magenta accent
     '#7570B3', // muted violet
-    '#66A61E', // olive green
     '#D95F02', // burnt orange
+    '#66A61E', // olive green
     '#A6761D', // earthy mustard brown
     '#666666'  // dark gray
     ];

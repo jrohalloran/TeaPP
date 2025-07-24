@@ -7,7 +7,7 @@
 
 
 import { fetchAllNodesEdges } from '../services/neo4j-driver.js';
-import { convertToSigmaFormat,
+import {
     allNodeslayerByYearReverse,
     groupSiblings,
     filterNodesWithoutHigherGenDescendants,
