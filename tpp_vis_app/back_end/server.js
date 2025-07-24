@@ -315,7 +315,7 @@ app.post('/uploadEnvTEMPfile', (req, res) => {
 });
 
 
-app.post('/uploadGENOMfile', (req, res) => {
+app.post('/uploadGENOMFile', (req, res) => {
   console.log('Starting Genomic File Upload...');
 
   genom_upload.single('file')(req, res, function (err) {

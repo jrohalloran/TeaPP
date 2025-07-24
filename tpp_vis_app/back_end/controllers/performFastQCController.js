@@ -37,7 +37,7 @@ async function runFastQC(filePaths){
   }catch(err){
     console.log("Unable to send Email/ Invalid Email given")
   }}
-  /*const promises = filePaths.map(path => {
+    const promises = filePaths.map(path => {
     const command = `fastqc "${path}" -o "${report_dir}"`;
     console.log(`Running: ${command}`);
     return execPromise(command)
