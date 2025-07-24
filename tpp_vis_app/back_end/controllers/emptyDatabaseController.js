@@ -6,13 +6,13 @@
 
 // Thesis Project 
 
-import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import { Client } from 'pg';
 import { emptyNeo4jDatabase } from '../services/neo4j-driver.js';
 import { exec } from 'child_process';
 import { promisify } from 'util';
+import { removeTemp_envir_tempDir, removeTemp_evirDir, removeTempDir } from '../services/directories.service.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -64,7 +64,9 @@ export const emptyPostgreSQL= async (req, res) => {
     console.log("Starting Postgres Emptying Function")
 
   try{
-
+    await removeTempDir();
+    await removeTemp_envir_tempDir();
+    await removeTemp_evirDir();
     const flag = await emptyPGDatabase();
     console.log("Flag: "+flag)
 
@@ -82,6 +84,9 @@ export const emptyNeo4j= async (req, res) => {
     console.log("Starting Neo4j Emptying Function")
 
   try{
+    await removeTempDir();
+    await removeTemp_envir_tempDir();
+    await removeTemp_evirDir();
 
     const flag = await emptyNeo4jDatabase();
     console.log("Flag: "+flag)

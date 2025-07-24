@@ -23,6 +23,8 @@ const driver = neo4j.driver(
   }
 );
 
+
+
 // Function for converting Neo4j Integers
 // For handling Year and Gener attributes
 function safeProperties(props) {
@@ -54,12 +56,11 @@ export async function emptyNeo4jDatabase(){
             emptyFlag = false;
         } finally {
             await session.close();
-            await driver.close();
+            //await driver.close();
     }
     console.log("Emptying Neo4j Databases successfully")
     return emptyFlag;
 }
-
 
 
 export async function getNeo4jStatus(){
@@ -132,6 +133,7 @@ export async function fetchNuclearFamilyData(nodeIDs) {
 
   return combinedResult;
 }
+
 
 export async function fetchWholeFamilyData(nodeIDs) {
   if (!Array.isArray(nodeIDs)) nodeIDs = [nodeIDs];
@@ -237,6 +239,8 @@ export async function fetchPedigreeData(nodeIDs) {
   return { nodes: combinedNodes };
 }
 
+
+
 export async function fetchAllNodesEdges2(){
   console.log('fetchAllNodesEdges called...');
   
@@ -291,7 +295,6 @@ export async function fetchAllNodesEdges2(){
   }
 }
 
-
 export async function fetchAllNodesEdges() {
   const session = driver.session();
   try {
@@ -338,7 +341,7 @@ export async function fetchAllNodesEdges() {
 }
 
 
-
+/*
 // Querying PartnerOF 
 // Returns Family nodes 
 export async function fetchPartnerOf(names) {
@@ -373,4 +376,4 @@ export async function fetchPartnerOf(names) {
 
   return allResults;
 }
-
+*/

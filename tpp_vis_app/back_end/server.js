@@ -28,7 +28,6 @@ import pedigreeRoutes from './routes/pedigree.js';
 import allNodesEdgesRoutes from "./routes/allNodesEdges.js"
 import allPlantsRoutes from "./routes/allPlantsPG.js"
 import selectedPlantRoutes from "./routes/selectedPlant.js"
-import getPartnerOfRoutes from "./routes/getPartnerOf.js"
 import processDataRoutes from "./routes/processData.js"
 import compareDataRoutes from "./routes/compareData.js"
 import getCleanDataRoutes from "./routes/getCleanData.js"
@@ -77,7 +76,7 @@ if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir);
 }
 
-
+/*
 if (fs.existsSync(upload_tempDir)){
   console.log("/env_temp_uploads directory exists");
   console.log("---- Removing Directory ----");
@@ -87,9 +86,9 @@ if (!fs.existsSync(upload_tempDir)) {
   console.log("/env_temp_uploads making directory");
   console.log("---- Making Directory ----");
   fs.mkdirSync(upload_tempDir);
-}
+}*/
 
-
+/*
 if (fs.existsSync(upload_rainDir)){
   console.log("/env_uploads directory exists");
   console.log("---- Removing Directory ----");
@@ -98,7 +97,7 @@ if (fs.existsSync(upload_rainDir)){
 if (!fs.existsSync(upload_rainDir)) {
   console.log("---- Making Directory ----");
   fs.mkdirSync(upload_rainDir);
-}
+}*/
 
 
 const uploadGenomDir = path.join(__dirname, 'genom_uploads');
@@ -117,7 +116,7 @@ console.log("Temp Envir Temp Directory: "+temp_envir_temp_dir);
 if (fs.existsSync(temp_dir)){
   console.log("/temp_dir directory exists");
   console.log("---- Removing Directory ----");
-  fs.rmSync(upload_tempDir, { recursive: true, force: true })
+  fs.rmSync(temp_dir, { recursive: true, force: true })
 }
 if (!fs.existsSync(temp_dir)) {
   console.log("---- Making Directory ----");
@@ -367,6 +366,7 @@ app.use('/api', processPedigreeRoutes);
 app.use('/api', updateParentsRoutes); 
 
 
+
 // STAT + SEARCHING Routes
 
 app.use('/api', getStatsRoutes);
@@ -393,7 +393,6 @@ app.use('/api', pedigreeRoutes);// Gets Pedigree of a selected node
 app.use('/api', allNodesEdgesRoutes); // Getting all nodes and edges for first visualisation 
 // Executes Filtering, Grouping and Sigma Conversion
 
-app.use('/api', getPartnerOfRoutes);
 
 
 // POSTGRESQL Routes

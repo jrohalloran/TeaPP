@@ -15,6 +15,7 @@ import { dirname } from 'path';
 import fs_promise from 'fs/promises';
 import fs from 'fs';
 import db from '../services/postgres_db.js';
+import { removeTempDir } from '../services/directories.service.js';
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -448,6 +449,7 @@ export const getStatistics= async (req, res) => {
     console.log("Attempting to process Pedigree Statistics...");
 
     try {
+        await removeTempDir();
         await joinPlants();
         await writeJson();
         await writeFile();

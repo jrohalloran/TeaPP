@@ -106,8 +106,7 @@ export class Overview {
           this.formattedCount = response[6];
           this.genCount = response[7];
 
-          this.statsImages = [/*{ url: this.backendApiService.getDiagramUrl('year_histogram.png'), name: 'histogram', gridArea: 'hero',
-          title: "Parents per Generation",type: "image" },*/
+          this.statsImages = [
         { url: this.backendApiService.getDiagramUrl('year_histogram.html'), name: 'histogram', gridArea: 'hero',
           title: "Parents per Generation",type: "html" }]
 
