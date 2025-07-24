@@ -63,7 +63,6 @@ export async function emptyNeo4jDatabase(){
 }
 
 
-
 export async function getNeo4jStatus(){
     let statusFlag = false;
     const session = driver.session();
@@ -134,6 +133,7 @@ export async function fetchNuclearFamilyData(nodeIDs) {
 
   return combinedResult;
 }
+
 
 export async function fetchWholeFamilyData(nodeIDs) {
   if (!Array.isArray(nodeIDs)) nodeIDs = [nodeIDs];
@@ -239,6 +239,8 @@ export async function fetchPedigreeData(nodeIDs) {
   return { nodes: combinedNodes };
 }
 
+
+
 export async function fetchAllNodesEdges2(){
   console.log('fetchAllNodesEdges called...');
   
@@ -293,7 +295,6 @@ export async function fetchAllNodesEdges2(){
   }
 }
 
-
 export async function fetchAllNodesEdges() {
   const session = driver.session();
   try {
@@ -340,7 +341,7 @@ export async function fetchAllNodesEdges() {
 }
 
 
-
+/*
 // Querying PartnerOF 
 // Returns Family nodes 
 export async function fetchPartnerOf(names) {
@@ -375,4 +376,4 @@ export async function fetchPartnerOf(names) {
 
   return allResults;
 }
-
+*/

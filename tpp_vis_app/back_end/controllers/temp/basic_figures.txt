@@ -1,2 +1,2 @@
 Metric	Count
-Number of Records	47782
+Number of Records	37691

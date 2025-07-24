@@ -632,9 +632,6 @@ export function convertToSigmaFormat(graphData) {
 
 
 // General Functions 
-
-
-
 export function convertToSigmaFormat(graphData) {
   const nodeById = new Map(graphData.nodes.map(n => [n.id, n]));
   const childrenCount = {};
@@ -781,52 +778,65 @@ export function convertToSigmaFormatDynamic(graphData, colourFlag) {
   }if(colourFlag == 'year'){
         function interpolateColor(year) {
               const colors = [
-                      '#1B9E77',
-                      '#E7298A', // magenta accent
-                      '#7570B3', // muted violet
-                      '#66A61E', // olive green
-                      '#D95F02', // burnt orange
-                      '#A6761D', // mustard brown
-                      '#666666', // dark gray
-                      '#1F78B4', // strong blue
-                      '#B2DF8A', // light green
-                      '#FDBF6F', // soft orange
-                      '#CAB2D6', // light lavender
-                      '#FF7F00', // vibrant orange
-                      '#6A3D9A', // deep purple
-                      '#B15928', // deep brown
-                      '#33A02C', // medium green
-                      '#FB9A99', // soft coral
-                      '#A6CEE3', // soft light blue
-                      '#00429D', // deep blue
-                      '#93003A', // deep red
-                      '#FF6E54', // coral
-                      '#F94144', // vivid red
-                      '#F3722C', // orange
-                      '#F8961E', // warm amber
-                      '#F9844A', // soft orange
-                      '#F9C74F', // yellow
-                      '#90BE6D', // green apple
-                      '#43AA8B', // sea green
-                      '#577590', // desaturated blue
-                      '#277DA1', // deep ocean
-                      '#4D908E', // dusty teal
-                      '#577590', // slate blue
-                      '#F6BD60', // pastel yellow
-                      '#F7A072', // salmon
-                      '#84A59D', // sage gray
-                      '#F28482', // coral pink
-                      '#9A031E', // crimson
-                      '#5F0F40', // deep plum
-                      '#0F4C5C', // rich blue
-                      '#3D348B', // indigo
-                      '#7678ED', // periwinkle
-                      '#F7B801', // sunflower yellow
-                      '#A1C181', // fern green
-                      '#619B8A', // pine green
-                      '#E07A5F', // tangerine
-                      '#3D5A80', // denim blue
-                    ];
+                          '#E7298A', // magenta
+                          '#66A61E', // olive green
+                          '#7570B3', // muted violet
+                          '#43AA8B', // sea green
+                          '#93003A', // deep red
+                          '#A1C181', // fern green
+                          '#F9C74F', // yellow
+                          '#6A3D9A', // deep purple
+                          '#A6761D', // mustard brown
+                          '#FF6E54', // coral
+                          '#619B8A', // pine green
+                          '#CAB2D6', // light lavender
+                          '#B15928', // deep brown
+                          '#F7A072', // salmon
+                          '#1F78B4', // strong blue
+                          '#90BE6D', // green apple
+                          '#F94144', // vivid red
+                          '#84A59D', // sage gray
+                          '#277DA1', // deep ocean
+                          '#F6BD60', // pastel yellow
+                          '#5F0F40', // deep plum
+                          '#00429D', // deep blue
+                          '#F28482', // coral pink
+                          '#577590', // slate blue
+                          '#3D5A80', // denim blue
+                          '#D95F02', // burnt orange
+                          '#F8961E', // warm amber   
+                          '#E7298A', // magenta
+                          '#66A61E', // olive green
+                          '#7570B3', // muted violet
+                          '#F3722C', // orange
+                          '#43AA8B', // sea green
+                          '#FDBF6F', // soft orange
+                          '#93003A', // deep red
+                          '#A1C181', // fern green
+                          '#F9C74F', // yellow
+                          '#6A3D9A', // deep purple
+                          '#277DA1', // deep ocean
+                          '#FF6E54', // coral
+                          '#619B8A', // pine green
+                          '#CAB2D6', // light lavender
+                          '#3D5A80', // denim blue
+                          '#F7A072', // salmon
+                          '#1F78B4', // strong blue
+                          '#90BE6D', // green apple
+                          '#F94144', // vivid red
+                          '#84A59D', // sage gray
+                          '#277DA1', // deep ocean
+                          '#F6BD60', // pastel yellow
+                          '#F8961E', // warm amber
+                          '#5F0F40', // deep plum
+                          '#00429D', // deep blue
+                          '#F28482', // coral pink
+                          '#577590', // slate blue
+                          '#FF7F00', // vibrant orange
+                          '#D95F02', // burnt orange
+                          '#F8961E', // warm amber
+                          '#F9844A', // soft orange
+                                            ];
             const index = uniqueYears.indexOf(Number(year));
             return colors[index % colors.length] || '#00FF00';
           }

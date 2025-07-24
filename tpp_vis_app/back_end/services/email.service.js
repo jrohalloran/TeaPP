@@ -1,4 +1,9 @@
-// backend/services/emailService.js
+/*** 
+ * // Date: 20/07/2025
+ * // Jennifer O'Halloran
+ * // IBIX Thesis Project - TPP Visualisation
+***/
+
 import sgMail from '@sendgrid/mail';
 import dotenv from 'dotenv';
 import path from 'path';
@@ -20,10 +25,6 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 export async function sendEmail(to, subject, message) {
 
-    //console.log(__dirname);
-    //console.log(__dirname+'/.env');
-    //console.log("tpp_vis_app/back_end/services/.env");
-    //console.log('SendGrid API Key starts with:', process.env.SENDGRID_API_KEY.substring(0, 5));
 
   const msg = {
     to,

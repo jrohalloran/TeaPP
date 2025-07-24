@@ -14,6 +14,7 @@ import { dirname } from 'path';
 import fs_promise from 'fs/promises';
 import fs from 'fs';
 import db from '../services/postgres_db.js';
+import { removeTemp_evirDir } from '../services/directories.service.js';
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -96,6 +97,7 @@ export const getRainfallStats= async (req, res) => {
 
     console.log("Attempting to process Pedigree Statistics...");
     try {
+        await removeTemp_evirDir();
         await getRainfallData();
         await writeFile();
         await performStatistics();

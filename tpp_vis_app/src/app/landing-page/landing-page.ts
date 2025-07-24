@@ -62,12 +62,14 @@ export class LandingPage {
 
   async emptyPostgreSQL(){
     console.log("Empty Databases clicked");
+
+
     try {
         const response = await firstValueFrom(this.backendApiService.emptyPostgreSQL());
         console.log('Response from backend:', response);
         this.postgreEmptyFlag = response;
         if(this.postgreEmptyFlag){
-          alert('PostgreSQL Database Cleared Successfully - All predigree data deleted.');
+        alert('PostgreSQL Database Cleared Successfully - All predigree data deleted.');
         }else{
           alert('Error in Database Emptying - Data removal unsuccessful');
         }

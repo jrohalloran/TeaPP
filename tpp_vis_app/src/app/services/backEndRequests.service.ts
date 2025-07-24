@@ -34,24 +34,7 @@ export class backendApiService {
 
 
 
-
-
   /// --------------- AUTHENTICATION -------------------------
-
-/*
-  checkUserDetails(data:any[]): Observable<any>{
-        console.log("Sending Inputed Details to back-end");
-        console.log(this.apiUrl);
-        return this.http.post(`${this.apiUrl}/getUserDetails`,data);
-
-  }
-
-
-  createNewUser(data:any[]): Observable<any>{
-        console.log("Sending Inputed Details to back-end");
-        return this.http.post(`${this.apiUrl}/setUserDetails`,data);
-
-  }*/
 
 
   getUsername(): Observable<any>{
@@ -74,7 +57,7 @@ export class backendApiService {
 
   }
 
-    emptyNeo4j(): Observable<any>{
+  emptyNeo4j(): Observable<any>{
         console.log("Sending Emptying request to backend");
         return this.http.get(`${this.apiUrl}/emptyNeo4j`);
 
@@ -171,17 +154,18 @@ export class backendApiService {
     console.log("Retrieving all Nodes and Edges");
     return this.http.get(`${this.apiUrl}/getAllNodesEdges`);
   }
-
+  /*
   // POST REQUESTS 
   getNuclearFamily2(nodeID: string):Observable<any> {
     console.log("Sending Data to /api/getNuclearFamily");
     return this.http.post(`${this.apiUrl}/getNuclearFamily2`,nodeID);
-  }
+  }*/
 
+  /*
   getWholeFamily(nodeID: string):Observable<any> {
     console.log("Sending Data to /api/getWholeFamily");
     return this.http.post(`${this.apiUrl}/getWholeFamily`,nodeID);
-  }
+  }*/
 
   getPedigree(nodeID: any[]):Observable<any> {
     console.log("Sending Data to /api/getPedigree");

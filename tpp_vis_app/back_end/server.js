@@ -28,7 +28,6 @@ import pedigreeRoutes from './routes/pedigree.js';
 import allNodesEdgesRoutes from "./routes/allNodesEdges.js"
 import allPlantsRoutes from "./routes/allPlantsPG.js"
 import selectedPlantRoutes from "./routes/selectedPlant.js"
-import getPartnerOfRoutes from "./routes/getPartnerOf.js"
 import processDataRoutes from "./routes/processData.js"
 import compareDataRoutes from "./routes/compareData.js"
 import getCleanDataRoutes from "./routes/getCleanData.js"
@@ -365,6 +364,7 @@ app.use('/api', insertNeo4jDBRoutes);
 app.use('/api', processPedigreeRoutes); 
 
 app.use('/api', updateParentsRoutes); 
+
 
 
 // STAT + SEARCHING Routes
