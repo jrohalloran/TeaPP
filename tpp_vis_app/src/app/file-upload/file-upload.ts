@@ -182,6 +182,7 @@ onFileSelected(event: Event) {
   }
 */
 
+/*
 async handleFileGenomSelection(event: any) {
   const files: FileList = event.target.files;
 
@@ -212,8 +213,111 @@ async handleFileGenomSelection(event: any) {
 
   // ✅ Log selected files
   console.log('Selected files:', this.selectedGenomFiles.map(f => f.name));
+}*/
+
+async validateFastqFileChunk(file: File, maxRecords: number = 3): Promise<boolean> {
+  return new Promise((resolve) => {
+    const CHUNK_SIZE = 10 * 1024; // 10 KB chunk, should cover a few records
+
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      const text = reader.result as string;
+
+      // Split into lines, filter empty
+      const rawLines = text.split(/\r?\n/);
+      const lines = rawLines.filter(line => line.trim().length > 0);
+
+      const expectedLines = maxRecords * 4;
+      if (lines.length < 4) {
+        console.warn('❌ Not enough lines for one FASTQ record');
+        resolve(false);
+        return;
+      }
+
+      // Only check up to expected lines or available lines whichever is smaller
+      const linesToCheck = lines.slice(0, Math.min(expectedLines, lines.length));
+
+      if (linesToCheck.length % 4 !== 0) {
+        console.warn('❌ Lines do not form complete FASTQ records');
+        resolve(false);
+        return;
+      }
+
+      for (let i = 0; i < linesToCheck.length; i += 4) {
+        const header = linesToCheck[i];
+        const sequence = linesToCheck[i + 1];
+        const plus = linesToCheck[i + 2];
+        const quality = linesToCheck[i + 3];
+
+        if (!header.startsWith('@')) {
+          console.warn(`❌ Header line ${i + 1} does not start with '@'`);
+          resolve(false);
+          return;
+        }
+
+        if (!plus.startsWith('+')) {
+          console.warn(`❌ Plus line ${i + 3} does not start with '+'`);
+          resolve(false);
+          return;
+        }
+
+        if (sequence.length !== quality.length) {
+          console.warn(
+            `❌ Sequence and quality lengths mismatch at record starting line ${i + 1}`
+          );
+          resolve(false);
+          return;
+        }
+      }
+
+      console.log(`✅ FASTQ validation passed for first ${maxRecords} records`);
+      resolve(true);
+    };
+
+    reader.onerror = () => {
+      console.error('❌ FileReader error while reading file chunk');
+      resolve(false);
+    };
+
+    // Read only the first chunk of the file, no full file read
+    const blob = file.slice(0, CHUNK_SIZE);
+    reader.readAsText(blob, 'utf-8');
+  });
 }
 
+async handleFileGenomSelection(event: any) {
+  const files: FileList = event.target.files;
+  if (!files || files.length === 0) return;
+
+  const validFiles: File[] = [];
+
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    const isTextFile = file.name.endsWith('.fastq') || file.name.endsWith('.fq');
+
+    if (!isTextFile) {
+      alert(`Invalid file: ${file.name} — Only .fastq or .fq files are allowed.`);
+      continue;
+    }
+
+    const isValid = await this.validateFastqFileChunk(file, 3); // check first 3 records
+    if (!isValid) {
+      alert(`File ${file.name} failed FASTQ format validation.`);
+      continue;
+    }
+
+    validFiles.push(file);
+  }
+
+  if (validFiles.length === 0) {
+    alert('No valid FASTQ files were selected.');
+    return;
+  }
+
+  this.selectedGenomFiles = validFiles;
+  console.log('Selected files:', this.selectedGenomFiles.map(f => f.name));
+}
 
 
   async uploadFile() {
