@@ -1,0 +1,2 @@
+Metric	Count
+Number of Records	37691

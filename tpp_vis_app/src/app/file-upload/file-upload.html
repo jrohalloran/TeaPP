@@ -40,7 +40,8 @@
         <ul>
           <li>Select your Pedigree data file from your local directory.</li>
           <li>Accepted format: Tab-delimited text file (.txt)</li>
-          <li>Required column names: "ID", "female_parent", "male_parent"</li>
+          <li>Required column names: "ID", "Female_parent", "Male_parent"</li>
+          <img src="pedigree_format.png" alt="Userimage" class="pedigree-img"/>
         </ul>
       </div>
     </div>
@@ -87,19 +88,24 @@
       </div>
     </div>
 
-    <div class="bottom-tab" [class.expanded]="isBottomTabExpanded">
-      <div class="tab-header" (click)="toggleBottomTab()">
+    <div class="bottom-tab-env" [class.expanded]="isBottomTabExpanded">
+      <div class="tab-header-env" (click)="toggleBottomTab()">
         <span class="tab-header-text">
           <mat-icon>{{ isBottomTabExpanded ? 'expand_more' : 'expand_less' }}</mat-icon>
           {{ isBottomTabExpanded ? 'Close Help' : 'Help' }}
         </span>
       </div>
-      <div class="tab-content">
+      <div class="tab-content-env">
         <h3>Need Assistance?</h3>
         <ul>
           <li>Select your environmental data file from your local directory.</li>
           <li>Specify the data type (Rainfall or Temperature) using the radio buttons.</li>
-          <li>Accepted format: Usually CSV or tab-delimited text.</li>
+          <li>Accepted format: Tab-delimited text file (.txt)</li>
+          <div class="images">
+          <p>Temperature format (degrees celsius):</p>
+          <img src="temp_format.png" alt="Userimage" class="temp-img"/>
+          <p>Rainfall format (mm/month):</p>
+          <img src="rainfall_format.png" alt="Userimage" class="rain-img"/></div>
         </ul>
       </div>
     </div>
@@ -161,7 +167,7 @@
         <h3>Need Assistance?</h3>
         <ul>
           <li>Select your genomic data file(s) from your local directory.</li>
-          <li>Accepted formats: .fastq, .fq</li>
+          <li>Accepted fastq file with formats: .fastq, .fq</li>
           <li>Provide a Clone ID before uploading.</li>
         </ul>
       </div>

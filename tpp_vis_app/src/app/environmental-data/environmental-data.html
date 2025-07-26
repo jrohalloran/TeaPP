@@ -1,6 +1,15 @@
 <div class="main-wrapper">
 <div class="title-wrapper">
     <h1>Environmental Data Analysis</h1>
+  <mat-accordion class="help-bar">
+  <mat-expansion-panel class="custom-help-panel">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Help
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+  </mat-expansion-panel>
+</mat-accordion>
 
   <mat-accordion class="analysis-bar">
   <mat-expansion-panel [expanded]="true" class="custom-analysis-panel">
@@ -24,15 +33,6 @@
         <button class = "button" (click)="getRainfallData()" >Rainfall Analysis</button>
       </div>
     </div>
-  </mat-expansion-panel>
-</mat-accordion>
-<mat-accordion class="help-bar">
-  <mat-expansion-panel class="custom-help-panel">
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        Help
-      </mat-panel-title>
-    </mat-expansion-panel-header>
   </mat-expansion-panel>
 </mat-accordion>
 </div>

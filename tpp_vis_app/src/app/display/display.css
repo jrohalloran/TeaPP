@@ -70,6 +70,19 @@
   box-sizing: border-box;
 }
 
+.help-bar {
+  width: 100%;
+  background-color: #f9f9f9;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.custom-help-panel {
+  background-color: #d1dee8; 
+  border-radius: 4px;
+  margin-top: 1rem;
+}
+
+
 /* Pedigree section inside top-fixed */
 .pedigree {
   padding: 1rem;

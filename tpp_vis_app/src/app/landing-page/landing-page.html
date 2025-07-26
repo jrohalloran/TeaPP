@@ -36,7 +36,19 @@
     </button>
   </div>
   <div class="help-content">
-    <p>This is the help section. Provide instructions or guidance here.</p>
+    <h3>Welcome to the Landing Page</h3>
+    <p>Here can select an option to start/continue anlysis of pedigree data.</p>
+    <h4>Upload New Dataset</h4>
+    <p>You can begin to upload a new set of pedigree and related data into TeaPPs database.</p>
+    <p>Including:</p>
+    <p> - Pedigree Data</p>
+    <p> - Environmental Data</p>
+    <p> - Genomic Data</p>
+    <h4>Analyse Existing Dataset</h4>
+    <p>This option navigates you to the home page were you can begin analysis of data that is currently stored in the TeaPP database.</p>
+    <h4>Manage Databases</h4>
+    <p>Currently, only a single dataset can be stored at any one time within the TeaPP database.</p>
+    <p>This option allows you to completely empty the respective databases to start a new analysis.</p>
   </div>
 </div>  
 
@@ -46,7 +58,7 @@
     <!-- Top welcome section -->
     <div class="top-section">
       <h2>Welcome to TeaPP</h2>
-      <p>This visualisation tool helps you upload and explore tea plant pedigree datasets.</p>
+      <p>This visualisation tool helps you upload and explore tea plant pedigree datasets. Select the "Help" for more information.</p>
     </div>
 
     <!-- Bottom two side-by-side containers -->
@@ -57,8 +69,6 @@
         <div class="icon-container">
           <mat-icon class="big-icon">create_new_folder</mat-icon>
         </div>
-        <p>Instructions</p>
-        <p>- Images</p>
         <button mat-raised-button color="primary" (click)="uploadNewData()">Upload New Data</button>
       </div>
 
@@ -68,8 +78,7 @@
         <div class="icon-container">
           <mat-icon class="big-icon">desktop_windows</mat-icon>
         </div>
-        <p>Select from dropdown to analyse existing dataset</p>
-        <p>- Images</p>
+
         <button mat-raised-button color="primary" (click)="analyseExisting()">Analyse Existing Data</button>
       </div>
     </div>
@@ -80,8 +89,6 @@
         <div class="icon-container">
           <mat-icon class="big-icon">storage</mat-icon>
         </div>
-        <p>Instructions</p>
-        <p>- Images</p>
         <button mat-raised-button color="primary" (click)="emptyPostgreSQL()">Empty PostgreSQL Database</button>
         <button mat-raised-button color="primary" (click)="emptyNeo4j()">Empty Neo4j Database</button>
       </div>

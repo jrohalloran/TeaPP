@@ -15,6 +15,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Router } from '@angular/router';
 import { DataTransferService } from '../services/dataTransferService';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 
 
@@ -52,7 +53,8 @@ export interface Neo4jStatRow {
       MatProgressSpinnerModule,
       MatTabsModule,
       MatSort,
-      MatIcon],
+      MatIcon,
+      MatExpansionModule],
   standalone: true,
   templateUrl: './database-page.html',
   styleUrls: ['./database-page.css']

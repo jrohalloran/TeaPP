@@ -35,6 +35,19 @@
   z-index: 10; /* Make sure it's above other content inside the container */
 }
 
+.help-bar {
+  width: 100%;
+  background-color: #f9f9f9;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.custom-help-panel {
+  background-color: #d1dee8; 
+  border-radius: 4px;
+  margin-top: 1rem;
+}
+
+
 .button-wrapper{
   background-color: #f9f9f9;
   padding: 2rem;
