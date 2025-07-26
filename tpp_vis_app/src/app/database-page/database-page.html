@@ -3,6 +3,18 @@
   <div class="button-wrapper">
     <h1>Database Status <mat-icon>storage</mat-icon></h1>
 
+  <mat-accordion class="help-bar">
+  <mat-expansion-panel class="custom-help-panel">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Help
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <p>This page provides a summary of the current contents of the TeaPP databases. The current status of each can be seen by the their "status" label. Each database can be restarted manually using the repestive "restart" button. Then the summary information refreshed using the "refresh" button.</p>
+    <p>A search feature below facilitates that querying of the database for a specific plant/clone ID within the stored pedigree data. Results for each are displayed beneath. </p>
+  </mat-expansion-panel>
+</mat-accordion>
+    <p>Refresh Databases:</p>
     <button class = "refresh-button" (click)="refreshAll()"><mat-icon>refresh</mat-icon></button>
   </div>
 

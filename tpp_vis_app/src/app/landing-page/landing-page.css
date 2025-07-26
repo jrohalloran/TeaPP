@@ -10,6 +10,7 @@ html, body {
   display: flex;
   flex-direction: column;
   height: auto;
+  min-height: 1200px;
   background-color: #d3e0d3;
 }
 

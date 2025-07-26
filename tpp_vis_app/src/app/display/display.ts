@@ -6,6 +6,7 @@ import { firstValueFrom } from 'rxjs';
 import { VisualisationService } from '../services/visualisation.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 
 
@@ -44,7 +45,7 @@ interface legend{
 @Component({
   selector: 'app-visualisation',
   standalone: true,
-  imports: [CommonModule, FormsModule],  // Import CommonModule here to use *ngIf, etc.
+  imports: [CommonModule, FormsModule, MatExpansionModule],  // Import CommonModule here to use *ngIf, etc.
   templateUrl: './display.html',
   styleUrls: ['./display.css']
 })
