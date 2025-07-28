@@ -310,7 +310,7 @@ export class DatabasePage {
         console.log('Response from backend:', response);
         this.neo4jRestartFlag=response;
         this.loading = false;
-        if(response.message == "success"){
+        if(response.success){
           alert('Neo4j Database Sucessfully Restarted - Please refresh the Database Tables.');
         }else{
           alert('Error in Neo4j Database Restart');

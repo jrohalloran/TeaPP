@@ -103,6 +103,8 @@
 
 .custom-analysis-panel {
   background-color: #d1dee8; 
+  margin-top: 1rem;
+  margin-bottom: 1rem;
   border-radius: 4px;
 }
 
@@ -110,6 +112,7 @@
   background-color: #d1dee8; 
   border-radius: 4px;
   margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 .content-container{
