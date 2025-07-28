@@ -95,7 +95,7 @@
         </mat-form-field>
 
         <!-- Search Button -->
-        <button mat-stroked-button color="primary" (click)="performSearch()">
+        <button mat-raised-button color="primary" (click)="performSearch()">
           Search
         </button>
 
@@ -182,10 +182,10 @@
 
             <!-- Buttons stay visible below table -->
             <div class="button-container">
-              <button mat-stroked-button color="primary" (click)="toggleSelectAllToRemove()">
+              <button mat-raised-button color="primary" (click)="toggleSelectAllToRemove()">
                 {{ areAllRemoved() ? 'Deselect All' : 'Select All to Remove' }}
               </button>
-              <button mat-stroked-button color="accent" (click)="toggleSelectUnusedToRemove()" style="margin-left: 8px;">
+              <button mat-raised-button color="primary" (click)="toggleSelectUnusedToRemove()" style="margin-left: 8px;">
                 {{ areAllUnusedRemoved() ? 'Deselect Unused' : 'Select All Unused' }}
               </button>
               <button mat-raised-button color="primary" (click)="onProceed()">

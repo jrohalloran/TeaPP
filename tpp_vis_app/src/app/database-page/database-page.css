@@ -18,7 +18,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  z-index: 10; /* Make sure it's above other content inside the container */
+  z-index: 10;
 }
 
 .loading-overlay-database {
@@ -27,12 +27,12 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: #ccc(255, 255, 255, 0.8); /* Optional: semi-transparent background */
+  background: rgba(255, 255, 255, 0.8); /* Optional: semi-transparent background */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  z-index: 10; /* Make sure it's above other content inside the container */
+  z-index: 10;
 }
 
 .help-bar {
