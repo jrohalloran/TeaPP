@@ -17,21 +17,27 @@ from sklearn.decomposition import PCA
 from sklearn.manifold import MDS
 import os
 
+import plotly.express as px
 
 chunk_size = 1000  # rows per chunk
 matrix_chunks = []
 row_labels = []
 
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir) # Scripts
+temp_dir = os.path.join(parent_dir,"temp")
+GENERATION_FILE = os.path.join(temp_dir, "pedigree.txt")
 
 
-npy_file = "kinship_matrix.npy"
+npy_file = os.path.join(temp_dir,"kinship_matrix.npy")
+txt_file = os.path.join(temp_dir,"kinship_matrix.txt")
 
 if os.path.exists(npy_file):
     print(f"Loading matrix from {npy_file}...")
     K = np.load(npy_file)
 else:
     print("Reading kinship.txt and assembling matrix...")
-    with open("kinship_matrix.txt") as f:
+    with open(txt_file) as f:
         header = f.readline().strip().split()[1:]
         print(f"Header loaded with {len(header)} columns")
 
@@ -73,12 +79,6 @@ K_small = block_reduce(K, block_size=block_size, func=np.nanmean)
 print(f"Downsampled matrix shape: {K_small.shape}")
 
 
-current_dir = os.path.dirname(os.path.abspath(__file__))
-parent_dir = os.path.dirname(current_dir) # Scripts
-temp_dir = os.path.join(parent_dir,"temp")
-GENERATION_FILE = os.path.join(temp_dir, "pedigree.txt")
-
-
 OUTDIR = os.path.join(parent_dir, "kinship_plots")
 os.makedirs(OUTDIR, exist_ok=True)
 
@@ -89,6 +89,17 @@ plt.title(f"Downsampled Kinship Matrix (block size={block_size})")
 plt.savefig(f"{OUTDIR}/kinship_heatmap.png", dpi=300)
 plt.close()
 
+
+fig = px.imshow(
+    K_small,
+    color_continuous_scale="viridis",
+    title=f"Downsampled Kinship Matrix (block size={block_size})",
+    aspect="auto"
+)
+fig.update_layout(margin=dict(l=40, r=40, t=60, b=40))
+fig.write_html(f"{OUTDIR}/kinship_heatmap.html")
+#fig.show()
+
 # 2. Histogram of kinship values
 plt.figure(figsize=(8,5))
 plt.hist(K.flatten(), bins=100, color='skyblue', edgecolor='black')
@@ -98,86 +109,69 @@ plt.ylabel("Frequency")
 plt.savefig(f"{OUTDIR}/kinship_histogram.png", dpi=300)
 plt.close()
 
-# 3. KDE plot of kinship values
-#plt.figure(figsize=(8,5))
-#sns.kdeplot(K.flatten(), bw_adjust=0.5)
-#plt.title("Density of Kinship Values")
-#plt.xlabel("Kinship")
-#plt.savefig(f"{outdir}/kinship_density.png", dpi=300)
-#plt.close()
+# Flatten and clean data
+kinship_vals = K.flatten()
+kinship_vals = kinship_vals[np.isfinite(kinship_vals)]
 
-# 4. Clustered heatmap
+# Downsample for performance
+if len(kinship_vals) > 1_000_000:
+    print(f"Sampling from {len(kinship_vals):,} kinship values for plotting...")
+    kinship_vals = np.random.choice(kinship_vals, size=1_000_000, replace=False)
+
+# Create DataFrame
+kinship_df = pd.DataFrame({'Kinship': kinship_vals})
+
+# Plot
+fig = px.histogram(
+    kinship_df,
+    x='Kinship',
+    nbins=100,
+    title="Histogram of Kinship Values (Sampled)",
+    color_discrete_sequence=['skyblue']
+)
+fig.update_traces(marker_line_color="black", marker_line_width=1)
+fig.update_layout(
+    xaxis_title="Kinship",
+    yaxis_title="Frequency",
+    height=500,
+    width=800
+)
+fig.write_html(f"{OUTDIR}/kinship_histogram.html")
+fig.show()
+
+
+# 3. Clustered heatmap
 sns.clustermap(K_small, cmap="viridis", figsize=(12, 12))
 plt.suptitle("Clustered Kinship Heatmap")
 plt.savefig(f"{OUTDIR}/kinship_clustermap.png", dpi=300)
 plt.close()
 
-# 5. PCA plot
-#pca = PCA(n_components=2)
-#coords = pca.fit_transform(K)
-#plt.figure(figsize=(8,6))
-#plt.scatter(coords[:,0], coords[:,1], s=5)
-#plt.title("PCA of Kinship Matrix")
-#plt.xlabel("PC1")
-#plt.ylabel("PC2")
-#plt.savefig(f"{outdir}/kinship_pca.png", dpi=300)
-#plt.close()
+
+from scipy.cluster.hierarchy import linkage, leaves_list
+
+# Cluster rows and columns
+row_linkage = linkage(K_small, method='ward')
+col_linkage = linkage(K_small.T, method='ward')
+
+row_order = leaves_list(row_linkage)
+col_order = leaves_list(col_linkage)
+
+K_clustered = K_small[np.ix_(row_order, col_order)]
+
+fig = px.imshow(
+    K_clustered,
+    color_continuous_scale="viridis",
+    title="Clustered Kinship Heatmap",
+    aspect="auto"
+)
+fig.update_layout(margin=dict(l=40, r=40, t=60, b=40))
+fig.write_html(f"{OUTDIR}/kinship_clustermap.html")
+#fig.show()
 
 
-meta_df = pd.read_table(GENERATION_FILE, dtype={'ID': str})
-meta_df = meta_df.set_index('ID')
-IDs = [...]
-assert len(IDs) == K.shape[0], "Mismatch between IDs and kinship matrix shape"
 
-missing = [i for i in IDs if i not in meta_df.index]
-if missing:
-    raise ValueError(f"Missing IDs in metadata: {missing}")
 
-# Get generations in order
-generations_ordered = meta_df.loc[IDs, 'gener'].astype(str).values
-
-# Encode generation labels
-le = LabelEncoder()
-generation_labels = le.fit_transform(generations_ordered)
-
-# Perform PCA
-pca = PCA(n_components=2)
-coords = pca.fit_transform(K)
-
-# PCA
-pca = PCA(n_components=2)
-coords = pca.fit_transform(K)
-
-# Plot
-plt.figure(figsize=(8, 6))
-scatter = plt.scatter(coords[:, 0], coords[:, 1], c=generation_labels, cmap='tab10', s=5)
-plt.title("PCA of Kinship Matrix")
-plt.xlabel("PC1")
-plt.ylabel("PC2")
-
-# Legend
-handles, _ = scatter.legend_elements(prop="colors", alpha=0.6)
-plt.legend(handles, le.classes_, title="Generation", bbox_to_anchor=(1.05, 1), loc='upper left')
-
-# Save
-plt.tight_layout()
-plt.savefig(f"{OUTDIR}/kinship_pca_coloured.png", dpi=300)
-plt.close()
-
-#
-# 6. MDS plot
-#mds = MDS(n_components=2, dissimilarity='precomputed', random_state=42)
-#dist_matrix = 1 - K  # convert kinship to distance-like metric
-#mds_coords = mds.fit_transform(dist_matrix)
-#plt.figure(figsize=(8,6))
-#plt.scatter(mds_coords[:,0], mds_coords[:,1], s=5)
-#plt.title("MDS of Kinship Matrix")
-#plt.xlabel("Dimension 1")
-#plt.ylabel("Dimension 2")
-#plt.savefig(f"{outdir}/kinship_mds.png", dpi=300)
-#plt.close()
-
-# 7. Distribution of mean kinship per individual
+# 4. Distribution of mean kinship per individual
 means = np.nanmean(K, axis=1)
 plt.figure(figsize=(8,5))
 plt.hist(means, bins=50, color='salmon', edgecolor='black')
@@ -186,6 +180,20 @@ plt.xlabel("Mean Kinship")
 plt.ylabel("Frequency")
 plt.savefig(f"{OUTDIR}/kinship_mean_histogram.png", dpi=300)
 plt.close()
+
+means = np.nanmean(K, axis=1)
+fig = px.histogram(
+    means,
+    nbins=50,
+    title="Distribution of Mean Kinship per Individual",
+    labels={'value': 'Mean Kinship'},
+    color_discrete_sequence=['salmon']
+)
+fig.update_traces(marker_line_color="black", marker_line_width=1)
+fig.update_layout(xaxis_title="Mean Kinship", yaxis_title="Frequency")
+fig.write_html(f"{OUTDIR}/kinship_mean_histogram.html")
+#fig.show()
+
 
 print(f"All plots saved in folder: {OUTDIR}")
 

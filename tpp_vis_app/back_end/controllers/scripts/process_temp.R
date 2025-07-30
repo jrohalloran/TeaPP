@@ -17,6 +17,9 @@ library(janitor)
 library(stringr)
 library(zoo) 
 library(ggrepel)
+library(plotly)
+library(htmlwidgets)
+library(pandoc)
 
 
 args <- commandArgs(trailingOnly = TRUE)
@@ -82,6 +85,12 @@ g<-ggplot(df_long, aes(x = month, y = value, color = stat, group = stat)) +
 
 ggsave(file, plot = g, width = 6, height = 6, dpi = 300)
 
+file<- paste0(temp_dir,"/temperature_year_month.html")
+g_plotly <- ggplotly(g)
+# Save as standalone HTML
+saveWidget(g_plotly, file, selfcontained = FALSE)
+
+
 
 ## LAYERED LINE PLOT
 
@@ -96,6 +105,12 @@ g<-ggplot(df_long, aes(x = month, y = value, group = interaction(year, stat), co
 
 
 ggsave(file, plot = g, width = 6, height = 6, dpi = 300)
+
+file<- paste0(temp_dir,"/temperature_year_layered.html")
+g_plotly <- ggplotly(g)
+# Save as standalone HTML
+saveWidget(g_plotly, file, selfcontained = FALSE)
+
 
 
 # BOX PLOT by year 
@@ -113,3 +128,82 @@ g<-ggplot(df_long, aes(x = stat, y = value, fill = as.factor(year))) +
         panel.background = element_rect(fill = "white", color = NA))
 
 ggsave(file, plot = g, width = 6, height = 6, dpi = 300)
+
+file<- paste0(temp_dir,"/temperature_boxplot_year.html")
+g_plotly <- ggplotly(g)
+# Save as standalone HTML
+saveWidget(g_plotly, file, selfcontained = FALSE)
+
+
+print(head(df_long))
+
+mean_df <- subset(df_long, stat == "MEAN")
+min_df<-subset(df_long, stat == "MINIMUM")
+max_df<-subset(df_long, stat == "MAXIMUM")
+
+## MEAN
+
+
+file<- paste0(temp_dir,"/temperature_boxplot_MEAN.png")
+g<-ggplot(mean_df, aes(x = year, y = value)) +
+  geom_boxplot(fill = "pink", position = position_dodge(width = 0.8)) +
+  labs(
+    title = "Monthly MEAN Temperature Summary by Year",
+    x = "Year",
+    y = "Temperature (°C)"
+  ) +
+  theme_minimal() +
+  scale_y_continuous(limits = c(5, 40), breaks = seq(5, 40, by = 5))+
+  theme(legend.position = "none",plot.background = element_rect(fill = "white", color = NA),  # White background
+        panel.background = element_rect(fill = "white", color = NA))
+ggsave(file, plot = g, width = 6, height = 6, dpi = 300)
+
+file<- paste0(temp_dir,"/temperature_boxplot_MEAN.html")
+g_plotly <- ggplotly(g)
+# Save as standalone HTML
+saveWidget(g_plotly, file, selfcontained = FALSE)
+
+
+## MINIMUM
+file<- paste0(temp_dir,"/temperature_boxplot_MIN.png")
+g<-ggplot(min_df, aes(x = year, y =value)) +
+  geom_boxplot(fill="skyblue",position = position_dodge(width = 0.8)) +
+  labs(
+    title = "Monthly MINIMUM Temperature Summary by Year",
+    x = "Year",
+    y = "Temperature (°C)",
+    fill = "Year"
+  ) +
+  theme_minimal()+
+  scale_y_continuous(limits = c(5, 40), breaks = seq(5, 40, by = 5))+
+  theme(legend.position = "none",plot.background = element_rect(fill = "white", color = NA),  # White background
+        panel.background = element_rect(fill = "white", color = NA))
+ggsave(file, plot = g, width = 6, height = 6, dpi = 300)
+
+file<- paste0(temp_dir,"/temperature_boxplot_MIN.html")
+g_plotly <- ggplotly(g)
+# Save as standalone HTML
+saveWidget(g_plotly, file, selfcontained = FALSE)
+
+
+
+## MAXIMUM
+file<- paste0(temp_dir,"/temperature_boxplot_MAX.png")
+g<-ggplot(max_df, aes(x = year, y =value)) +
+  geom_boxplot(fill = "lightgreen",position = position_dodge(width = 0.8)) +
+  labs(
+    title = "Monthly MAXIMUM Temperature Summary by Year",
+    x = "Year",
+    y = "Temperature (°C)",
+    fill = "Year"
+  ) +
+  theme_minimal()+
+  scale_y_continuous(limits = c(5, 40), breaks = seq(5, 40, by = 5))+
+  theme(legend.position = "none",plot.background = element_rect(fill = "white", color = NA),  # White background
+        panel.background = element_rect(fill = "white", color = NA))
+ggsave(file, plot = g, width = 6, height = 6, dpi = 300)
+
+file<- paste0(temp_dir,"/temperature_boxplot_MAX.html")
+g_plotly <- ggplotly(g)
+# Save as standalone HTML
+saveWidget(g_plotly, file, selfcontained = FALSE)

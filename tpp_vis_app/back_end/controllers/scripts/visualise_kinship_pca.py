@@ -12,6 +12,8 @@ import seaborn as sns
 import pandas as pd
 import os
 from sklearn.decomposition import PCA
+import plotly.express as px
+import plotly.graph_objects as go
 
 # ==== Settings ====
 KINSHIP_NPY = "kinship.npy"         # Must be 47,000 x 47,000
@@ -23,6 +25,9 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir) # Scripts
 temp_dir = os.path.join(parent_dir,"temp")
 GENERATION_FILE = os.path.join(temp_dir, "pedigree.txt")
+npy_file = os.path.join(temp_dir,"kinship_matrix.npy")
+txt_file = os.path.join(temp_dir,"kinship_matrix.txt")
+
 
 
 OUTDIR = os.path.join(parent_dir, "kinship_plots")
@@ -30,7 +35,7 @@ os.makedirs(OUTDIR, exist_ok=True)
 
 # ==== Load Kinship Matrix ====
 print("Loading kinship matrix...")
-K = np.load(KINSHIP_NPY)  
+K = np.load(npy_file)  
 print(f"Kinship matrix shape: {K.shape}")
 assert K.shape[0] == K.shape[1], "Kinship matrix must be square."
 
@@ -38,6 +43,7 @@ assert K.shape[0] == K.shape[1], "Kinship matrix must be square."
 print(f"📄 Loading generation data from {GENERATION_FILE}...")
 gen_df = pd.read_csv(GENERATION_FILE, sep="\t", comment="#", header=0)
 generations = gen_df["gener"].values
+individuals = gen_df["ID"].astype(str).values
 
 print(f"Kinship rows: {K.shape[0]}")
 print(f"Generation rows: {len(gen_df)}")
@@ -98,6 +104,29 @@ plt.tight_layout()
 plt.savefig(f"{OUTDIR}/pca_by_generation_pc1_pc2.png", dpi=300)
 plt.close()
 
+pca_df = pd.DataFrame(pcs[:, :3], columns=["PC1", "PC2", "PC3"])
+pca_df["Generation"] = generations
+pca_df["Individual"] = individuals
+
+hover_data={"Individual": True, "Generation": True}
+
+fig = px.scatter(
+    pca_df,
+    x="PC1",
+    y="PC2",
+    color="Generation",
+    title="PCA of Kinship Matrix: PC1 vs PC2",
+    labels={
+        "PC1": f"PC1 ({explained_var[0]*100:.2f}% variance)",
+        "PC2": f"PC2 ({explained_var[1]*100:.2f}% variance)"
+    },
+    color_discrete_sequence=px.colors.qualitative.Dark2,
+    height=600,
+    hover_data={"Individual": True, "Generation": True}
+)
+fig.update_traces(marker=dict(size=4, opacity=0.7), selector=dict(mode='markers'))
+fig.write_html(f"{OUTDIR}/pca_by_generation_pc1_pc2.html")
+
 # ==== Optional: PC1 vs PC3 ====
 print("📈 Plotting PC1 vs PC3...")
 plt.figure(figsize=(10, 8))
@@ -127,5 +156,63 @@ plt.tight_layout()
 plt.savefig(f"{OUTDIR}/pca_variance_explained.png", dpi=300)
 plt.close()
 
-print("✅ PCA completed and plots saved to:", os.path.abspath(OUTDIR))
+fig = go.Figure()
 
+fig.add_trace(go.Scatter(
+    x=np.arange(1, N_COMPONENTS + 1),
+    y=np.cumsum(explained_var) * 100,
+    mode='lines+markers',
+    name='Cumulative Variance'
+))
+
+fig.add_hline(y=80, line_dash="dash", line_color="red", annotation_text="80% threshold")
+
+fig.update_layout(
+    title="Cumulative Variance Explained by PCA",
+    xaxis_title="Number of Principal Components",
+    yaxis_title="Cumulative Variance Explained (%)",
+    height=500
+)
+
+fig.write_html(f"{OUTDIR}/pca_variance_explained.html")
+# fig.show()
+
+# === Scree Plot ===
+print("Plotting Scree Plot...")
+plt.figure(figsize=(8, 6))
+components = np.arange(1, N_COMPONENTS + 1)
+plt.plot(components, explained_var * 100, marker='o', linestyle='-', color='blue')
+plt.xticks(components)
+plt.xlabel("Principal Component")
+plt.ylabel("Explained Variance (%)")
+plt.title("Scree Plot of PCA on Kinship Matrix")
+plt.grid(True)
+plt.tight_layout()
+plt.savefig(f"{OUTDIR}/scree_plot.png", dpi=300)
+plt.close()
+print("Scree plot saved.")
+
+# === Scree Plot using Eigenvalues ===
+print("Plotting Scree Plot (Eigenvalues)...")
+eigenvalues = pca.explained_variance_
+
+plt.figure(figsize=(8, 6))
+components = np.arange(1, len(eigenvalues) + 1)
+plt.plot(components, eigenvalues, marker='o', linestyle='-', color='darkorange')
+plt.xticks(components)
+plt.xlabel("Principal Component")
+plt.ylabel("Eigenvalue")
+plt.title("Scree Plot (Eigenvalues) of PCA on Kinship Matrix")
+plt.grid(True)
+plt.tight_layout()
+plt.savefig(f"{OUTDIR}/scree_plot_eigenvalues.png", dpi=300)
+plt.close()
+print("Scree plot (eigenvalues) saved.")
+
+
+
+
+
+
+
+print("✅ PCA completed and plots saved to:", os.path.abspath(OUTDIR))

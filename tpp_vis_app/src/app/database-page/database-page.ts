@@ -15,6 +15,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Router } from '@angular/router';
 import { DataTransferService } from '../services/dataTransferService';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatExpansionModule } from '@angular/material/expansion';
+
 
 
 
@@ -51,24 +53,33 @@ export interface Neo4jStatRow {
       MatProgressSpinnerModule,
       MatTabsModule,
       MatSort,
-      MatIcon],
+      MatIcon,
+      MatExpansionModule],
   standalone: true,
   templateUrl: './database-page.html',
   styleUrls: ['./database-page.css']
 })
 
 export class DatabasePage {
+  loading: boolean = false;
+  searchloading: boolean = false;
 
   //@Input() dataSource: postgreSQLTableData[] = [];
 
     postgreSQLTableData: any[] = [];
     neo4jTableData: any[] = [];
 
+    pgStatus = false;
+    neoStatus = false;
+    neoStatusMessage: string = '';
+    pgStatusMessage = '';
+
     postgresTableColumns = ['table_name','rows', 'total_size'];
     neo4jDisplayedColumns: string[] = ['key', 'value'];
 
     postgresSearchColumns  = ['correct_id', 'correct_female', 'correct_male', 'year', 'generation'];
     neo4jSearchColumns = ['source', 'relation', 'target'];
+    groupedSearchColumns = ['expand', 'female_parent', 'male_parent', 'year', 'entries'];
 
         // Search Attributes 
     searchInput: string = '';
@@ -78,6 +89,14 @@ export class DatabasePage {
    // neo4jSearch: any[] = [];
     postgresSearch = new MatTableDataSource<any>([]);  // initialize with empty array
     neo4jSearch = new MatTableDataSource<any>([]); 
+    groupedPGSearch: any[] = [];
+
+    expandedElement:  any | null = null;
+
+
+    postgreRestartFlag: boolean | undefined;
+    neo4jRestartFlag: boolean | undefined;
+
 
     @ViewChild('postgresSort') postgresSort!: MatSort;
     @ViewChild('neo4jSort') neo4jSort!: MatSort;
@@ -91,10 +110,11 @@ export class DatabasePage {
 
 
     async ngAfterViewInit(): Promise<void> {
+      this.loading = true;
 
-
-      await this.getPostgresStats();
-      await this.getNeo4jStats();
+      await this.getDBStatus();// Getting the Status of the Databases - are they live?
+      await this.getPostgresStats();// Get Statistics for PostgreSQL DB
+      await this.getNeo4jStats();// Get Statistics for Neo4j DB
       this.postgresSearch.sort = this.postgresSort;
       this.postgresSearch.sortingDataAccessor = (item, property) => {
         switch(property) {
@@ -116,6 +136,7 @@ export class DatabasePage {
             return (item[property] || '').toString().toLowerCase();
         }
       };
+      this.loading = false;
 
 
     }
@@ -126,7 +147,6 @@ export class DatabasePage {
     }
 
     populateNeo4jTable(response: any[]){
-
       this.neo4jTableData = response;
 
     }
@@ -165,9 +185,43 @@ export class DatabasePage {
     }
 
 
+    async getDBStatus(){
+      
+      console.log('Getting DB Status');
 
+        try {
+          const response = await firstValueFrom(this.backendApiService.getDBStatus());
+          console.log('Postgres Stats Response from backend:', response);
+          this.postgreSQLTableData = response;
+          this.pgStatus = response.pg;
+          this.neoStatus = response.neo;
+          if (this.pgStatus){
+            this.pgStatusMessage = "Live";
+          }else{
+            this.pgStatusMessage = "Offline";
+
+          }
+          if (this.neoStatus){
+            this.neoStatusMessage = "Live";
+          }else{
+            this.neoStatusMessage = "Offline";
+
+          }
+
+
+
+
+
+
+        } catch (error) {
+              console.error('Error:', error);
+
+      }
+
+    }
 
     async performSearch() {
+    this.searchloading=true;
     const term = this.searchInput?.toLowerCase().trim();
     this.searchPerformed = true;
     console.log(this.searchInput);
@@ -181,11 +235,92 @@ export class DatabasePage {
       console.log('Search Response from backend:', response);
       this.postgresSearch.data = response['postgres'] || [];
       this.neo4jSearch.data = response['neo4j'] || [];
-      
+      this.groupedPGSearch = response['grouped'] || [];
+      this.searchloading=false;
     }
     catch(error){
       console.error('Error:', error);
     }
   }
-  
+
+    async refreshAll(){
+      this.loading = true;
+
+      console.log("Refresh Database tables");
+            await this.getDBStatus();
+      await this.getPostgresStats();
+      await this.getNeo4jStats();
+      this.postgresSearch.sort = this.postgresSort;
+      this.postgresSearch.sortingDataAccessor = (item, property) => {
+        switch(property) {
+          case 'rows':
+          case 'total_size':
+            return Number(item[property]) || 0;
+          default:
+            return (item[property] || '').toString().toLowerCase();
+        }
+      };
+
+      this.neo4jSearch.sort = this.neo4jSort;
+      this.neo4jSearch.sortingDataAccessor = (item, property) => {
+        switch(property) {
+          case 'nodeCount':
+          case 'relationshipCount':
+            return Number(item[property]) || 0;
+          default:
+            return (item[property] || '').toString().toLowerCase();
+        }
+      };
+      this.loading = false;
+
+
+    }
+
+    toggleRow(row: any) {
+    console.log(this.expandedElement);
+    this.expandedElement = this.expandedElement === row ? null : row;
+  }
+
+
+  async restartPostgres(){
+    this.loading = true;
+    console.log("Restart Postgres Selected");
+        try {
+        const response = await firstValueFrom(this.backendApiService.restartPostgreSQL());
+        console.log('Response from backend:', response);
+        this.postgreRestartFlag=response;
+        this.loading = false;
+        if(response.message == "success"){
+          alert('PostgreSQL Database Sucessfully Restarted - Please refresh the Database Tables.');
+        }else{
+          alert('Error in PostgreSQL Database Restart');
+        }
+    } catch (error) {
+            console.error('Error:', error);
+    
+    }
+
+  }
+
+  async restartNeo4j(){
+    this.loading = true;
+    console.log("Restart Neo4j Selected");
+    try {
+        const response = await firstValueFrom(this.backendApiService.restartNeo4j());
+        console.log('Response from backend:', response);
+        this.neo4jRestartFlag=response;
+        this.loading = false;
+        if(response.success){
+          alert('Neo4j Database Sucessfully Restarted - Please refresh the Database Tables.');
+        }else{
+          alert('Error in Neo4j Database Restart');
+        }
+    } catch (error) {
+            console.error('Error:', error);
+    
+    }
+
+
+  }
+
 }

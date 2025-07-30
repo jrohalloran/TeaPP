@@ -10,9 +10,12 @@
     </button>
 
     <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="onHome()">Home<mat-icon>home</mat-icon></button>
       <button mat-menu-item (click)="onProfile()">Profile<mat-icon>account_circle</mat-icon></button>
       <button mat-menu-item (click)="onSettings()">Settings<mat-icon>settings</mat-icon></button>
-      <button mat-menu-item (click)="onLogout()">Logout<mat-icon>logout</mat-icon></button>
+      <button mat-menu-item (click)="newAnalysis()">New Analysis<mat-icon>add</mat-icon></button>
+      <button mat-menu-item (click)="onHelp()">Help<mat-icon>question_mark</mat-icon></button>
+
     </mat-menu>
 
     <div class = "user-details">
@@ -33,14 +36,22 @@
       </button>
     </div>
     <div class="help-content">
-      <p>This is the help section. Provide instructions or guidance here.</p>
+      <h4>Welcome to the Upload Page</h4>
+      <p>Here you can upload all data to be stored in the TeaPP databases including:</p>
+      <p> - Pedigree Data</p>
+      <p> - Environmental Data; Rainfall & Temperature</p>
+      <p> - Genomic Data; Fastq files</p>
+
+      <p>Each datatype can be uploaded to TeaPP by selecting its respective tab within the central upload diaply.</p>
+      <p>Please see each respective "Help" dropdown for the required file formats.</p>
+      <p>After successful upload the data can be explored and analysis in the Homepage. Navigation to the homepage will either occur at the end of upload, or can be selected via the "Menu" dropdown.</p>
     </div>
   </div>  
 
   <!-- Loading overlay -->
   <div class="loading-overlay" *ngIf="loading">
     <mat-progress-spinner mode="indeterminate" diameter="60" color="primary"></mat-progress-spinner>
-    <div style="margin-top: 10px; font-size: 1.2rem; color: #333;">Loading data...</div>
+    <div style="margin-top: 10px; font-size: 1.2rem; color: #333;">Uploading data...</div>
   </div>
 
   <!-- PHASE 1: Centered Upload View -->
@@ -57,6 +68,7 @@
   (onConfirm)="onModalConfirm()"
   (onCancel)="onModalCancel()"
   ></app-modal>
+
 
   <!-- Main container split left and right -->
   <div *ngIf="apiResult?.length" class="main-split">
@@ -83,7 +95,7 @@
         </mat-form-field>
 
         <!-- Search Button -->
-        <button mat-stroked-button color="primary" (click)="performSearch()">
+        <button mat-raised-button color="primary" (click)="performSearch()">
           Search
         </button>
 
@@ -170,10 +182,10 @@
 
             <!-- Buttons stay visible below table -->
             <div class="button-container">
-              <button mat-stroked-button color="primary" (click)="toggleSelectAllToRemove()">
+              <button mat-raised-button color="primary" (click)="toggleSelectAllToRemove()">
                 {{ areAllRemoved() ? 'Deselect All' : 'Select All to Remove' }}
               </button>
-              <button mat-stroked-button color="accent" (click)="toggleSelectUnusedToRemove()" style="margin-left: 8px;">
+              <button mat-raised-button color="primary" (click)="toggleSelectUnusedToRemove()" style="margin-left: 8px;">
                 {{ areAllUnusedRemoved() ? 'Deselect Unused' : 'Select All Unused' }}
               </button>
               <button mat-raised-button color="primary" (click)="onProceed()">
@@ -212,13 +224,6 @@
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="removed">
-          <th mat-header-cell *matHeaderCellDef> Remove </th>
-          <td mat-cell *matCellDef="let element">
-            <mat-checkbox [(ngModel)]="element.removed"></mat-checkbox>
-          </td>
-        </ng-container>
-
         <tr mat-header-row *matHeaderRowDef="secondDisplayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: secondDisplayedColumns;"></tr>
       </table>
@@ -226,8 +231,8 @@
 
     <!-- Buttons stay visible below table -->
     <div class="button-container">
-      <button mat-raised-button color="primary" (click)="finalise()">Next</button>
       <button mat-raised-button color="primary" (click)="onUpdate()">Update</button>
+      <button mat-raised-button color="primary" (click)="finalise()">Upload</button>
     </div>
   </div>
   </mat-tab> 

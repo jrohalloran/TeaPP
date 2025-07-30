@@ -1,13 +1,32 @@
+.main-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem; /* space between the stats and grid */
+}
+
+
 .loading-overlay {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw; height: 100vh;
-  background: rgba(255, 255, 255, 0.8);
-  z-index: 10000;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8); /* Optional: semi-transparent background */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  z-index: 10; /* Make sure it's above other content inside the container */
+}
+
+.title-wrapper{
+  background-color: #f9f9f9;
+  padding: 2rem;
+  border-radius: 10px;
+  border: 1px solid #c1d1c1;
+  margin-bottom: 2rem;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  
 }
 
 .main-content {
@@ -51,6 +70,51 @@
   max-height: 100%;
 }
 
+.two-column-panel {
+  display: flex;
+  justify-content: space-between;
+  gap: 40px;
+  padding: 16px 8px;
+  flex-wrap: wrap;
+}
+
+.column {
+  flex: 1;
+  min-width: 250px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.analysis-bar {
+  width: 100%;
+  background-color: #f9f9f9;
+  margin-top: 40px;
+  margin-bottom: 20px;
+}
+
+.help-bar {
+  width: 100%;
+  background-color: #f9f9f9;
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
+
+
+.custom-analysis-panel {
+  background-color: #d1dee8; 
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 4px;
+}
+
+.custom-help-panel {
+  background-color: #d1dee8; 
+  border-radius: 4px;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
 .content-container{
     flex: 1 1 auto;
     overflow: auto;
@@ -64,7 +128,7 @@
     justify-content: space-between;
 }
 
-.custom-grid {
+.custom-grid-temp {
     padding: 1rem;
     border-radius: 5px;
     display: grid;
@@ -72,8 +136,23 @@
     grid-template-rows: auto auto;
     grid-template-areas:
         "hero thumb1"
-        "thumb2 stats"
-        "thumb3 thumb4";
+        "boxplotArea stats"
+        "thumb2 thumb3"
+        "thumb5 thumb6";
+    gap: 1rem;
+}
+
+.custom-grid-rain {
+    padding: 1rem;
+    border-radius: 5px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    grid-template-areas:
+        "hero thumb1"
+        "boxplotArea stats"
+        "thumb2 thumb3"
+        "thumb4 thumb5";
     gap: 1rem;
 }
 
@@ -94,32 +173,16 @@
   margin: 0 auto;
 }
 
-/* Container for both buttons */
-.two-panels {
-  display: flex;
-  justify-content: space-around;
-  gap: 2rem;
-  padding: 2rem;
-  flex-wrap: wrap;
-}
 
 /* Each panel (holds one button) */
-.panel {
-  background: #f9f9f9;
-  padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  flex: 1 1 300px;
-  text-align: center;
-  transition: transform 0.2s ease;
-}
+
 
 .panel:hover {
   transform: translateY(-4px);
 }
 
 /* Style buttons inside the panels */
-.panel button {
+.two-column-panel button {
   font-size: 1.1rem;
   padding: 0.75rem 2rem;
   border-radius: 5px;
@@ -127,20 +190,20 @@
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.panel button:hover {
+.two-column-panel button:hover {
   background-color: #24588c; /* darker blue */
   color: white;
   box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
-/* Container for both buttons */
-.two-panels {
+.two-column-panel {
   display: flex;
-  justify-content: center;
-  gap: 2rem;
-  padding: 2rem;
+  justify-content: space-between;
+  gap: 40px;
+  padding: 16px 8px;
   flex-wrap: wrap;
 }
+
 
 /* Each panel (holds one button) */
 .panel {
@@ -151,7 +214,7 @@
 }
 
 /* Style buttons inside the panels */
-.panel button {
+.button {
   font-size: 1.1rem;
   padding: 0.75rem 2rem;
   border-radius: 8px;
@@ -162,13 +225,13 @@
 }
 
 /* Flat hover effect with a slight lift */
-.panel button:hover {
+.button:hover {
   background-color: #125ea6; /* darker blue */
   transform: scale(1.03);
 }
 
 /* Optional: focus effect */
-.panel button:focus {
+.button:focus {
   outline: none;
   background-color: #125ea6;
 }

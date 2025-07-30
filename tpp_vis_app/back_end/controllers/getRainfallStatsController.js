@@ -14,6 +14,7 @@ import { dirname } from 'path';
 import fs_promise from 'fs/promises';
 import fs from 'fs';
 import db from '../services/postgres_db.js';
+import { removeTemp_evirDir } from '../services/directories.service.js';
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -61,9 +62,15 @@ async function writeFile(){
 async function performStatistics() {
 
     console.log("Performing statistics")
-    
+
     const scriptPath = path.join(__dirname, 'scripts', 'process_rainfall.R');
     const scriptDir = path.dirname(scriptPath);
+
+    console.log('========== RAINFALL STATS Script Execution ==========');
+    console.log(`[INFO] Timestamp: ${new Date().toISOString()}`);
+    console.log(`[INFO] Script path: ${scriptPath}`);
+    console.log(`[INFO] Working directory: ${process.cwd()}`);
+    console.log(`[INFO] Spawning Python process...\n`);
 
     // Escape quotes inside the JSON string for safe shell usage:
     const command = `Rscript "${scriptPath}" "${outputFile}" "${scriptDir}"`;
@@ -90,6 +97,7 @@ export const getRainfallStats= async (req, res) => {
 
     console.log("Attempting to process Pedigree Statistics...");
     try {
+        await removeTemp_evirDir();
         await getRainfallData();
         await writeFile();
         await performStatistics();

@@ -15,6 +15,7 @@ import { dirname } from 'path';
 import fs_promise from 'fs/promises';
 import fs from 'fs';
 import db from '../services/postgres_db.js';
+import { removeTempDir } from '../services/directories.service.js';
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -22,9 +23,7 @@ const __dirname = dirname(__filename);
 const backend_dir = path.dirname(__dirname);
 const tempDir = path.join(__dirname, 'temp');
 const outputFile = path.join(tempDir, 'Stats_cleanData.json');
-
-
-
+const outputTextFile = path.join(tempDir, 'temp_cleanData.txt');
 
 let data;
 
@@ -61,6 +60,47 @@ async function writeJson(){
         console.error('Error:', error);
     }
 
+}
+
+
+async function writeFile(){
+
+
+    console.log("Attempting Write Data file...")
+    const headers = Object.keys(data[0]).join('\t');
+    const dataLines = data.map(row => Object.values(row).join('\t'));
+    const content = [headers, ...dataLines].join('\n');
+    
+    try{
+        fs.writeFileSync(outputTextFile, content);
+        console.log("File Successfully Written:", outputTextFile);
+    } catch (error) {
+        console.error('Error:', error);
+    }
+
+}
+
+async function performSynbreed() {
+    
+    const scriptPath = path.join(__dirname, 'scripts', 'perform_synbreed.R');
+    const dataFilePath = outputTextFile;
+    const scriptDir = path.dirname(scriptPath);
+
+    const command = `Rscript "${scriptPath}" "${dataFilePath}" "${scriptDir}"`;
+
+    return new Promise((resolve, reject) => {
+        exec(command, { maxBuffer: 1024 * 5000 }, (error, stdout, stderr) => {
+        if (error) {
+            console.error(`Error running R script: ${error.message}`);
+            return reject(error);
+        }
+        if (stderr) {
+            console.warn(`R script stderr:\n${stderr}`);
+        }
+        console.log(`R script output:\n${stdout}`);
+        resolve();
+        });
+    });
 }
 
 
@@ -267,7 +307,7 @@ async function readYearCount(tempDir) {
 async function readFormatted(tempDir) {
 
     console.log("Getting Re-Formatting Stats")
-    const filename = "formatting_summary.tsv";
+    const filename = "formatting_summary.txt";
     const filePath = path.join(tempDir, filename);
     console.log("Reading file:", filePath);
 
@@ -409,8 +449,11 @@ export const getStatistics= async (req, res) => {
     console.log("Attempting to process Pedigree Statistics...");
 
     try {
+        await removeTempDir();
         await joinPlants();
         await writeJson();
+        await writeFile();
+        await performSynbreed();
         await performStatistics();
         const result = await readStats(tempDir);
         res.json(result);

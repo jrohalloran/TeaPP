@@ -1,23 +1,26 @@
 <div class="app-wrapper">
+
   <!-- Top bar -->
 <header class="top-bar">
   <div class="top-bar-content">
     <h1>TeaPP</h1>
 
-    <button mat-button [matMenuTriggerFor]="menu" class="menu-button">
+    <button class="menu-button" mat-button [matMenuTriggerFor]="menu">
       Menu <mat-icon>arrow_drop_down</mat-icon>
     </button>
+
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="onProfile()">Profile<mat-icon>account_circle</mat-icon></button>
+      <button mat-menu-item (click)="onSettings()">Settings<mat-icon>settings</mat-icon></button>
+      <button mat-menu-item (click)="onUpload()">Upload<mat-icon>folder</mat-icon></button>
+      <button mat-menu-item (click)="newAnalysis()">New Analysis<mat-icon>add</mat-icon></button>
+      <button mat-menu-item (click)="onHelp()">Help<mat-icon>question_mark</mat-icon></button>
+    </mat-menu>
 
     <div class = "user-details">
        <h4><mat-icon>account_circle</mat-icon> {{currentUser}}</h4>
        <h4><mat-icon>folder</mat-icon> Dataset</h4>
     </div>
-
-    <mat-menu #menu="matMenu">
-      <button mat-menu-item (click)="onProfile()">Profile<mat-icon>account_circle</mat-icon></button>
-      <button mat-menu-item (click)="onSettings()">Settings<mat-icon>settings</mat-icon></button>
-      <button mat-menu-item (click)="onLogout()">Logout<mat-icon>logout</mat-icon></button>
-    </mat-menu>
 
     <button class="help-button" (click)="toggleHelpPanel()">
       <mat-icon>question_mark</mat-icon>
@@ -33,7 +36,19 @@
     </button>
   </div>
   <div class="help-content">
-    <p>This is the help section. Provide instructions or guidance here.</p>
+    <h3>Welcome to the Landing Page</h3>
+    <p>Here can select an option to start/continue anlysis of pedigree data.</p>
+    <h4>Upload New Dataset</h4>
+    <p>You can begin to upload a new set of pedigree and related data into TeaPPs database.</p>
+    <p>Including:</p>
+    <p> - Pedigree Data</p>
+    <p> - Environmental Data</p>
+    <p> - Genomic Data</p>
+    <h4>Analyse Existing Dataset</h4>
+    <p>This option navigates you to the home page were you can begin analysis of data that is currently stored in the TeaPP database.</p>
+    <h4>Manage Databases</h4>
+    <p>Currently, only a single dataset can be stored at any one time within the TeaPP database.</p>
+    <p>This option allows you to completely empty the respective databases to start a new analysis.</p>
   </div>
 </div>  
 
@@ -43,7 +58,7 @@
     <!-- Top welcome section -->
     <div class="top-section">
       <h2>Welcome to TeaPP</h2>
-      <p>This visualisation tool helps you upload and explore tea plant pedigree datasets.</p>
+      <p>This visualisation tool helps you upload and explore tea plant pedigree datasets. Select the "Help" for more information.</p>
     </div>
 
     <!-- Bottom two side-by-side containers -->
@@ -51,19 +66,34 @@
       <!-- Upload New Dataset -->
       <div class="panel">
         <h3>Upload New Dataset</h3>
-        <p>Instructions</p>
-        <p>- Images</p>
+        <div class="icon-container">
+          <mat-icon class="big-icon">create_new_folder</mat-icon>
+        </div>
         <button mat-raised-button color="primary" (click)="uploadNewData()">Upload New Data</button>
       </div>
 
       <!-- Analyse Existing Data -->
       <div class="panel">
         <h3>Analyse Existing Data</h3>
-        <p>Select from dropdown to analyse existing dataset</p>
-        <p>- Images</p>
+        <div class="icon-container">
+          <mat-icon class="big-icon">desktop_windows</mat-icon>
+        </div>
+
         <button mat-raised-button color="primary" (click)="analyseExisting()">Analyse Existing Data</button>
       </div>
     </div>
+  </div>
+  <div class="database-management-wrapper">
+      <div class="panel">
+        <h3>Manage Databases</h3>
+        <div class="icon-container">
+          <mat-icon class="big-icon">storage</mat-icon>
+        </div>
+        <button mat-raised-button color="primary" (click)="emptyPostgreSQL()">Empty PostgreSQL Database</button>
+        <button mat-raised-button color="primary" (click)="emptyNeo4j()">Empty Neo4j Database</button>
+      </div>
+
+
   </div>
 
 </div>

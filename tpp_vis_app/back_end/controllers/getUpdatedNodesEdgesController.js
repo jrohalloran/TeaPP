@@ -6,13 +6,10 @@
 
 
 import { fetchAllNodesEdges } from '../services/neo4j-driver.js';
-import { convertToSigmaFormat,
-    allNodeslayerByYearReverse,
+import {
     groupSiblings,
     filterNodesWithoutHigherGenDescendants,
     removeIsolatedNodes,
-    layerByGenerationAll,
-    layerByGenerationFiltered,
     layerByGeneration,
     allNodeslayerByYearReverseDynamic,
     convertToSigmaFormatDynamic} from '../utils/sigmaFormatter.js';
@@ -91,8 +88,8 @@ export const getUpdatedNodesEdges = async (req, res) => {
     }if (groupFlag=="none"){
         groupedData = filteredData;
         if (filterFlag == 'yes'){ 
-            layerHeight = 50000000;
-            nodeSpacing = 2000000;
+            layerHeight = 500000000;
+            nodeSpacing = 3000000;
             layerHeightYear = 1_000_000_000;
             nodeSpacingYear = 300_000_000;
             }

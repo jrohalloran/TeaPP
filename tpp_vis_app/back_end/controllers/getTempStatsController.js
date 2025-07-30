@@ -13,6 +13,7 @@ import { dirname } from 'path';
 import fs_promise from 'fs/promises';
 import fs from 'fs';
 import db from '../services/postgres_db.js';
+import { removeTemp_envir_tempDir} from '../services/directories.service.js';
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -35,7 +36,7 @@ async function getTempData(){
             `;
             const result = await db.query(query);
             data = result.rows;
-            console.log(result.rows);
+            //console.log(result.rows);
             
           } catch (error) {
             console.error(error);
@@ -64,9 +65,16 @@ async function writeFile(){
 async function performStatistics() {
 
     console.log("Performing statistics")
-    
+
     const scriptPath = path.join(__dirname, 'scripts', 'process_temp.R');
     const scriptDir = path.dirname(scriptPath);
+
+    console.log('========== TEMPERATURE STATS Script Execution ==========');
+    console.log(`[INFO] Timestamp: ${new Date().toISOString()}`);
+    console.log(`[INFO] Script path: ${scriptPath}`);
+    console.log(`[INFO] Working directory: ${process.cwd()}`);
+    console.log(`[INFO] Spawning Python process...\n`);
+
 
     const command = `Rscript "${scriptPath}" "${outputFile}" "${scriptDir}"`;
 
@@ -91,6 +99,7 @@ export const getTempStats= async (req, res) => {
 
     console.log("Attempting to process Pedigree Statistics...");
     try {
+        await removeTemp_envir_tempDir();
         await getTempData();
         await writeFile();
         await performStatistics();

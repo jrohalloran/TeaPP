@@ -14,7 +14,7 @@
       <button mat-menu-item (click)="onSettings()">Settings<mat-icon>settings</mat-icon></button>
       <button mat-menu-item (click)="onUpload()">Upload<mat-icon>folder</mat-icon></button>
       <button mat-menu-item (click)="newAnalysis()">New Analysis<mat-icon>add</mat-icon></button>
-      <button mat-menu-item (click)="onLogout()">Logout<mat-icon>logout</mat-icon></button>
+      <button mat-menu-item (click)="onHelp()">Help<mat-icon>question_mark</mat-icon></button>
     </mat-menu>
 
     <div class = "user-details">
@@ -36,14 +36,27 @@
     </button>
   </div>
   <div class="help-content">
-    <p>This is the help section. Provide instructions or guidance here.</p>
+    <h3>Welcome to the Homepage</h3>
+    <p>This pages contains the key analysis and data exploration features of TeaPP</p>
+    <p>Each feature can be viewed by selecting its respective tab.</p>
+    <h4>Analysis features include:</h4>
+    <p> - Summary & Descriptive Statistics</p>
+    <p> - Database Status & Search </p>
+    <p> - Pedigree Visualisation </p>
+    <p> - Kinship Analysis </p>
+    <p> - Environmental Analysis </p>
+    <p> - Genomic Analysis </p>
+    <h4></h4>
+    <h4></h4>
+    <p>The application can be navigated via the "menu" dropdown selection. From there you can access additional features such as upload new datasets, profile and settings.</p>
+
   </div>
 </div>  
 <div class = "content-wrapper">
   <!-- New container above tabs -->
   <div class="top-container">
-    <h2>Welcome to TeaPP</h2>
-    <p>Some intro or controls here</p>
+    <h1>Welcome to the Home Page.</h1>
+    <p>Here you can explore and analyse the dataset currently stored with the TeaPP database. Select "Help" for more information.</p>
   </div>
 
   <!-- Container for mat-tab-group -->
@@ -67,6 +80,7 @@
           <app-environmental-data></app-environmental-data>
       </mat-tab>
       <mat-tab label="Genetic Data">
+        <app-genomic-data></app-genomic-data>
       </mat-tab>
     </mat-tab-group>
   </div>

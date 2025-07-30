@@ -8,14 +8,17 @@ html, body {
 .app-wrapper {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: auto;
+  min-height: 1000px;
   background-color: #d3e0d3;
 }
+
 
 .content-wrapper {
   padding: 1rem;      /* padding only around the main content */
   flex: 1;            /* take remaining height */
   box-sizing: border-box;
+  min-height: 1000px;
 }
 /* Top bar styling for completeness */
 .top-bar {
@@ -127,8 +130,6 @@ html, body {
 }
 
 
-
-
 button {
   margin-top: 1rem;
   padding: 0.75rem 1.5rem;
@@ -147,15 +148,12 @@ button:hover {
 
 
 
-
-
-
 .main-panel-layout {
   flex: 1;
     padding: 0.75rem;
   gap: 2rem;
   display: flex;
-  min-height: 500px; /* or height: 100% if inside a flexible parent */
+  min-height:600px; /* or height: 100% if inside a flexible parent */
 }
 .sidebar {
   display: flex;
@@ -202,4 +200,10 @@ button:hover {
 .user-details mat-icon {
   font-size: 28px;
   line-height: 1;
+}
+
+
+.profile-img {
+  width: 150px;
+  height: 150px;
 }

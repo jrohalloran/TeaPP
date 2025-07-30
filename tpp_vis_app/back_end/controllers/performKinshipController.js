@@ -4,14 +4,14 @@
  * // IBIX Thesis Project - TPP Visualisation
 ***/
 
-//import {joinPlants} from "tpp_vis_app/back_end/services/login_db.service.js"
 import path, { join } from 'path';
-import { exec } from 'child_process';
+import { exec, spawn } from 'child_process';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-//import fs_promise from 'fs/promises';
 import fs from 'fs';
 import db from '../services/postgres_db.js';
+import { sendEmail } from '../services/email.service.js';
+import os from 'os';
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -20,6 +20,8 @@ const backend_dir = path.dirname(__dirname);
 const tempDir = path.join(__dirname, 'temp');
 //const outputFile = path.join(tempDir, '');
 const outputTextFile = path.join(tempDir, 'temp_cleanData.txt');
+
+
 
 
 // Fetching all Data from PostgresDatabase
@@ -63,8 +65,15 @@ async function writeFile(data){
 // Running Kinship R Script
 async function getKinship() {
     console.log("Performing Kinship")
-    
+
     const scriptPath = path.join(__dirname, 'scripts', 'perform_kinship.R');
+
+    console.log('========== KINSHIP Script Execution ==========');
+    console.log(`[INFO] Timestamp: ${new Date().toISOString()}`);
+    console.log(`[INFO] Script path: ${scriptPath}`);
+    console.log(`[INFO] Working directory: ${process.cwd()}`);
+    console.log(`[INFO] Spawning Python process...\n`);
+    
 
     const scriptDir = path.dirname(scriptPath);
 
@@ -86,41 +95,153 @@ async function getKinship() {
 }
 
 
-// Running Visualisation Scripts
 
-async function getPCA() {
-    console.log("Running Python script to visualise PCA");
+async function getHeatmap() {
+    const scriptPath = path.join(__dirname, 'scripts', 'visualise_kinship_heatmap.py');
+    const command = 'python3';
+    const args = [scriptPath];
 
+    console.log('========== HEATMAP Script Execution ==========');
+    console.log(`[INFO] Timestamp: ${new Date().toISOString()}`);
+    console.log(`[INFO] Script path: ${scriptPath}`);
+    console.log(`[INFO] Working directory: ${process.cwd()}`);
+    console.log(`[INFO] Spawning Python process...\n`);
 
+    return new Promise((resolve, reject) => {
+        const pythonProcess = spawn(command, args, { cwd: process.cwd() });
+
+        pythonProcess.stdout.on('data', (data) => {
+            process.stdout.write(`[PYTHON STDOUT] ${data}`);
+        });
+
+        pythonProcess.stderr.on('data', (data) => {
+            process.stderr.write(`[PYTHON STDERR] ${data}`);
+        });
+
+        pythonProcess.on('close', (code) => {
+            console.log(`\n[INFO] Python process exited with code ${code}`);
+            if (code === 0) {
+                resolve();
+            } else {
+                reject(new Error(`Python script exited with code ${code}`));
+            }
+        });
+
+        pythonProcess.on('error', (err) => {
+            console.error(`[ERROR] Failed to start subprocess: ${err.message}`);
+            reject(err);
+        });
+    });
 }
 
-async function getHeatmap(){
-     console.log("Running Python script to visualise Heatmap + Histograms");
+async function getPCA() {
+    const scriptPath = path.join(__dirname, 'scripts', 'visualise_kinship_pca.py');
+    const command = 'python3';
+    const args = [scriptPath];
+
+    console.log('========== PCA Script Execution ==========');
+    console.log(`[INFO] Timestamp: ${new Date().toISOString()}`);
+    console.log(`[INFO] Script path: ${scriptPath}`);
+    console.log(`[INFO] Working directory: ${process.cwd()}`);
+    console.log(`[INFO] Spawning Python process...\n`);
+
+    return new Promise((resolve, reject) => {
+        const pythonProcess = spawn(command, args, { cwd: process.cwd() });
+
+        pythonProcess.stdout.on('data', (data) => {
+            process.stdout.write(`[PYTHON STDOUT] ${data}`);
+        });
+
+        pythonProcess.stderr.on('data', (data) => {
+            process.stderr.write(`[PYTHON STDERR] ${data}`);
+        });
+
+        pythonProcess.on('close', (code) => {
+            console.log(`\n[INFO] Python process exited with code ${code}`);
+            if (code === 0) {
+                resolve();
+            } else {
+                reject(new Error(`Python script exited with code ${code}`));
+            }
+        });
+
+        pythonProcess.on('error', (err) => {
+            console.error(`[ERROR] Failed to start subprocess: ${err.message}`);
+            reject(err);
+        });
+    });
+}
+
+let totalRAM;
 
 
 
+function checkMem(){
+// Minimum RAM required (in GB)
+    const MIN_RAM_GB = 64;
+    let flag;
+
+// Get total system memory in GB
+    totalRAM = os.totalmem() / (1024 ** 3);
+
+    console.log(`Detected RAM: ${totalRAM.toFixed(2)} GB`);
+
+    if (totalRAM >= MIN_RAM_GB) {
+    console.log(`Enough RAM. Running script...`);
+    flag = true;
+
+    } else {
+    console.error(`Not enough RAM. Need at least ${MIN_RAM_GB} GB.`);
+    flag = false;
+    }
+
+    return flag;
 }
 
 
 export const performKinship= async (req, res) => {
 
+    const email = req.body;
+    console.log("Email: "+email);
+
     console.log("Performing Kinship Analysis ")
 
     // get Data 
+
+    const flag = checkMem();
+    if (flag){
 
     try{
         const data = await joinPlants(); // Getting all Data from the DB
         await writeFile(data); // Write to a data text file to parse to the R script
         console.log("Perform Kinship");
+        let date = new Date().toISOString();
+        if (email){
+            try{
+                sendEmail(email, 'Kinship Pipeline Started', 'Kinship Analysis started!');
+            }catch(err){
+                console.log("Unable to send Email")
+            }
+        }
         await getKinship(); // Performing new synbreed pedigree and kinship matrix
         await getHeatmap(); 
         await getPCA();
-
+        date = new Date().toISOString();
+        if (email){
+            try{
+                sendEmail(email, 'Kinship Pipeline Ended', 'Kinship Analysis Finished!');
+            }catch(err){
+                console.log("Unable to send Email");
+            }
+        }
+        res.json(true);
     
-
     }catch(error){
+        res.json(false);
 
+    }}
+    else{
+        res.json(["Memory",totalRAM]);
     }
 
-    res.json("Kinship Retrieved");
 }

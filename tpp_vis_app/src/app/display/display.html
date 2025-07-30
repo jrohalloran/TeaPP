@@ -1,5 +1,21 @@
 <!-- Top-level container -->
 <div class="app-wrapper">
+<div class="title-wrapper">
+    <h1>Pedigree Visualisation</h1>
+  <mat-accordion class="help-bar">
+  <mat-expansion-panel class="custom-help-panel">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Help
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+        <p>This visualisation tool has been developed to all easy exploration of the pedigree data uploaded to TeaPP. A default graph is displayed in the top container ready for interaction and seelction of individual nodes.
+      Specific graph layout options can be selected in the right-handside panel, which will render a new visualisation when "update" is selected.
+    </p>
+    <p>Selection of individual plants will display its pedigree family (closest relatives) in the bottom containe, highlighting the respective individuals in the original graph above.</p>
+  </mat-expansion-panel>
+</mat-accordion>
+</div>
 
 
   <!-- Main content area -->
@@ -37,10 +53,11 @@
     <aside class="side-panel">
 
       <!-- Controls section -->
-      <div class="top-half">
+      <div class="top-fixed">
         <h2>Controls</h2>
         <button (click)="zoomIn()">Zoom In</button>
         <button (click)="zoomOut()">Zoom Out</button>
+        <button (click)="resetZoom()">Reset</button>
         </div>
         <div class = pedigree>
         <h2>Pedigree Layout</h2>
@@ -125,9 +142,11 @@
 
       <button (click)="updateDiagram()">Update</button>
       </div>
+      <div class="side-scrollable">
 
       <div class='my-legend' *ngIf="legend.length > 0">
         <h2>Legend</h2>
+        <p>{{selectedColour}}</p>
         <div class='legend-scale'>
           <ul class='legend-labels'>
             <li *ngFor="let item of legend">
@@ -139,6 +158,8 @@
       </div>
       <div class="search-panel">
           <!-- Search Input -->
+           <h2>Search</h2>
+           <p>Enter an individual ID:</p>
           <input
             type="text"
             placeholder="Search..."
@@ -152,6 +173,7 @@
             <li *ngFor="let item of filteredData" (click)="selectItem(item)">{{ item }} 
             </li>
           </ul>
+        </div>
               <!-- Stats section -->
       <div class="bottom-half">
         <h3>Statistics</h3>
@@ -159,6 +181,8 @@
         <p>Edges: {{ stats.edges }}</p>
       </div>
       </div>
+
+
 
     </aside>
 

@@ -85,7 +85,7 @@ async function importWithNeo4jAdmin(graphData) {
     const { nodesFile, relsFile } = await writeCsvFiles(graphData);
 
     // Step 2: Stop Neo4j (ensure DB is offline before import)
-    console.log('⛔ Stopping Neo4j...');
+    console.log('Stopping Neo4j...');
     await execAsync('neo4j stop');
 
     // Step 3: Build and run neo4j-admin import command
@@ -96,9 +96,9 @@ async function importWithNeo4jAdmin(graphData) {
     const { stdout, stderr } = await execAsync(cmd);
 
     if (stderr) {
-      console.warn('⚠️ neo4j-admin import warnings:', stderr);
+      console.warn('neo4j-admin import warnings:', stderr);
     }
-    console.log('✅ neo4j-admin import output:', stdout);
+    console.log('neo4j-admin import output:', stdout);
 
     // Step 4: Start Neo4j again
     console.log('▶️ Starting Neo4j...');

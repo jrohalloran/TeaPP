@@ -12,6 +12,7 @@ library(synbreed)
 library(jsonlite)
 library(VennDiagram)
 library(grid)
+library(AGHmatrix)
 
 args <- commandArgs(trailingOnly = TRUE)
 
@@ -91,9 +92,37 @@ gp <- create.gpData(pedigree=ped)
 summary(gp)
 
 message("Performing Kinship Matrix")
-#kinship.mx <- kin(gp)
+kinship.mx <- kin(gp)
 
-#write.csv(kinship.mx, file = "kinship_matrix.csv", row.names = TRUE)
 
-#write.table(kinship.mx, file = "kinship_matrix.txt", sep = "\t", quote = FALSE, row.names = TRUE, col.names = NA)
+file<- paste0(temp_dir,"/kinship_matrix.txt")
+#write.csv(kinship.mx, file, row.names = TRUE)
 
+write.table(kinship.mx, file, sep = "\t", quote = FALSE, row.names = TRUE, col.names = NA)
+
+#library(AGHmatrix)
+
+#pedigree <- gp$pedigree
+
+#pedigree <- data.frame(
+  #ID = pedigree$ID,
+  #Par1 = pedigree$Par1,
+  #Par2 = pedigree$Par2
+#)
+
+
+# Compute additive kinship matrix
+#A_matrix <- Amatrix(pedigree, ploidy = 2, dominance = FALSE)
+## Tea Trees are Diploid
+## A Matrix - pedigree-based 
+
+
+# Save it
+
+
+#write.csv(A_matrix, "A_matrix.csv")
+
+##write.table(A_matrix, "A_matrix.txt")
+
+#file<- paste0(temp_dir,"/kinship_matrix.txt")
+#write.table(A_matrix, file, sep = "\t", quote = FALSE, row.names = TRUE, col.names = NA)

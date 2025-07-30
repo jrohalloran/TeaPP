@@ -7,17 +7,20 @@ import { MatTableModule } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatIcon } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Router } from '@angular/router';
 import { DataTransferService } from '../services/dataTransferService';
+import { SafeUrlPipe } from '../services/safe-url.pipe';
 
 interface GridItem {
   url: string;
   name: string;
   gridArea: string; 
-  title: string; // <-- add this
+  title: string;
+  type: string;
 }
 
 
@@ -32,7 +35,9 @@ interface GridItem {
       ReactiveFormsModule,
       MatCheckboxModule,
       MatProgressSpinnerModule,
-      MatTabsModule],
+      MatTabsModule,
+      MatIcon,
+      SafeUrlPipe ],
   standalone: true,
   templateUrl: './overview.html',
   styleUrls: ['./overview.css']
@@ -42,6 +47,8 @@ interface GridItem {
 export class Overview {
 
 
+    loading = false;
+
     siblingCount: any[] = [];
     rankedCount: any[] = [];
     summaryCount: any[] = [];
@@ -50,7 +57,8 @@ export class Overview {
     basicStats: any[] = [];
     formattedCount: any[] = [];
     genCount: any[] = [];
-    images: GridItem[] = [];
+    yearVenn:GridItem [] = [];
+    parentVenn:GridItem [] = [];
     statsImages:GridItem [] = [];
 
     
@@ -61,11 +69,11 @@ export class Overview {
 
 
     async ngAfterViewInit(): Promise<void> {
-
+      this.loading = true;
 
       await this.getPedigreeStats();
       await this.getDiagrams();
-
+      this.loading = false;
 
     }
 
@@ -73,10 +81,11 @@ export class Overview {
       console.log("Getting Diagrams");
 
 
-      this.images = [
-      { url: this.backendApiService.getDiagramUrl('venn_parents_Gener_2.png'), name: 'clustermap', gridArea: 'hero',
-         title: "Parents per Generation" },
-      { url: this.backendApiService.getDiagramUrl('year_gen_venn_2.png'), name: 'clustermap', gridArea: 'thumb1', title: "Year of Breeding for Each Generation"  }
+      this.yearVenn = [
+      { url: this.backendApiService.getDiagramUrl('venn_parents_Gener_2.png'), name: 'vennParents', gridArea: 'hero', type: "image",
+         title: "Parents per Generation" }];
+      this.parentVenn = [
+      { url: this.backendApiService.getDiagramUrl('year_gen_venn_2.png'), name: 'vennYear', gridArea: 'thumb1', title: "Year of Breeding for Each Generation",type: "image"}
     ];
 
     }
@@ -96,12 +105,10 @@ export class Overview {
           this.basicStats = response[5];
           this.formattedCount = response[6];
           this.genCount = response[7];
-          //console.log(this.siblingCount);
-          //console.log(this.rankedCount);
-          //console.log(this.summaryCount);
-          //console.log(this.twinCount);
-          this.statsImages = [{ url: this.backendApiService.getDiagramUrl('year_histogram.png'), name: 'histogram', gridArea: 'hero',
-          title: "Parents per Generation" },]
+
+          this.statsImages = [
+        { url: this.backendApiService.getDiagramUrl('year_histogram.html'), name: 'histogram', gridArea: 'hero',
+          title: "Parents per Generation",type: "html" }]
 
           } catch (error) {
               console.error('Error:', error);
@@ -128,4 +135,5 @@ export class Overview {
   closeModal(): void {
     this.selectedImageUrl = null;
   }
+
 }

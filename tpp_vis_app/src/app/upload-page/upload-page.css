@@ -10,7 +10,6 @@ html, body {
   display: flex;
   flex-direction: column;
   height: auto;
-  min-height: 100vh;
   background-color: #d3e0d3;
 }
 
@@ -33,10 +32,11 @@ html, body {
   width: 100%;
 }
 
+
 .menu-button {
+  color: white !important;
   font-weight: 800;
   text-transform: none;
-  color: white;
 }
 
 .user-details {
@@ -121,6 +121,9 @@ html, body {
   cursor: pointer;
 }
 
+
+
+
 .loading-overlay {
   position: fixed;
   top: 0; left: 0;
@@ -153,9 +156,10 @@ html, body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: calc(100vh - 80px); /* full height minus header */
+  height: auto;
+  min-height:1000px;
   padding: 2rem;
-  background-color: #f0f0f0;
+  background-color: #d3e0d3;
 }
 
 .upload-content {
@@ -330,9 +334,25 @@ td input.mat-input-element {
   box-shadow: 0 0 6px rgb(0 0 0 / 0.05);
 }
 
-.menu-button {
-  font-weight: 800;
-  text-transform: none;
+/* ===== Buttons ===== */
+button {
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  background-color: #24588c;
   color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
+
+button:hover {
+  background-color: #1e4a75;
+}
+
+.panel button {
+  align-self: flex-start;
+  margin-top: auto;
+}

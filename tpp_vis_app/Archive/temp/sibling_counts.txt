@@ -1,0 +1,7 @@
+Sibling	Entry_Count	Unique_Parent_Count
+A	7776	34
+B	8786	31
+C	4336	14
+D	539	3
+E	1348	1
+F	0	0

@@ -24,8 +24,8 @@ import { Observable } from 'rxjs';
 export class backendApiService {
   
   private apiUrl = 'http://localhost:3333/api';
-  private imageListUrl = 'http://localhost:3333/api/images';
   private imageBaseUrl = 'http://localhost:3333/kinshipImages';
+  private imageKinshipBaseUrl = 'http://localhost:3333/calculatedKinship';
   private diagramsBaseUrl = 'http://localhost:3333/diagramImages';
   private rainfallBaseUrl = 'http://localhost:3333/rainfallImages';
   private temperatureBaseUrl = 'http://localhost:3333/temperatureImages';
@@ -33,19 +33,39 @@ export class backendApiService {
   constructor(private http: HttpClient) {}
 
 
+
   /// --------------- AUTHENTICATION -------------------------
 
 
-  checkUserDetails(data:any[]): Observable<any>{
-        console.log("Sending Inputed Details to back-end");
-        return this.http.post(`${this.apiUrl}/getUserDetails`,data);
+  getUsername(): Observable<any>{
+        console.log("Getting Username");
+        return this.http.get(`${this.apiUrl}/user`);
 
   }
 
+  // Database Management 
 
-  createNewUser(data:any[]): Observable<any>{
-        console.log("Sending Inputed Details to back-end");
-        return this.http.post(`${this.apiUrl}/setUserDetails`,data);
+   emptyPostgreSQL(): Observable<any>{
+        console.log("Sending Emptying request to backend");
+        return this.http.get(`${this.apiUrl}/emptyPostgreSQL`);
+
+  }
+
+  restartPostgreSQL(): Observable<any>{
+        console.log("Sending PostgreSQL Restart request to backend");
+        return this.http.get(`${this.apiUrl}/restartPostgreSQL`);
+
+  }
+
+  emptyNeo4j(): Observable<any>{
+        console.log("Sending Emptying request to backend");
+        return this.http.get(`${this.apiUrl}/emptyNeo4j`);
+
+  }
+
+  restartNeo4j(): Observable<any>{
+        console.log("Sending Neo4j Restart request to backend");
+        return this.http.get(`${this.apiUrl}/restartNeo4j`);
 
   }
 
@@ -120,6 +140,11 @@ export class backendApiService {
 
   }
 
+  getDBStatus(): Observable<any> {
+    console.log("Getting /getDBStatus");
+    return this.http.get(`${this.apiUrl}/getDBStatus`);
+
+  }
 
   // ------------- VISUALISATION ------------------
   /// NEO4J API REQUESTS 
@@ -129,26 +154,22 @@ export class backendApiService {
     console.log("Retrieving all Nodes and Edges");
     return this.http.get(`${this.apiUrl}/getAllNodesEdges`);
   }
-
+  /*
   // POST REQUESTS 
   getNuclearFamily2(nodeID: string):Observable<any> {
     console.log("Sending Data to /api/getNuclearFamily");
     return this.http.post(`${this.apiUrl}/getNuclearFamily2`,nodeID);
-  }
+  }*/
 
+  /*
   getWholeFamily(nodeID: string):Observable<any> {
     console.log("Sending Data to /api/getWholeFamily");
     return this.http.post(`${this.apiUrl}/getWholeFamily`,nodeID);
-  }
+  }*/
 
   getPedigree(nodeID: any[]):Observable<any> {
     console.log("Sending Data to /api/getPedigree");
     return this.http.post(`${this.apiUrl}/getPedigree`,nodeID);
-  }
-
-  getPartnerOf(nodeID: string):Observable<any> {
-    console.log("Sending Data to /api/getPartnerOf");
-    return this.http.post(`${this.apiUrl}/getPartnerOf`,nodeID);
   }
 
   getUpdatedNodesEdges(data: any[]): Observable<any> {
@@ -171,25 +192,25 @@ export class backendApiService {
 
 
 
-  // KINSHIP ANALYSIS 
+  // ------------ KINSHIP ANALYSIS -------------------
 
   getKinship(): Observable<any> {
     console.log("Retrieving Existing Kinship Data");
     return this.http.get(`${this.apiUrl}/getKinship`);
   }
 
-
-  performKinship(): Observable<any> {
+  performKinship(email: string): Observable<any> {
     console.log("Requesting Kinhsip Analysis");
-    return this.http.get(`${this.apiUrl}/performKinship`);
+    return this.http.post(`${this.apiUrl}/performKinship`, email);
   }
 
-  getImages(): Observable<string[]> {
-    return this.http.get<string[]>(this.imageListUrl);
-  }
 
   getImageUrl(fileName: string): string {
     return `${this.imageBaseUrl}/${fileName}`;
+  }
+
+  getKinshipUrl(fileName: string): string {
+    return `${this.imageKinshipBaseUrl}/${fileName}`;
   }
 
   getDiagramUrl(fileName: string): string {
@@ -197,7 +218,13 @@ export class backendApiService {
   }
 
 
+
+
+
+
   // ------------ ENVIRONMENTAL DATA  ---------------
+
+
 
   // RAINFALL
   getRainfallStats(): Observable<any> {
@@ -230,5 +257,28 @@ export class backendApiService {
     return `${this.temperatureBaseUrl}/${fileName}`;
   }
 
+    // ------------ GENOMIC DATA  ---------------
+
+
+  getGenomicData(): Observable<any> {
+    console.log("Getting Genomic Table Entries");
+    return this.http.get(`${this.apiUrl}/getGenomicData`);
+  }
+
+  processGenomFile(data: any): Observable<any> {
+    console.log("Processing Genomic Data File");
+    return this.http.post(`${this.apiUrl}/processGenomFile`, data);
+  }
+
+  performFastQC(data: any): Observable<any> {
+    console.log("Performing FastQC");
+    return this.http.post(`${this.apiUrl}/performFastQC`, data);
+  }
+
+  getHtmlReports() {
+    return this.http.get<string[]>(`${this.apiUrl}/fastQCreports`);
+  }
+
   
 }
+

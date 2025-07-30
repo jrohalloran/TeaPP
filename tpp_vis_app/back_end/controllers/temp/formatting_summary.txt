@@ -1,4 +1,4 @@
 Metric	Count
-Offspring IDs	1146
-Female Parents	0
+Offspring IDs	0
 Male Parents	0
+Female Parents	0

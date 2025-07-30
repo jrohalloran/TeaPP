@@ -1,37 +1,33 @@
-
 <mat-tab-group>
-<mat-tab label="Pedigree Data">
-<div class="upload-wrapper">
-<h3>Upload Your Pedigree Data File</h3>
-<!-- File input field -->
-<input type="file" class="upload-input" (change)="handleFileSelection($event)" #fileInput />
 
-<div *ngIf="selectedFile">
-<!-- Display file details -->
-<section class="file-details">
-  <h3>Selected File Details:</h3>
-  <ul>
-    <li><strong>Filename:</strong> {{selectedFile.name}}</li>
-    <li><strong>File Type:</strong> {{selectedFile.type}}</li>
-    <li><strong>File Size:</strong> {{selectedFile.size}} bytes</li>
-  </ul>
-</section>
+  <mat-tab label="Pedigree Data">
+    <div class="upload-wrapper">
+      <h3>Upload Your Pedigree Data File</h3>
+      <input type="file" class="upload-input" (change)="handleFileSelection($event)" #fileInput />
 
-<!-- Upload button -->
-<button (click)="uploadFile(); actionMethod($event)">Start Upload</button>
+      <div *ngIf="selectedFile">
+        <section class="file-details">
+          <h3>Selected File Details:</h3>
+          <ul>
+            <li><strong>Filename:</strong> {{selectedFile.name}}</li>
+            <li><strong>File Type:</strong> {{selectedFile.type}}</li>
+            <li><strong>File Size:</strong> {{selectedFile.size}} bytes</li>
+          </ul>
+        </section>
 
-<!-- Display upload status -->
-<section [ngSwitch]="uploadStatus">
-  <p *ngSwitchCase="'inProgress'">Uploading, please wait...</p>
-  <p *ngSwitchCase="'completed'">File uploaded successfully!</p>
-  <p *ngSwitchCase="'error'">An error occurred during upload.</p>
-  <p *ngSwitchDefault>Ready to upload your file.</p>
-</section>
-</div>
-    <div class="message">
-        {{ pedMessage }}
+        <button (click)="uploadFile()">Start Upload</button>
+
+        <section [ngSwitch]="uploadStatus">
+          <p *ngSwitchCase="'inProgress'">Uploading, please wait...</p>
+          <p *ngSwitchCase="'completed'">File uploaded successfully!</p>
+          <p *ngSwitchCase="'error'">An error occurred during upload.</p>
+          <p *ngSwitchDefault>Ready to upload your file.</p>
+        </section>
+      </div>
+
+      <div class="message">{{ pedMessage }}</div>
     </div>
-</div>
+
     <div class="bottom-tab" [class.expanded]="isBottomTabExpanded">
       <div class="tab-header" (click)="toggleBottomTab()">
         <span class="tab-header-text">
@@ -41,69 +37,126 @@
       </div>
       <div class="tab-content">
         <h3>Need Assistance?</h3>
-        <p>Here you can upload the Pedigree Data.</p>
         <ul>
-          <p>Selected your Pedigree data file from your local directory.</p>
-          <p>Formats Accepted:</p>
-          <p>- Tab-deliminated text file (.txt)</p>
-          <p>- Column Names: "ID","female_parent","male_parent"</p>
+          <li>Select your Pedigree data file from your local directory.</li>
+          <li>Accepted format: Tab-delimited text file (.txt)</li>
+          <li>Required column names: "ID", "Female_parent", "Male_parent"</li>
+          <img src="pedigree_format.png" alt="Userimage" class="pedigree-img"/>
         </ul>
       </div>
     </div>
-</mat-tab>
-<mat-tab label="Environmental Data">
-  <div class="upload-wrapper">
-  <h3>Upload Your Environmental Data File</h3>
-  <input type="file" class="upload-input" (change)="handleFileEnvSelection($event)" #fileInput />
-    <div *ngIf="selectedEnvFile">
-    <!-- Display file details -->
-    <section class="file-details">
-      <h3>Selected File Details:</h3>
-      <ul>
-        <li><strong>Filename:</strong> {{selectedEnvFile.name}}</li>
-        <li><strong>File Type:</strong> {{selectedEnvFile.type}}</li>
-        <li><strong>File Size:</strong> {{selectedEnvFile.size}} bytes</li>
-      </ul>
-    </section>
-    <div class="data-type-selection">
-      <p>Please select a data type:</p>
-      <label>
-        <input
-          type="radio"
-          name="envDataType"
-          value="rainfall"
-          [(ngModel)]="selectedEnvType"
-        />
-        Rainfall
-      </label>
-      <label>
-        <input
-          type="radio"
-          name="envDataType"
-          value="temperature"
-          [(ngModel)]="selectedEnvType"
-        />
-        Temperature
-      </label>
-    </div>
-    <div class="message">
-        {{ envMessage }}
-    </div>
+  </mat-tab>
 
-    <!-- Upload button -->
-    <button (click)="uploadEnvFile(); actionMethod($event)">Start Upload</button>
+  <!-- 🌱 ENVIRONMENTAL DATA TAB -->
+  <mat-tab label="Environmental Data">
+    <div class="upload-wrapper">
+      <h3>Upload Your Environmental Data File</h3>
+      <input type="file" class="upload-input" (change)="handleFileEnvSelection($event)" #fileInput />
 
-    <!-- Display upload status -->
-    <section [ngSwitch]="uploadStatus">
-      <p *ngSwitchCase="'inProgress'">Uploading, please wait...</p>
-      <p *ngSwitchCase="'completed'">File uploaded successfully!</p>
-      <p *ngSwitchCase="'error'">An error occurred during upload.</p>
-      <p *ngSwitchDefault>Ready to upload your file.</p>
-    </section>
+      <div *ngIf="selectedEnvFile">
+        <section class="file-details">
+          <h3>Selected File Details:</h3>
+          <ul>
+            <li><strong>Filename:</strong> {{selectedEnvFile.name}}</li>
+            <li><strong>File Type:</strong> {{selectedEnvFile.type}}</li>
+            <li><strong>File Size:</strong> {{selectedEnvFile.size}} bytes</li>
+          </ul>
+        </section>
+
+        <div class="data-type-selection">
+          <p>Please select a data type:</p>
+          <label>
+            <input type="radio" name="envDataType" value="rainfall" [(ngModel)]="selectedEnvType" />
+            Rainfall
+          </label>
+          <label>
+            <input type="radio" name="envDataType" value="temperature" [(ngModel)]="selectedEnvType" />
+            Temperature
+          </label>
+        </div>
+
+        <div class="message">{{ envMessage }}</div>
+
+        <button (click)="uploadEnvFile()">Start Upload</button>
+
+        <section [ngSwitch]="uploadStatus">
+          <p *ngSwitchCase="'inProgress'">Uploading, please wait...</p>
+          <p *ngSwitchCase="'completed'">File uploaded successfully!</p>
+          <p *ngSwitchCase="'error'">An error occurred during upload.</p>
+          <p *ngSwitchDefault>Ready to upload your file.</p>
+        </section>
+      </div>
     </div>
 
-  </div>
-      <div class="bottom-tab" [class.expanded]="isBottomTabExpanded">
+    <div class="bottom-tab-env" [class.expanded]="isBottomTabExpanded">
+      <div class="tab-header-env" (click)="toggleBottomTab()">
+        <span class="tab-header-text">
+          <mat-icon>{{ isBottomTabExpanded ? 'expand_more' : 'expand_less' }}</mat-icon>
+          {{ isBottomTabExpanded ? 'Close Help' : 'Help' }}
+        </span>
+      </div>
+      <div class="tab-content-env">
+        <h3>Need Assistance?</h3>
+        <ul>
+          <li>Select your environmental data file from your local directory.</li>
+          <li>Specify the data type (Rainfall or Temperature) using the radio buttons.</li>
+          <li>Accepted format: Tab-delimited text file (.txt)</li>
+          <div class="images">
+          <p>Temperature format (degrees celsius):</p>
+          <img src="temp_format.png" alt="Userimage" class="temp-img"/>
+          <p>Rainfall format (mm/month):</p>
+          <img src="rainfall_format.png" alt="Userimage" class="rain-img"/></div>
+        </ul>
+      </div>
+    </div>
+  </mat-tab>
+
+
+  <mat-tab label="Genomic Data">
+    <div class="upload-wrapper">
+      <h3>Upload Your Genomic Data Files</h3>
+      <input type="file" (change)="handleFileGenomSelection($event)" multiple />
+
+      <div *ngIf="selectedGenomFiles && selectedGenomFiles.length > 0">
+        <section class="file-details">
+          <h3>Selected File(s):</h3>
+          <ul>
+            <li *ngFor="let file of selectedGenomFiles">
+              <strong>Name:</strong> {{file.name}} |
+              <strong>Type:</strong> {{file.type || 'Unknown'}} |
+              <strong>Size:</strong> {{file.size}} bytes
+            </li>
+          </ul>
+        </section>
+
+        <h3>Please Specify Clone ID:</h3>
+        <input class="ID-input-box" type="text" [(ngModel)]="userIDInput" placeholder="Clone ID" />
+
+        <button (click)="uploadGenomFiles()" [disabled]="!userIDInput || selectedGenomFiles.length === 0">
+          Start Upload
+        </button>
+
+        <section [ngSwitch]="uploadStatus">
+          <p *ngSwitchCase="'inProgress'">Uploading, please wait...</p>
+          <p *ngSwitchCase="'completed'">File(s) uploaded successfully!</p>
+          <p *ngSwitchCase="'error'">An error occurred during upload.</p>
+          <p *ngSwitchDefault>Ready to upload your files.</p>
+        </section>
+      </div>
+
+      <div class="modal-overlay" *ngIf="processing">
+        <div class="modal-content">
+          <h2>Upload Another File?</h2>
+          <p>Do you want to upload another file?</p>
+          <div class="modal-buttons">
+            <button (click)="onUserChoice(false)">No</button>
+            <button (click)="onUserChoice(true)">Yes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-tab" [class.expanded]="isBottomTabExpanded">
       <div class="tab-header" (click)="toggleBottomTab()">
         <span class="tab-header-text">
           <mat-icon>{{ isBottomTabExpanded ? 'expand_more' : 'expand_less' }}</mat-icon>
@@ -112,63 +165,12 @@
       </div>
       <div class="tab-content">
         <h3>Need Assistance?</h3>
-        <p>Here you can upload the Environmental Data for your pedigree dataset.</p>
         <ul>
-          <p>Selected your environmental data file from your local directory.</p>
-          <p>Specify data type (Rainfal / Temperature) using the checkbox.</p>
-          <p>Formats Accepted:</p>
+          <li>Select your genomic data file(s) from your local directory.</li>
+          <li>Accepted fastq file with formats: .fastq, .fq</li>
+          <li>Provide a Clone ID before uploading.</li>
         </ul>
       </div>
     </div>
-
-</mat-tab>
-<mat-tab label="Genomic Data">
-  <div class="upload-wrapper">
-  <h3>Upload Your Genomic Data File</h3>
-  <input type="file" class="upload-input" (change)="handleFileGenomSelection($event)" #fileInput />
-  <div *ngIf="selectedGenomFile">
-    <!-- Display file details -->
-    <section class="file-details">
-      <h3>Selected File Details:</h3>
-      <ul>
-        <li><strong>Filename:</strong> {{selectedGenomFile.name}}</li>
-        <li><strong>File Type:</strong> {{selectedGenomFile.type}}</li>
-        <li><strong>File Size:</strong> {{selectedGenomFile.size}} bytes</li>
-      </ul>
-    </section>
-
-    <!-- Upload button -->
-    <button (click)="uploadEnvFile(); actionMethod($event)">Start Upload</button>
-
-    <!-- Display upload status -->
-    <section [ngSwitch]="uploadStatus">
-      <p *ngSwitchCase="'inProgress'">Uploading, please wait...</p>
-      <p *ngSwitchCase="'completed'">File uploaded successfully!</p>
-      <p *ngSwitchCase="'error'">An error occurred during upload.</p>
-      <p *ngSwitchDefault>Ready to upload your file.</p>
-    </section>
-   </div>
-
-
-
-
-  </div>
-      <div class="bottom-tab" [class.expanded]="isBottomTabExpanded">
-      <div class="tab-header" (click)="toggleBottomTab()">
-        <span class="tab-header-text">
-          <mat-icon>{{ isBottomTabExpanded ? 'expand_more' : 'expand_less' }}</mat-icon>
-          {{ isBottomTabExpanded ? 'Close Help' : 'Help' }}
-        </span>
-      </div>
-      <div class="tab-content">
-        <h3>Need Assistance?</h3>
-        <p>Here you can upload the Genomic Data for your pedigree dataset.</p>
-        <ul>
-          <li>Selected your genomic data file from your local directory.</li>
-        </ul>
-      </div>
-    </div>
-
-</mat-tab>
-
+  </mat-tab>
 </mat-tab-group>

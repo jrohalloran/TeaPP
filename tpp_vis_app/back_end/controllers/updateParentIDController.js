@@ -121,13 +121,5 @@ export const updateParents= async (req, res) => {
 
     res.json([filtered, stats, mismatches, cleanData]);
     
-    // Get list of changed parents 
-    // Compare to all parents -- does it match 
-    // If it does match -- remove from list
-    // Else keep 
-    // Send update list 
-
-
-
 
 }

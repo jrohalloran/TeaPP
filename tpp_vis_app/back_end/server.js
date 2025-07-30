@@ -28,7 +28,6 @@ import pedigreeRoutes from './routes/pedigree.js';
 import allNodesEdgesRoutes from "./routes/allNodesEdges.js"
 import allPlantsRoutes from "./routes/allPlantsPG.js"
 import selectedPlantRoutes from "./routes/selectedPlant.js"
-import getPartnerOfRoutes from "./routes/getPartnerOf.js"
 import processDataRoutes from "./routes/processData.js"
 import compareDataRoutes from "./routes/compareData.js"
 import getCleanDataRoutes from "./routes/getCleanData.js"
@@ -39,8 +38,9 @@ import getKinshipRoutes  from './routes/getKinship.js';
 import performKinshipfromRoutes from './routes/performKinship.js';
 import getStatsRoutes from './routes/getStats.js'
 import searchRoutes from './routes/searchID.js'
-import authenticationRoutes from './routes/getUserDetails.js'
 import envStatsRoutes from './routes/envStats.js'
+import genomicDataRoutes from './routes/genomicAnalysis.js'
+import databaseRoutes from './routes/databaseRoutes.js'
 
 const app = express();
 
@@ -53,13 +53,19 @@ app.use(express.json({ limit: '10mb' }));
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const backend_dir = path.dirname(__dirname);
+const backend_dir = __dirname;
+const controller_dir = path.join(backend_dir,"controllers");
+const temp_dir = path.join(controller_dir,"temp");
+const temp_envir_dir = path.join(controller_dir,"temp_envir");
+const temp_envir_temp_dir = path.join(controller_dir,"temp_envir_temp");
 
-
-/// ------------ FILE UPLOAD --------------
+/// ------------ DIRECTORY HANDLING --------------
 
 // Setting up Upload Directory in Back-end 
 const uploadDir = 'uploads';
+const upload_tempDir = 'env_temp_uploads';
+const upload_rainDir = 'env_uploads';
+
 if (fs.existsSync(uploadDir)){
   console.log("/uploads directory exists");
   console.log("---- Removing Directory ----");
@@ -70,13 +76,64 @@ if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir);
 }
 
+/*
+if (fs.existsSync(upload_tempDir)){
+  console.log("/env_temp_uploads directory exists");
+  console.log("---- Removing Directory ----");
+  fs.rmSync(upload_tempDir, { recursive: true, force: true })
+}
+if (!fs.existsSync(upload_tempDir)) {
+  console.log("/env_temp_uploads making directory");
+  console.log("---- Making Directory ----");
+  fs.mkdirSync(upload_tempDir);
+}*/
+
+/*
+if (fs.existsSync(upload_rainDir)){
+  console.log("/env_uploads directory exists");
+  console.log("---- Removing Directory ----");
+  fs.rmSync(upload_rainDir, { recursive: true, force: true })
+}
+if (!fs.existsSync(upload_rainDir)) {
+  console.log("---- Making Directory ----");
+  fs.mkdirSync(upload_rainDir);
+}*/
+
+
+const uploadGenomDir = path.join(__dirname, 'genom_uploads');
+if (!fs.existsSync(uploadGenomDir)) {
+  fs.mkdirSync(uploadGenomDir, { recursive: true });
+}
+
+console.log("Backend Directory: "+backend_dir);
+console.log("Controller Directory: "+controller_dir);
+console.log("Temp Directory: "+temp_dir);
+console.log("Temp Envir Directory: "+temp_envir_dir);
+console.log("Temp Envir Temp Directory: "+temp_envir_temp_dir);
+
+// ------ Re-establising TEMP files --------
+
+if (fs.existsSync(temp_dir)){
+  console.log("/temp_dir directory exists");
+  console.log("---- Removing Directory ----");
+  fs.rmSync(temp_dir, { recursive: true, force: true })
+}
+if (!fs.existsSync(temp_dir)) {
+  console.log("---- Making Directory ----");
+  fs.mkdirSync(temp_dir);
+}
+
+/// ------------ FILE UPLOAD --------------
+
 
 const EXPECTED_HEADERS = ['ID', 'Female_parent', 'Male_parent'];
 
-const EXPECTED_RAIN_HEADERS = ['year',	'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const EXPECTED_RAIN_HEADERS = ['year','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
 const EXPECTED_TEMP_HEADERS = ["YEAR","MONTH","JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC","Mean"];
 
+
+const MAX_SIZE = 10 * 1024 * 1024 * 1024;
 
 // Set up multer for file upload
 const storage = multer.diskStorage({
@@ -87,7 +144,7 @@ const storage = multer.diskStorage({
    cb(null, file.originalname); // Keep the original file name
  }
 });
-const upload = multer({ storage: storage });
+const upload = multer({ storage: storage ,limits: { fileSize: MAX_SIZE }});
 
 
 const env_storage = multer.diskStorage({
@@ -98,7 +155,19 @@ const env_storage = multer.diskStorage({
    cb(null, file.originalname); // Keep the original file name
  }
 });
-const env_upload = multer({ storage: env_storage });
+const env_upload = multer({ storage: env_storage ,limits: { fileSize: MAX_SIZE }});
+
+
+const genom_storage = multer.diskStorage({
+ destination: function (req, file, cb) {
+   cb(null, 'genom_uploads/'); // Upload directory
+ },
+ filename: function (req, file, cb) {
+   cb(null, file.originalname); // Keep the original file name
+ }
+});
+const genom_upload = multer({ storage: genom_storage, limits: { fileSize: MAX_SIZE } });
+
 
 
 const env_temp_storage = multer.diskStorage({
@@ -109,7 +178,7 @@ const env_temp_storage = multer.diskStorage({
    cb(null, file.originalname); // Keep the original file name
  }
 });
-const env_temp_upload = multer({ storage: env_temp_storage });
+const env_temp_upload = multer({ storage: env_temp_storage , limits: { fileSize: MAX_SIZE }});
 
 
 
@@ -246,15 +315,40 @@ app.post('/uploadEnvTEMPfile', (req, res) => {
 });
 
 
+app.post('/uploadGENOMfile', (req, res) => {
+  console.log('Starting Genomic File Upload...');
+
+  genom_upload.single('file')(req, res, function (err) {
+    if (err instanceof multer.MulterError) {
+      return res.status(500).json({ message: 'Multer error occurred during upload.', error: err.message });
+    } else if (err) {
+      return res.status(500).json({ message: 'An unknown error occurred during upload.', error: err.message });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({ message: 'No file uploaded.' });
+    }
+
+    const filePath = path.join('genom_uploads', req.file.originalname);
+
+    console.log('File uploaded successfully with valid headers:', req.file);
+    return res.status(200).json(true);
+
+    });
+  });
+
+
+
+
 // Serve uploaded files
 app.use('/uploads', express.static('uploads'));
 
+app.use('/genom_uploads', express.static('genom_uploads'));
 
-// USER LOGIN + AUTHENTICATION ROUTES
 
+// DATABASE HANDLING 
 
-app.use('/api', authenticationRoutes)
-
+app.use('/api', databaseRoutes);
 
 
 // File Processing Routes
@@ -272,11 +366,19 @@ app.use('/api', processPedigreeRoutes);
 app.use('/api', updateParentsRoutes); 
 
 
+
 // STAT + SEARCHING Routes
 
 app.use('/api', getStatsRoutes);
 
 app.use('/api', searchRoutes);
+
+
+app.use('/api', genomicDataRoutes);
+
+
+
+
 
 
 // NEO4J Routes
@@ -291,7 +393,6 @@ app.use('/api', pedigreeRoutes);// Gets Pedigree of a selected node
 app.use('/api', allNodesEdgesRoutes); // Getting all nodes and edges for first visualisation 
 // Executes Filtering, Grouping and Sigma Conversion
 
-app.use('/api', getPartnerOfRoutes);
 
 
 // POSTGRESQL Routes
@@ -310,16 +411,26 @@ app.use('/api', performKinshipfromRoutes); // Performing New Kinship
 
 app.use('/kinshipImages', express.static(path.join(__dirname, '/kinship')));
 
-/*
-app.get('/api/images', (req, res) => {
-  const imagesPath = path.join(__dirname, '/kinship');
-  console.log(imagesPath);
-  fs.readdir(imagesPath, (err, files) => {
-    if (err) return res.status(500).json({ error: 'Error reading images directory' });
-    const imageFiles = files.filter(f => /\.(png|jpg|jpeg|gif)$/i.test(f));
-    res.json(imageFiles);
+app.use('/calculatedKinship', express.static(path.join(__dirname, '/controllers/kinship_plots')));
+
+
+
+
+app.use('/fastQCReports', express.static(path.join(__dirname, '/fastQC_reports')));
+
+app.get('/api/fastQCreports', (req, res) => {
+  const reportsDir = path.join(__dirname, '/fastQC_reports');
+
+  fs.readdir(reportsDir, (err, files) => {
+    if (err) {
+      return res.status(500).json({ error: 'Failed to read directory' });
+    }
+
+    const htmlFiles = files.filter(file => file.endsWith('.html'));
+    res.json(htmlFiles);
   });
-});*/
+});
+
 
 app.use('/diagramImages', express.static(path.join(__dirname, '/controllers/temp')));
 

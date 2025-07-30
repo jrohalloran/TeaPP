@@ -6,18 +6,10 @@
 
 import neo4j from 'neo4j-driver';
 
-// Neo4j connection setup
-
-/* // CLOUD HOST
-const URI = 'neo4j+s://a71c11d2.databases.neo4j.io';
-const USER = 'neo4j';
-const PASSWORD = 'KPoauq4gefxZaMGDId8t3lRtudtCCMJdM1gVDe84JiQ';
-*/
-
 // LOCAL DATABASE -- PRE AWS
 const URI = 'bolt://localhost:7687';
 const USER = 'neo4j';
-const PASSWORD = 'tAqsiv-tivfif-bomhe9'; // Replace with your actual password
+const PASSWORD = 'tAqsiv-tivfif-bomhe9'; 
 
 // Create a driver instance
 
@@ -30,6 +22,8 @@ const driver = neo4j.driver(
     connectionAcquisitionTimeout: 3000000, // 30 seconds
   }
 );
+
+
 
 // Function for converting Neo4j Integers
 // For handling Year and Gener attributes
@@ -48,6 +42,45 @@ function safeProperties(props) {
   return output;
 }
 
+
+export async function emptyNeo4jDatabase(){
+    const session = driver.session();
+    console.log("Starting emptying function....");
+    let emptyFlag;
+      try {
+            await session.run('MATCH (n) DETACH DELETE n');
+            console.log('All data deleted successfully.');
+            emptyFlag = true;
+        } catch (err) {
+            console.error('Error deleting data:', err);
+            emptyFlag = false;
+        } finally {
+            await session.close();
+            //await driver.close();
+    }
+    console.log("Emptying Neo4j Databases successfully")
+    return emptyFlag;
+}
+
+
+export async function getNeo4jStatus(){
+    let statusFlag = false;
+    const session = driver.session();
+
+  try {
+    const result = await session.run('RETURN 1');
+    console.log('Neo4j connected successfully:', result);
+    statusFlag = true;
+  } catch (error) {
+    console.error('Neo4j connection failed:', error.message);
+    statusFlag = false;
+  } finally {
+  if (session) await session.close();
+  }
+
+  return statusFlag;
+
+}
 
 // Querying for NodeID/IDs (Array) from front-end
 // Returns Family nodes 
@@ -100,6 +133,7 @@ export async function fetchNuclearFamilyData(nodeIDs) {
 
   return combinedResult;
 }
+
 
 export async function fetchWholeFamilyData(nodeIDs) {
   if (!Array.isArray(nodeIDs)) nodeIDs = [nodeIDs];
@@ -205,6 +239,8 @@ export async function fetchPedigreeData(nodeIDs) {
   return { nodes: combinedNodes };
 }
 
+
+
 export async function fetchAllNodesEdges2(){
   console.log('fetchAllNodesEdges called...');
   
@@ -259,7 +295,6 @@ export async function fetchAllNodesEdges2(){
   }
 }
 
-
 export async function fetchAllNodesEdges() {
   const session = driver.session();
   try {
@@ -306,7 +341,7 @@ export async function fetchAllNodesEdges() {
 }
 
 
-
+/*
 // Querying PartnerOF 
 // Returns Family nodes 
 export async function fetchPartnerOf(names) {
@@ -341,4 +376,4 @@ export async function fetchPartnerOf(names) {
 
   return allResults;
 }
-
+*/

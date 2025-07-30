@@ -1,8 +1,37 @@
-<div class="stats-tables-container">
-  <div class="table-wrapper">
-  <h2>PostgresSQL DB Statistics</h2>
+  <div class="main-wrapper">
 
-  <h5>Status:</h5>
+  <div class="button-wrapper">
+    <h1>Database Status <mat-icon>storage</mat-icon></h1>
+
+  <mat-accordion class="help-bar">
+  <mat-expansion-panel class="custom-help-panel">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Help
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <p>This page provides a summary of the current contents of the TeaPP databases. The current status of each can be seen by the their "status" label. Each database can be restarted manually using the repestive "restart" button. Then the summary information refreshed using the "refresh" button.</p>
+    <p>A search feature below facilitates that querying of the database for a specific plant/clone ID within the stored pedigree data. Results for each are displayed beneath. </p>
+  </mat-expansion-panel>
+</mat-accordion>
+    <p>Refresh Databases:</p>
+    <button class = "refresh-button" (click)="refreshAll()"><mat-icon>refresh</mat-icon></button>
+  </div>
+
+<div class="stats-tables-container">
+    <div class="loading-overlay-database" *ngIf="loading">
+    <mat-progress-spinner mode="indeterminate" diameter="60" color="primary"></mat-progress-spinner>
+    <div style="margin-top: 10px; font-size: 1.2rem; color: #333;">Loading data...</div>
+  </div>
+  
+  <div class="table-wrapper">
+  <h2>PostgresSQL DB</h2>
+
+  <h4>Status: {{pgStatusMessage}}
+
+  </h4>
+  <button class = "restart-button" (click)="restartPostgres()">Restart</button>
+  
 
   <table mat-table [dataSource]="postgreSQLTableData" class="mat-elevation-z8">
 
@@ -31,93 +60,117 @@
 </div>
 
 <div class="table-wrapper">
-<h2>Neo4j Graph Statistics</h2>
+<h2>Neo4j Graph DB</h2>
 
-<h5>Status:</h5>
+<h4>Status:  {{neoStatusMessage}}</h4>
+  <button class = "restart-button" (click)="restartNeo4j()">Restart</button>
 
 
-<table mat-table [dataSource]="neo4jDataSource" class="mat-elevation-z8" style="width: 100%; margin-top: 20px;">
+      <table mat-table [dataSource]="neo4jDataSource" class="mat-elevation-z8" style="width: 100%; margin-top: 20px;">
 
-  <!-- Key Column -->
-  <ng-container matColumnDef="key">
-    <th mat-header-cell *matHeaderCellDef> Key </th>
-    <td mat-cell *matCellDef="let element"> {{ element.key }} </td>
-  </ng-container>
-
-  <!-- Value Column -->
-  <ng-container matColumnDef="value">
-    <th mat-header-cell *matHeaderCellDef> Value </th>
-    <td mat-cell *matCellDef="let element"> {{ element.value }} </td>
-  </ng-container>
-
-  <!-- Header and Row Declarations -->
-  <tr mat-header-row *matHeaderRowDef="neo4jDisplayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: neo4jDisplayedColumns;"></tr>
-
-</table>
-
-</div>
-</div>
-
-<div class="search-section">
-    <h3>Search Database Entries</h3>
-
-    <!-- Search Input -->
-    <mat-form-field appearance="outline" class="search-box">
-      <mat-label><mat-icon>search</mat-icon>Search by any field</mat-label>
-      <input matInput [(ngModel)]="searchInput" placeholder="Type any ID or parent..." />
-    </mat-form-field>
-
-    <button mat-stroked-button color="primary" (click)="performSearch()">Search</button>
-
-    <!-- Angular Material Table -->
-   <div class = table-section >
-    <div *ngIf="postgresSearch.data.length > 0"  style="max-height: 400px; overflow-y: auto;">
-      <h3>Postgres Results</h3>
-
-      <table mat-table [dataSource]="postgresSearch" matSort #postgresSort="matSort">
-
-        <!-- ID Column -->
-        <ng-container matColumnDef="correct_id">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
-          <td mat-cell *matCellDef="let row">{{ row.correct_id }}</td>
+        <!-- Key Column -->
+        <ng-container matColumnDef="key">
+          <th mat-header-cell *matHeaderCellDef> Key </th>
+          <td mat-cell *matCellDef="let element"> {{ element.key }} </td>
         </ng-container>
 
-        <!-- Female Parent -->
-        <ng-container matColumnDef="correct_female">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Female Parent</th>
-          <td mat-cell *matCellDef="let row">{{ row.correct_female }}</td>
-        </ng-container>
-
-        <!-- Male Parent -->
-        <ng-container matColumnDef="correct_male">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Male Parent</th>
-          <td mat-cell *matCellDef="let row">{{ row.correct_male }}</td>
-        </ng-container>
-
-        <!-- Year -->
-        <ng-container matColumnDef="year">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Year</th>
-          <td mat-cell *matCellDef="let row">{{ row.year }}</td>
-        </ng-container>
-
-        <!-- Generation -->
-        <ng-container matColumnDef="generation">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Generation</th>
-          <td mat-cell *matCellDef="let row">{{ row.generation }}</td>
+        <!-- Value Column -->
+        <ng-container matColumnDef="value">
+          <th mat-header-cell *matHeaderCellDef> Value </th>
+          <td mat-cell *matCellDef="let element"> {{ element.value }} </td>
         </ng-container>
 
         <!-- Header and Row Declarations -->
-        <tr mat-header-row *matHeaderRowDef="postgresSearchColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: postgresSearchColumns;"></tr>
+        <tr mat-header-row *matHeaderRowDef="neo4jDisplayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: neo4jDisplayedColumns;"></tr>
 
       </table>
+
+      </div>
+      </div>
+
+      <div class="search-section">
+          <h3>Search Database Entries</h3>
+
+          <!-- Search Input -->
+          <mat-form-field appearance="outline" class="search-box">
+            <mat-label><mat-icon>search</mat-icon>Search by any field</mat-label>
+            <input matInput [(ngModel)]="searchInput" placeholder="Type any ID or parent..." />
+          </mat-form-field>
+
+          <button mat-stroked-button color="primary" (click)="performSearch()">Search</button>
+
+          <!-- Angular Material Table -->
+        <div class = table-section >
+            <div class="loading-overlay" *ngIf="searchloading">
+            <mat-progress-spinner mode="indeterminate" diameter="60" color="primary"></mat-progress-spinner>
+            <div style="margin-top: 10px; font-size: 1.2rem; color: #333;">Loading Searched Results...</div>
+          </div>
+          <div *ngIf="groupedPGSearch.length > 0 && !searchloading"  style="max-height: 400px; overflow-y: auto;">
+            <h3>Aggregated Postgres Results</h3>
+
+            <table mat-table [dataSource]="groupedPGSearch" multiTemplateDataRows>
+        
+        <!-- expand toggle -->
+        <ng-container matColumnDef="expand">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let element">
+            <button mat-icon-button (click)="toggleRow(element)">
+              <mat-icon>{{ expandedElement === element ? 'expand_less' : 'expand_more' }}</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <!-- female_parent -->
+        <ng-container matColumnDef="female_parent">
+          <th mat-header-cell *matHeaderCellDef>Female Parent</th>
+          <td mat-cell *matCellDef="let element">{{ element.female_parent }}</td>
+        </ng-container>
+
+        <!-- male_parent -->
+        <ng-container matColumnDef="male_parent">
+          <th mat-header-cell *matHeaderCellDef>Male Parent</th>
+          <td mat-cell *matCellDef="let element">{{ element.male_parent }}</td>
+        </ng-container>
+
+        <!-- year -->
+        <ng-container matColumnDef="year">
+          <th mat-header-cell *matHeaderCellDef>Year</th>
+          <td mat-cell *matCellDef="let element">{{ element.year }}</td>
+        </ng-container>
+
+        <!-- entries -->
+        <ng-container matColumnDef="entries">
+          <th mat-header-cell *matHeaderCellDef>No. of Entries</th>
+          <td mat-cell *matCellDef="let element">{{ element.items?.length }}</td>
+        </ng-container>
+
+        <!-- expandedDetail -->
+        <ng-container matColumnDef="expandedDetail">
+          <td mat-cell *matCellDef="let element" [attr.colspan]="groupedSearchColumns.length">
+            <div *ngIf="element.items?.length">
+              <strong>Entries:</strong>
+              <ul>
+                <li *ngFor="let item of element.items">
+                  ID: {{ item.clone_id }}, Female Parent: {{ item.correct_female }}, Male Parent: {{ item.correct_male }}, Year: {{ item.year }}, Generation: {{ item.generation }},
+                </li>
+              </ul>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="groupedSearchColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: groupedSearchColumns;"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" [style.display]="expandedElement === row ? 'table-row' : 'none'"></tr>
+
+      </table>
+
     </div>
   </div>
 
       <!-- Neo4j Search Results Table -->
   <div class = table-section >
-    <div *ngIf="neo4jSearch.data.length > 0" style="max-height: 400px; overflow-y: auto;">
+    <div *ngIf="neo4jSearch.data.length > 0 && !searchloading" style="max-height: 400px; overflow-y: auto;">
       <h3>Neo4j Results</h3>
 
       <table mat-table [dataSource]="neo4jSearch" matSort #neo4jSort="matSort">
@@ -148,4 +201,5 @@
     </div>
   </div>
 
+</div>
 </div>

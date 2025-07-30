@@ -1,0 +1,98 @@
+<div class="main-wrapper">
+  <div class="title-wrapper">
+    <h1>Genomic Data Analysis</h1>
+  <mat-accordion class="help-bar">
+  <mat-expansion-panel class="custom-help-panel">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Help
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+  </mat-expansion-panel>
+</mat-accordion>
+
+</div>
+
+
+<div class="main-content">
+  <div class="loading-overlay" *ngIf="loading">
+    <mat-progress-spinner mode="indeterminate" diameter="60" color="primary"></mat-progress-spinner>
+    <div style="margin-top: 10px; font-size: 1.2rem; color: #333;">Loading data...</div>
+</div>
+
+
+<div class="stats-tables-container">
+  <h1>FastQC Analysis</h1>
+  
+<div class="table-wrapper">
+<h2>Genomic Data Records</h2>
+  
+<p>Select records you wish to analyse</p>
+<table mat-table [dataSource]="genomicTableData" class="mat-elevation-z8">
+
+  <ng-container matColumnDef="clone_id">
+    <th mat-header-cell *matHeaderCellDef> ID </th>
+    <td mat-cell *matCellDef="let element"> {{element.clone_id}} </td>
+  </ng-container>
+  <ng-container matColumnDef="file_name">
+    <th mat-header-cell *matHeaderCellDef> File Name </th>
+    <td mat-cell *matCellDef="let element"> {{element.file_name}} </td>
+  </ng-container>
+  <ng-container matColumnDef="add_info">
+    <th mat-header-cell *matHeaderCellDef> Additional Information </th>
+    <td mat-cell *matCellDef="let element"> {{element.additional_data}} </td>
+  </ng-container>
+  <ng-container matColumnDef="select">
+    <th mat-header-cell *matHeaderCellDef> Select </th>
+    <td mat-cell *matCellDef="let row">
+        <mat-checkbox
+          (change)="toggleSelection(row)"
+          [checked]="isRowSelected(row)">
+        </mat-checkbox>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="genomicTableColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: genomicTableColumns;"></tr>
+</table>
+
+<div class="input-panel">
+<div class = "run-button-wrapper">
+
+
+<label for="email">Please enter your email to recieve notifications:</label>
+  <input
+    type="email"
+    id="email"
+    name="email"
+    [(ngModel)]="email"
+    placeholder="user@example.com"
+  /></div>
+  <div class = "parameter-selection">
+
+  <p>Trim Length:</p>
+  <p>K-mer Content:</p>
+
+
+  <button class="button"
+      mat-raised-button
+      (click)="performFastQC()">
+      Run FastQC<mat-icon>arrow_right_alt</mat-icon>
+    </button>
+  </div>
+  </div>
+
+<div class = "results" *ngIf="htmlReports.length>0">
+  <h3>FastQC Results</h3>
+  <p>Please select a FastQC report to view in an external tab:</p>
+  <ul *ngIf="htmlReports.length > 0">
+    <li *ngFor="let file of htmlReports">
+      <a [href]="'http://localhost:3333/fastQCReports/' + file" target="_blank" rel="noopener noreferrer">
+        {{ file }}<mat-icon>launch</mat-icon>
+      </a>
+    </li>
+  </ul>
+</div>
+  </div>
+  </div>
+</div>

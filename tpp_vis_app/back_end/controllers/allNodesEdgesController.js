@@ -7,13 +7,13 @@
 
 
 import { fetchAllNodesEdges } from '../services/neo4j-driver.js';
-import { convertToSigmaFormat,
+import {
     allNodeslayerByYearReverse,
     groupSiblings,
     filterNodesWithoutHigherGenDescendants,
     removeIsolatedNodes,
     convertToSigmaFormatDynamic} from '../utils/sigmaFormatter.js';
-//import { saveJsonToFile } from '../utils/fileWriter.js';
+
 
 
 export const getAllNodesEdges = async (req, res) => {

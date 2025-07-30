@@ -6,6 +6,7 @@ import { firstValueFrom } from 'rxjs';
 import { VisualisationService } from '../services/visualisation.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 
 
@@ -44,7 +45,7 @@ interface legend{
 @Component({
   selector: 'app-visualisation',
   standalone: true,
-  imports: [CommonModule, FormsModule],  // Import CommonModule here to use *ngIf, etc.
+  imports: [CommonModule, FormsModule, MatExpansionModule],  // Import CommonModule here to use *ngIf, etc.
   templateUrl: './display.html',
   styleUrls: ['./display.css']
 })
@@ -165,18 +166,6 @@ export class DisplayComponent implements AfterViewInit {
     }
   }
 
-  async getPartnerOf(nodeID: any): Promise<void> {
-    console.log('Retrieving Selected:');
-    console.log(nodeID);
-    try {
-      const response = await firstValueFrom(this.backendApiService.getPartnerOf(nodeID));
-      console.log('Postgres Response from getPartnerOf:', response);
-      //this.jsonData = response;
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  }
-
   loadGraph(): void {
     if (this.rendererTop) {
       this.rendererTop.kill();
@@ -195,6 +184,7 @@ export class DisplayComponent implements AfterViewInit {
     this.getSelectedNode();
 
   }
+  
 
   loadNewGraph(): void {
     this.showBottomOverlay = false;
@@ -268,7 +258,6 @@ export class DisplayComponent implements AfterViewInit {
       console.log("Gettig node value:")
       console.log(nodeData);
       this.getSelectPlantPG([node]);
-      //this.getPartnerOf([node]);
 
     });
 
@@ -357,25 +346,15 @@ export class DisplayComponent implements AfterViewInit {
         yearColorMap.set(Number(item.element), item.colour);
       });
 
-    this.nuclearFamilyData.nodes.forEach(element =>{
-      for (let i=0;i<nodeID.length;i++){
-        if (element.id == nodeID[i]){
-          console.log("match")
-          console.log(element);
-          element.color = '#fe6100';
-
-        }else {
-              if (this.selectedColour == "generation"){
-                const originalColor = yearColorMap.get(Number(element.gener));
-                element.color = originalColor || '#1B9E77'; // fallback color if year is missing
-            
-              }
-              if (this.selectedColour == "year"){
-                const originalColor = yearColorMap.get(Number(element.year));
-                element.color = originalColor || '#1B9E77'; // fallback color if year is missing
-            
-              }
-              else{continue}
+    this.nuclearFamilyData.nodes.forEach(node => {
+      if (nodeID.includes(node.id)) {
+        console.log("match");
+        node.color = '#fe6100';
+      } else {
+        if (this.selectedColour === "generation") {
+          node.color = yearColorMap.get(Number(node.gener)) || '#1B9E77';
+        } else if (this.selectedColour === "year") {
+          node.color = yearColorMap.get(Number(node.year)) || '#1B9E77';
         }
       }
     });
@@ -411,7 +390,6 @@ export class DisplayComponent implements AfterViewInit {
           console.log("Retrieving Data...");
           console.log(nodeID)
           this.getSelectPlantPG(nodeID); // Get entry for select clones
-          //this.getPartnerOf(nodeID);// Get partners of selected clones
 
           const data = [nodeID, this.selectedColour];
 
@@ -439,7 +417,6 @@ export class DisplayComponent implements AfterViewInit {
         try {
           console.log("Retrieving Data...");
           this.getSelectPlantPG([nodeID]); // Get entry for select clones
-          //this.getPartnerOf([nodeID]);// Get partners of selected clones
           const data = [nodeID, this.selectedColour];
           const response = await firstValueFrom(this.backendApiService.getPedigree(data));
           console.log('Response from backend:', response);
@@ -466,13 +443,25 @@ export class DisplayComponent implements AfterViewInit {
     this.stats.nodes = noNodes;
 
   }
-
-  zoomIn() {
-    console.log('Zoom in clicked');
+  zoomIn(): void {
+    if (this.rendererTop) {
+      const camera = this.rendererTop.getCamera();
+      camera.animatedZoom({ duration: 200, factor: 1.2 }); // Zoom in 20%
+    }
   }
 
-  zoomOut() {
-    console.log('Zoom out clicked');
+  zoomOut(): void {
+    if (this.rendererTop) {
+      const camera = this.rendererTop.getCamera();
+      camera.animatedUnzoom({ duration: 200, factor: 1.2 }); // Zoom out 20%
+    }
+  }
+
+  resetZoom(): void {
+  if (this.rendererTop) {
+    const camera = this.rendererTop.getCamera();
+    camera.animatedReset({ duration: 300 });
+    }
   }
 
 

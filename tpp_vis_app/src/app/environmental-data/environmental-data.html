@@ -1,50 +1,212 @@
-  
-<div class="main-content vertical-split">
+<div class="main-wrapper">
+<div class="title-wrapper">
+    <h1>Environmental Data Analysis</h1>
+
+  <mat-accordion class="analysis-bar">
+  <mat-expansion-panel [expanded]="true" class="custom-analysis-panel">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Analysis Options
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <!-- Two-column layout -->
+    <div class="two-column-panel">
+      <!-- Left Panel -->
+      <div class="column">
+        <h3>Temperature Analysis</h3>
+        <button class = "button" (click)="getTempData()" >Temperature Analysis</button>
+      </div>
+
+      <!-- Right Panel -->
+      <div class="column">
+        <h3>Rainfall Analysis</h3>
+        <button class = "button" (click)="getRainfallData()" >Rainfall Analysis</button>
+      </div>
+    </div>
+  </mat-expansion-panel>
+</mat-accordion>
+  <mat-accordion class="help-bar">
+  <mat-expansion-panel class="custom-help-panel">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Help
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+  </mat-expansion-panel>
+</mat-accordion>
+</div>
+
+<div class="main-content vertical-split content-wrapper">
       <!-- Loading overlay -->
   <div class="loading-overlay" *ngIf="loading">
     <mat-progress-spinner mode="indeterminate" diameter="60" color="primary"></mat-progress-spinner>
     <div style="margin-top: 10px; font-size: 1.2rem; color: #333;">Loading data...</div>
   </div>
-    <!-- Bottom two side-by-side containers -->
-    <div class="bottom-section two-panels">
-      <!-- Upload New Dataset -->
-      <div class="panel">
-        <button mat-raised-button color="primary" (click)="getRainfallData()" >Rainfall Analysis</button>
-      </div>
-      <div class="panel">
-        <button mat-raised-button color="primary" (click)="getTempData()" >Temperature Analysis</button>
-      </div>
-</div>
 
-<div class="custom-grid">
-  <div
-    *ngFor="let item of imagesRainfall"
-    class="grid-item"
-    [ngStyle]="{ 'grid-area': item.gridArea }"
-  >
-    <img *ngIf="item.url" [src]="item.url" [alt]="item.name" [ngClass]="getImageClass(item.name)" (click)="openModal(item.url)" />
-    <div *ngIf="!item.url" class="stats-box">
-      <h3>Rainfall Statistics</h3>
-      <p>Here will display any relevant statistics and comments for Rainfall Analysis.</p>
-    </div>
+<div class="custom-grid-rain" *ngIf="selectedAnalysis === 'rainfall'">
+<div
+  *ngFor="let item of imagesRainfall"
+  class="grid-item"
+  [ngStyle]="{ 'grid-area': item.gridArea }"
+>
+  <!-- Render image -->
+  <img
+    *ngIf="item.type === 'image' && item.url"
+    [src]="item.url"
+    [alt]="item.name"
+    [ngClass]="getImageClass(item.name)"
+    (click)="openModal(item.url)"
+  />
+
+  <!-- Render HTML (e.g., interactive Plotly) in iframe -->
+  <iframe
+    *ngIf="item.type === 'html' && item.url"
+    [src]="item.url | safeUrl"
+    width="100%"
+    height="400"
+    frameborder="0"
+  ></iframe>
+
+
+
+  <!-- Fallback stats box -->
+  <div *ngIf="!item.url" class="stats-box">
+    <h3>Rainfall Statistics</h3>
+    <p>Here will display any relevant statistics and comments for Rainfall Analysis.</p>
+  </div>
+</div>
+  <div class="grid-item" [ngStyle]="{ 'grid-area': 'boxplotArea' }">
+
+    <!-- Buttons to select boxplot -->
+  <div class="plot-selector" style="margin-bottom: 10px;">
+      <button
+      mat-raised-button
+      [color]="selectedRainPlot === 'season' ? 'primary' : null"
+      (click)="selectedRainPlot = 'season'">
+      Season
+    </button>
+    <button
+      mat-raised-button
+      [color]="selectedRainPlot === 'year' ? 'primary' : null"
+      (click)="selectedRainPlot = 'year'">
+      Year
+    </button>
+    <button
+      mat-raised-button
+      [color]="selectedRainPlot === 'month' ? 'primary' : null"
+      (click)="selectedRainPlot = 'month'">
+      Month
+    </button>
+
+  </div>
+
+    <!-- Conditionally render iframe based on selection -->
+  <iframe
+  *ngIf="selectedRainPlot === 'season'"
+  [src]="seasonBoxplotUrl | safeUrl"
+  width="100%" height="400" frameborder="0"
+  ></iframe>
+
+  <iframe
+    *ngIf="selectedRainPlot === 'year'"
+    [src]="yearBoxplotUrl | safeUrl"
+    width="100%" height="400" frameborder="0"
+  ></iframe>
+
+  <iframe
+    *ngIf="selectedRainPlot === 'month'"
+    [src]="monthBoxplotUrl | safeUrl"
+    width="100%" height="400" frameborder="0"
+  ></iframe>
+
   </div>
 </div>
 
-<div class="custom-grid">
-  <div
-    *ngFor="let item of imagesTemp"
-    class="grid-item"
-    [ngStyle]="{ 'grid-area': item.gridArea }"
-  >
-    <img *ngIf="item.url" [src]="item.url" [alt]="item.name" [ngClass]="getImageClass(item.name)" (click)="openModal(item.url)" />
-    <div *ngIf="!item.url" class="stats-box">
-      <h3>Temperature Statistics</h3>
-      <p>Here will display any relevant statistics and comments for Temperature Analysis.</p>
-    </div>
+
+<div class="custom-grid-temp" *ngIf="selectedAnalysis === 'temperature'">
+<div
+  *ngFor="let item of imagesTemp"
+  class="grid-item"
+  [ngStyle]="{ 'grid-area': item.gridArea }"
+>
+  <!-- Render image -->
+  <img
+    *ngIf="item.type === 'image' && item.url"
+    [src]="item.url"
+    [alt]="item.name"
+    [ngClass]="getImageClass(item.name)"
+    (click)="openModal(item.url)"
+  />
+
+  <!-- Render HTML (e.g., interactive Plotly) in iframe -->
+  <iframe
+    *ngIf="item.type === 'html' && item.url"
+    [src]="item.url | safeUrl"
+    width="100%"
+    height="400"
+    frameborder="0"
+  ></iframe>
+
+
+  <div *ngIf="!item.url" class="stats-box">
+    <h3>Temperature Statistics</h3>
+    <p>Here will display any relevant statistics and comments for Temperature Analysis.</p>
   </div>
 </div>
+
+    <!-- Single grid-item for layered boxplots -->
+     
+  <div class="grid-item" [ngStyle]="{ 'grid-area': 'boxplotArea' }">
+
+    <!-- Buttons to select boxplot -->
+  <div class="plot-selector" style="margin-bottom: 10px;">
+      <button
+      mat-raised-button
+      [color]="selectedTempPlot === 'mean' ? 'primary' : null"
+      (click)="selectedTempPlot = 'mean'">
+      Mean
+    </button>
+    <button
+      mat-raised-button
+      [color]="selectedTempPlot === 'max' ? 'primary' : null"
+      (click)="selectedTempPlot = 'max'">
+      Max
+    </button>
+    <button
+      mat-raised-button
+      [color]="selectedTempPlot === 'min' ? 'primary' : null"
+      (click)="selectedTempPlot = 'min'">
+      Min
+    </button>
+
+  </div>
+
+    <!-- Conditionally render iframe based on selection -->
+    <iframe
+  *ngIf="selectedTempPlot === 'mean'"
+  [src]="meanBoxplotUrl | safeUrl"
+  width="100%" height="400" frameborder="0"
+  ></iframe>
+
+  <iframe
+    *ngIf="selectedTempPlot === 'min'"
+    [src]="minBoxplotUrl | safeUrl"
+    width="100%" height="400" frameborder="0"
+  ></iframe>
+
+  <iframe
+    *ngIf="selectedTempPlot === 'max'"
+    [src]="maxBoxplotUrl | safeUrl"
+    width="100%" height="400" frameborder="0"
+  ></iframe>
+
+  </div>
+</div>
+
 </div>
 
 <div class="modal" *ngIf="selectedImageUrl" (click)="closeModal()">
   <img [src]="selectedImageUrl" alt="Enlarged Image" />
+</div>
 </div>

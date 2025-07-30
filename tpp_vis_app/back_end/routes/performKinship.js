@@ -10,6 +10,6 @@ import {performKinship} from '../controllers/performKinshipController.js';
 const router = express.Router();
 
 
-router.get('/performKinship', performKinship)
+router.post('/performKinship', performKinship)
 
 export default router;
