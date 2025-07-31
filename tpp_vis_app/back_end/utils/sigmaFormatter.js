@@ -447,7 +447,6 @@ export function layerByYearBoundedSpacing(graphData) {
 
   const lastLayerY = sortedYears.length * layerHeight;
 
-  // Position nullGenPos
   {
     const count = nullGenPos.length;
     const spacing = getSpacing(count);
@@ -457,7 +456,6 @@ export function layerByYearBoundedSpacing(graphData) {
     });
   }
 
-  // Position nullGen0
   {
     const count = nullGen0.length;
     const spacing = getSpacing(count);
@@ -473,7 +471,6 @@ export function layerByYearBoundedSpacing(graphData) {
 
 
 //  ------- Inital Group mapping functions ----------
-
 
 export function allNodeslayerByYearReverse(graphData) {
   const layers = {};
@@ -570,67 +567,6 @@ export function allNodeslayerByYearReverseDynamic(graphData,height,space) {
 }
 
 
-/*
-export function convertToSigmaFormat(graphData) {
-  const nodeById = new Map(graphData.nodes.map(n => [n.id, n]));
-  const childrenCount = {};
-
-  graphData.edges.forEach(edge => {
-    const sourceNode = nodeById.get(edge.source);
-    const targetNode = nodeById.get(edge.target);
-    if (!sourceNode || !targetNode) return;
-
-    if (Number(targetNode.gener) > Number(sourceNode.gener)) {
-      if (!childrenCount[edge.source]) childrenCount[edge.source] = 0;
-      childrenCount[edge.source]++;
-    }
-  });
-
-  const generations = graphData.nodes
-    .map(n => Number(n.gener) || 0)
-    .filter(g => g != null);
-  const uniqueGenerations = [...new Set(generations)].sort((a, b) => a - b);
-
-  function interpolateColor(gener) {
-    if (gener == null) return '#00FF00';
-    const colors = ['#e6194B', '#f58231', '#ffe119', '#3cb44b', '#4363d8', '#911eb4'];
-    const index = uniqueGenerations.indexOf(Number(gener));
-    return colors[index % colors.length] || '#00FF00';
-  }
-
-  const sigmaNodes = graphData.nodes.map(node => {
-
-    const childCount = childrenCount[node.id] || 0;
-    const size = Math.min(40, 6 + Math.log2(childCount + 1) * 2.5);
-    return {
-      id: node.id,
-      label: node.label || node.id,
-      x: Number(node.x),
-      y: Number(node.y),
-      size,
-      color: interpolateColor(node.gener),
-      year: node.year,
-      parents: node.parents,
-      siblings: node.sibling,
-      gener: Number(node.gener || 0)
-    };
-  });
-
-  const sigmaEdges = graphData.edges.map((edge, i) => ({
-    id: `e${i}`,
-    source: edge.source,
-    target: edge.target,
-    size: edge.size || 1,
-    color: edge.color || '#999'
-  }));
-
-  return { nodes: sigmaNodes, edges: sigmaEdges };
-}
-*/
-
-
-
-
 // General Functions 
 export function convertToSigmaFormat(graphData) {
   const nodeById = new Map(graphData.nodes.map(n => [n.id, n]));
@@ -707,7 +643,7 @@ export function convertToSigmaFormat(graphData) {
 }
 
 
-export function convertToSigmaFormatDynamic(graphData, colourFlag) {
+export function convertToSigmaFormatDynamic(graphData, colourFlag, scale) {
   const nodeById = new Map(graphData.nodes.map(n => [n.id, n]));
   const childrenCount = {};
 
@@ -754,8 +690,13 @@ export function convertToSigmaFormatDynamic(graphData, colourFlag) {
     }
 
     sigmaNodes = graphData.nodes.map(node => {
+      let size;
+      if (scale){
       const childCount = childrenCount[node.id] || 0;
-      const size = Math.min(40, 6 + Math.log2(childCount + 1) * 2);
+      size = Math.min(40, 6 + Math.log2(childCount + 1) * 2);}
+      if (!scale){
+      size = 6;
+      }
       return {
         id: node.id,
         label: node.label || node.id,

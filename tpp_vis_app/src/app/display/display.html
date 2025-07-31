@@ -138,6 +138,25 @@
                 />
                 Generation
               </label>
+        <h3>Node Size:</h3>
+              <label>
+                <input
+                  type="radio"
+                  name="scale"
+                  [value]="true"
+                  [(ngModel)]="scale"
+                />
+                No. of Descendants
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="scale"
+                  [value]="false"
+                  [(ngModel)]="scale"
+                />
+                None 
+              </label>
 
 
       <button (click)="updateDiagram()">Update</button>
