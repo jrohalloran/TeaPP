@@ -1,7 +1,0 @@
-Description	Count
-Twin No.1 IDs	177
-Twin No.1 used as father	0
-Twin No.1 used as mother	0
-Twin No.2 IDs	196
-Twin No.2 used as father	0
-Twin No.2 used as mother	0
