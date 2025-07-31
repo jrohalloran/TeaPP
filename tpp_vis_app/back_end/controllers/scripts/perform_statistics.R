@@ -249,13 +249,33 @@ file<- paste0(temp_dir,"/sibling_counts.txt")
 write.table(results, file = file, sep = "\t", row.names = FALSE, quote = FALSE)
 
 # Calculate values
-num_female_unique <- length(unique(c(df$correct_female)))
-num_male_unique <- length(unique(c(df$correct_male)))
-num_intersect <- length(intersect(unique(c(df$correct_female)), unique(c(df$correct_male))))
-num_female_not_male <- length(setdiff(unique(c(df$correct_female)), unique(c(df$correct_male))))
-num_male_not_female <- length(setdiff(unique(c(df$correct_male)), unique(c(df$correct_female))))
+num_female_unique <- unique(c(df$correct_female))
+# Remove NAs and whitespace/empty
+num_female_unique <- num_female_unique[!is.na(num_female_unique) & trimws(num_female_unique) != "" & trimws(num_female_unique) != "NA"]
+num_female_unique<- length(num_female_unique)
+
+num_male_unique <- unique(c(df$correct_male))
+num_male_unique <- num_male_unique[!is.na(num_male_unique) & trimws(num_male_unique) != "" & trimws(num_male_unique) != "NA"]
+num_male_unique<- length(num_male_unique)
+
+
+num_intersect <- intersect(unique(c(df$correct_female)), unique(c(df$correct_male)))
+num_intersect <- num_intersect[!is.na(num_intersect) & trimws(num_intersect) != "" & trimws(num_intersect) != "NA"]
+num_intersect<- length(num_intersect)
+
+num_female_not_male <- setdiff(unique(c(df$correct_female)), unique(c(df$correct_male)))
+num_female_not_male  <- num_female_not_male[!is.na(num_female_not_male) & trimws(num_female_not_male) != "" & trimws(num_female_not_male) != "NA"]
+num_female_not_male<- length(num_female_not_male)
+
+
+num_male_not_female <- setdiff(unique(c(df$correct_male)), unique(c(df$correct_female)))
+num_male_not_female <- num_male_not_female[!is.na(num_male_not_female) & trimws(num_male_not_female) != "" & trimws(num_male_not_female) != "NA"]
+num_male_not_female <- length(num_male_not_female)
+
 
 parents <- unique(c(df$correct_male, df$correct_female))
+parents <- parents[!is.na(parents) & trimws(parents) != "" & trimws(parents) != "NA"]
+
 num_parents <- length(parents)
 
 # Create a data frame
@@ -315,8 +335,8 @@ num_female_par_updated<-length(unique(setdiff(df$female_par, df$correct_female))
 formatting_df <- data.frame(
   Metric = c(
     "Offspring IDs",
-    "Female Parents",
-    "Male Parents"
+    "Male Parents",
+    "Female Parents"
   ),
   Count = c(
     num_id_updated,
