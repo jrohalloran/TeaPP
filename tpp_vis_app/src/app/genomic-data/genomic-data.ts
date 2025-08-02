@@ -53,6 +53,7 @@ export class GenomicData {
   genomicTableColumns = ['clone_id','file_name', 'add_info', 'select'];
   genomicTableData: any = [];
   htmlReports: string[] = [];
+  storedReports: string[] = [];
   email: string = '';
 
 
@@ -69,8 +70,6 @@ export class GenomicData {
 
 
   }
-
-
 
 
   async getGenomicData(){
@@ -91,6 +90,28 @@ export class GenomicData {
 
       }
   }
+
+  async retrieveFastQC(){
+    this.loading = true;
+    try{
+        this.backendApiService.getHtmlReports().subscribe({
+                next: (files) => {
+                  this.storedReports = files;
+                },
+                error: (err) => {
+                  console.error('Failed to load reports:', err);
+                }
+              });
+            }
+            catch(error) {
+        console.error('Error:', error);
+            }finally{
+      this.loading = false;
+    }
+
+
+  
+}
 
 
   async performFastQC(){
