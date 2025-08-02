@@ -69,6 +69,7 @@ export class DisplayComponent implements AfterViewInit {
   selectedGroup = 'sibling';//Default Grouping
   selectedColour = 'generation'; //Default Colouring
   selectedLayer = 'year'; //Default Layering
+  scale: boolean = false;
 
 
   jsonData: GraphJSON = {
@@ -528,8 +529,9 @@ async getUpdatedData(flags: any[]): Promise<void> {
   console.log(this.selectedGroup);
   console.log(this.selectedLayer);
   console.log(this.isfiltered);
+  console.log(this.scale);
 
-  const flags = [this.selectedGroup,this.selectedLayer, this.isfiltered,this.selectedColour];
+  const flags = [this.selectedGroup,this.selectedLayer, this.isfiltered,this.selectedColour, this.scale];
   console.log(flags);
 
   await this.getUpdatedData(flags);
