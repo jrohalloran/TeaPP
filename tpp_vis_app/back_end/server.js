@@ -123,6 +123,31 @@ if (!fs.existsSync(temp_dir)) {
   fs.mkdirSync(temp_dir);
 }
 
+
+if (fs.existsSync(temp_envir_dir)){
+  console.log("/temp__evir_dir directory exists");
+  console.log("---- Removing Directory ----");
+  fs.rmSync(temp_envir_dir, { recursive: true, force: true })
+}
+if (!fs.existsSync(temp_envir_dir)) {
+  console.log("---- Making Directory ----");
+  fs.mkdirSync(temp_envir_dir);
+}
+
+
+if (fs.existsSync(temp_envir_temp_dir)){
+  console.log("/temp__evir_dir directory exists");
+  console.log("---- Removing Directory ----");
+  fs.rmSync(temp_envir_temp_dir, { recursive: true, force: true })
+}
+if (!fs.existsSync(temp_envir_temp_dir)) {
+  console.log("---- Making Directory ----");
+  fs.mkdirSync(temp_envir_temp_dir);
+}
+
+
+
+
 /// ------------ FILE UPLOAD --------------
 
 
