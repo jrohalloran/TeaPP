@@ -646,6 +646,7 @@ export function convertToSigmaFormat(graphData) {
 export function convertToSigmaFormatDynamic(graphData, colourFlag, scale) {
   const nodeById = new Map(graphData.nodes.map(n => [n.id, n]));
   const childrenCount = {};
+  console.log("Scale: "+scale);
 
   graphData.edges.forEach(edge => {
     const sourceNode = nodeById.get(edge.source);
@@ -782,8 +783,13 @@ export function convertToSigmaFormatDynamic(graphData, colourFlag, scale) {
             return colors[index % colors.length] || '#00FF00';
           }
           sigmaNodes = graphData.nodes.map(node => {
-            const childCount = childrenCount[node.id] || 0;
-            const size = Math.min(40, 6 + Math.log2(childCount + 1) * 2);
+              let size;
+              if (scale){
+              const childCount = childrenCount[node.id] || 0;
+              size = Math.min(40, 6 + Math.log2(childCount + 1) * 2);}
+              if (!scale){
+              size = 6;
+              }
             return {
               id: node.id,
               label: node.label || node.id,
