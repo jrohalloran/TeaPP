@@ -12,5 +12,6 @@ export const environment = {
   uploadEnvTEMPUrl:'http://localhost:3333/uploadEnvTEMPFile',
   uploadGENOMUrl: 'http://localhost:3333/uploadGENOMFile',
   imageKinshipBaseUrl:'http://localhost:3333/calculatedKinship',
-  fastQCreportsURL: 'http://localhost:3333/fastQCReports'
+  fastQCreportsURL: 'http://localhost:3333/fastQCReports',
+  statsBaseUrl: 'http://localhost:3333/stored_stats'
 };
