@@ -62,11 +62,8 @@
   <!-- Container for mat-tab-group -->
   <div class="tab-container">
     <mat-tab-group>
-      <mat-tab label="Overview">
+      <mat-tab label="Pedigree Overview">
         <app-overview></app-overview>
-      </mat-tab>
-            <mat-tab label="Database Status">
-        <app-database-page></app-database-page>
       </mat-tab>
     <mat-tab label="Pedigree Visualisation">
       <ng-template matTabContent>
@@ -81,6 +78,9 @@
       </mat-tab>
       <mat-tab label="Genetic Data">
         <app-genomic-data></app-genomic-data>
+      </mat-tab>
+      <mat-tab label="Admin Tools">
+        <app-database-page></app-database-page>
       </mat-tab>
     </mat-tab-group>
   </div>
