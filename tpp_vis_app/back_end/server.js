@@ -46,9 +46,9 @@ const app = express();
 
 // Middleware
 app.use(cors());
-app.use(bodyParser.json({ limit: '10mb' }));
-app.use(express.text({ limit: '10mb' })); 
-app.use(express.json({ limit: '10mb' })); 
+app.use(bodyParser.json({ limit: '10gb' }));
+app.use(express.text({ limit: '10gb' })); 
+app.use(express.json({ limit: '10gb' })); 
 
 
 const __filename = fileURLToPath(import.meta.url);
