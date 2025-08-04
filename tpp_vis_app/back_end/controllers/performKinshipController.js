@@ -184,7 +184,7 @@ function checkMem(){
 // Get total system memory in GB
     totalRAM = (os.totalmem() / (1024 ** 3)).toFixed(2);
 
-    console.log(`Detected RAM: ${totalRAM.toFixed(2)} GB`);
+    console.log(`Detected RAM: ${totalRAM} GB`);
 
     if (totalRAM >= MIN_RAM_GB) {
     console.log(`Enough RAM. Running script...`);
@@ -199,12 +199,15 @@ function checkMem(){
 }
 
 
+
 export const performKinship= async (req, res) => {
 
     const email = req.body;
     console.log("Email: "+email);
 
     console.log("Performing Kinship Analysis ")
+
+    
 
     // get Data 
 

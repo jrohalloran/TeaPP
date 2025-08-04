@@ -20,6 +20,21 @@
 
   <!-- Main content area -->
   <div class="app-container">
+  <aside class="left-side-panel">
+
+    <div class='my-legend' *ngIf="legend.length > 0">
+        <h2>Legend</h2>
+        <p>{{legendText}}</p>
+        <div class='legend-scale'>
+          <ul class='legend-labels'>
+            <li *ngFor="let item of legend">
+              <span [ngStyle]="{'background': item.colour}"></span>
+              {{ item.element }}
+            </li>
+          </ul>
+        </div>
+    </div>
+  </aside>
 
     <!-- Left side: split into top and bottom halves -->
     <div class="left-side">
@@ -48,7 +63,7 @@
       </div>
 
     </div>
-
+    
     <!-- Right side panel -->
     <aside class="side-panel">
 
@@ -163,18 +178,6 @@
       </div>
       <div class="side-scrollable">
 
-      <div class='my-legend' *ngIf="legend.length > 0">
-        <h2>Legend</h2>
-        <p>{{selectedColour}}</p>
-        <div class='legend-scale'>
-          <ul class='legend-labels'>
-            <li *ngFor="let item of legend">
-              <span [ngStyle]="{'background': item.colour}"></span>
-              {{ item.element }}
-            </li>
-          </ul>
-        </div>
-      </div>
       <div class="search-panel">
           <!-- Search Input -->
            <h2>Search</h2>

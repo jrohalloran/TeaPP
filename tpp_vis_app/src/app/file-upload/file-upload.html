@@ -116,7 +116,10 @@
     <div class="upload-wrapper">
       <h3>Upload Your Genomic Data Files</h3>
       <input type="file" (change)="handleFileGenomSelection($event)" multiple />
-
+      <p style="color: red;">
+        <mat-icon>error</mat-icon>
+        Please note, large files may take &gt;1 hour to upload.
+      </p>
       <div *ngIf="selectedGenomFiles && selectedGenomFiles.length > 0">
         <section class="file-details">
           <h3>Selected File(s):</h3>
@@ -169,6 +172,7 @@
           <li>Select your genomic data file(s) from your local directory.</li>
           <li>Accepted fastq file with formats: .fastq, .fq</li>
           <li>Provide a Clone ID before uploading.</li>
+          <li>Maximum File size is 10GB</li>
         </ul>
       </div>
     </div>

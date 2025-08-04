@@ -68,8 +68,10 @@ export class DisplayComponent implements AfterViewInit {
   isfiltered = 'yes';
   selectedGroup = 'sibling';//Default Grouping
   selectedColour = 'generation'; //Default Colouring
-  selectedLayer = 'year'; //Default Layering
+  selectedLayer = 'generation'; //Default Layering
   scale: boolean = false;
+
+  legendText = 'generation';
 
 
   jsonData: GraphJSON = {
@@ -536,6 +538,7 @@ async getUpdatedData(flags: any[]): Promise<void> {
 
   await this.getUpdatedData(flags);
   this.loadGraph();
+  this.legendText = this.selectedColour;
   this.isTopLoading=false;
 
  }
