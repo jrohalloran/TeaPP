@@ -103,7 +103,7 @@
   <p>Please select a FastQC report to view in an external tab:</p>
   <ul *ngIf="storedReports.length > 0">
     <li *ngFor="let file of storedReports">
-      <a [href]="'http://localhost:3333/fastQCReports/' + file" target="_blank" rel="noopener noreferrer">
+      <a [href]="reportBaseUrl + '/' + file" target="_blank" rel="noopener noreferrer">
         {{ file }}<mat-icon>launch</mat-icon>
       </a>
     </li>
