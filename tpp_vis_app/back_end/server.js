@@ -371,8 +371,11 @@ app.use('/uploads', express.static('uploads'));
 app.use('/genom_uploads', express.static('genom_uploads'));
 
 
-// DATABASE HANDLING 
+// Stored Stats 
+app.use('/stored_stats', express.static('stored_stats'));
 
+
+// DATABASE HANDLING 
 app.use('/api', databaseRoutes);
 
 

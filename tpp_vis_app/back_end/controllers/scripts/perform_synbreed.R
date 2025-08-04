@@ -184,6 +184,18 @@ set1 <- unique_first_two_1
 set2 <- unique_first_two_2
 set3 <- unique_first_two_3
 
+print(set1)
+print(set2)
+print(set3)
+
+print("Intersect 1, 2")
+intersect(set1, set2)
+print("Intersect 2, 3")
+intersect(set2, set3)
+print("Intersect 1, 3")
+intersect(set1, set3)
+
+
 file<- paste0(temp_dir,"/year_gen_venn.png")
 # Open the PNG device
 png(file, width = 800, height = 800)

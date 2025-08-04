@@ -18,7 +18,7 @@
 
   <div class="stats-section">
     <h2>Plants per Generations</h2>
-      <p>Number of plants in each generation</p>
+      <p>Number of plants in each generation. Generation defined as 1+ highest parental generation.</p>
       <div class="table-scroll-container">
         <table>
           <thead>
@@ -39,7 +39,7 @@
 
         <div class="stats-section">
       <h2>Parental Records</h2>
-      <p></p>
+      <p>Number of individual used as breeding parents (offspring & founders).</p>
       <div class="table-scroll-container">
         <table>
           <thead>
@@ -61,7 +61,8 @@
     <!-- Section 1 -->
     <div class="stats-section">
       <h2>Entry Counts by Sibling</h2>
-      <p>Occurance of recorded siblings and number of unique parents. Defined by the presence of sibling nomeclature (Aa-Ff)</p>
+      <p>Occurance of recorded siblings and number of unique parents. Defined by the presence of sibling nomeclature (A-F).</p>
+      <p>Siblings are considered Year-Wide-Siblings (YWS)(Same parents, same year)</p>
       <div class="table-scroll-container">
         <table>
           <thead>
@@ -105,10 +106,10 @@
     </div>
 
     <div class="stats-section">
-      <h2>Years of breeding</h2>
-      <p>Years where breeding took place for each generation.</p>
+      <h2>Parents Used Per Generation</h2>
+      <p>Overlapping number of parents used for each generation. Details which generations used the same breeding indviduals.</p>
       <div
-          *ngFor="let item of yearVenn"
+          *ngFor="let item of parentVenn"
           class="grid-item"
           [ngStyle]="{ 'grid-area': item.gridArea }"
         >
@@ -131,7 +132,7 @@
   <div class="stats-column">
 
     <div class="stats-section">
-      <h2>Ranked No. of Offspring</h2>
+      <h2>Ranked Breeding Clones</h2>
       <p>The individuals that contributed the most to breeding events - Highest incidence of being a parent</p>
       <div class="table-scroll-container">
         <table>
@@ -153,8 +154,8 @@
 
 
     <div class="stats-section">
-      <h2>Count by Year</h2>
-      <p>Frequency of Offspring bred for each year</p>
+      <h2>Crosses by Year</h2>
+      <p>Frequency of Offspring records detailed for each year (obtained from Clone ID).</p>
       <div class="table-scroll-container">
         <table>
           <thead>
@@ -210,10 +211,42 @@
     </div>
 
     <div class="stats-section">
-      <h2>Parents Used Per Generation</h2>
-      <p>Overlapping parents used for each generation. Details which generations used the same breeding indviduals.</p>
-        <div
-        *ngFor="let item of parentVenn"
+      <h2>Years of breeding by Generation</h2>
+      <p>Years where breeding took place for each generation.</p>
+          <div class="plot-selector" style="margin-bottom: 10px;">
+      <button
+      mat-raised-button
+      [color]="selectedVennplot === 'default' ? 'primary' : null"
+      (click)="selectedVennplot = 'default'">
+      Default
+    </button>
+    <button
+      mat-raised-button
+      [color]="selectedVennplot === 'labelled' ? 'primary' : null"
+      (click)="selectedVennplot = 'labelled'">
+      Labelled
+    </button>
+    <div *ngIf="selectedVennplot === 'default'">
+    <div
+        *ngFor="let item of yearVenn"
+        class="grid-item"
+        [ngStyle]="{ 'grid-area': item.gridArea }"
+      >
+      <figure *ngIf="item.url" class="image-figure">
+      <figcaption>
+        <strong>{{ item.title || item.name }}</strong><br />
+      </figcaption>
+      <img 
+        [src]="item.url" 
+        [alt]="item.name" 
+        [ngClass]="getImageClass(item.name)" 
+        (click)="openModal(item.url)" 
+      />
+    </figure>
+      </div></div>
+      <div *ngIf="selectedVennplot === 'labelled'">
+    <div
+        *ngFor="let item of storedVenn"
         class="grid-item"
         [ngStyle]="{ 'grid-area': item.gridArea }"
       >
@@ -229,8 +262,10 @@
       />
     </figure>
 
-      </div>
+      </div></div>
+     </div>
     </div>
+      
   </div>
 
 
@@ -244,6 +279,7 @@
 
         <div class="search-section">
           <h3>Search Database Entries</h3>
+          <p>Search for full/partial Clone ID e.g. "SFS" or "MRT1"</p>
 
           <!-- Search Input -->
           <mat-form-field appearance="outline" class="search-box">

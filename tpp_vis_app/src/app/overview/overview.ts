@@ -54,6 +54,8 @@ export class Overview {
     loading = false;
     searchloading: boolean = false;
 
+    selectedVennplot: 'default' | 'labelled' = 'default'; 
+
     siblingCount: any[] = [];
     rankedCount: any[] = [];
     summaryCount: any[] = [];
@@ -65,6 +67,7 @@ export class Overview {
     yearVenn:GridItem [] = [];
     parentVenn:GridItem [] = [];
     statsImages:GridItem [] = [];
+    storedVenn:GridItem [] = [];
 
 
     postgresTableColumns = ['table_name','rows', 'total_size'];
@@ -112,7 +115,10 @@ export class Overview {
          title: "Parents per Generation" }];
       this.yearVenn = [
       { url: this.backendApiService.getDiagramUrl('year_gen_venn_2.png'), name: 'vennYear', gridArea: 'thumb1', title: "Year of Breeding for Each Generation",type: "image"}
-    ];
+      ];
+      this.storedVenn = [
+      { url: this.backendApiService.getStatsImageUrl('year_gen_venn_2_labels.png'), name: 'vennYearStored', gridArea: 'thumb1', title: "Year of Breeding for Each Generation",type: "image"}
+      ];
 
     }
 
@@ -140,6 +146,8 @@ export class Overview {
               console.error('Error:', error);
         }
     }
+
+
 
 
   getImageClass(name: string): string {
