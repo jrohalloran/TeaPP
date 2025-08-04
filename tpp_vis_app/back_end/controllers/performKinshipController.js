@@ -182,7 +182,7 @@ function checkMem(){
     let flag;
 
 // Get total system memory in GB
-    totalRAM = os.totalmem() / (1024 ** 3);
+    totalRAM = (os.totalmem() / (1024 ** 3)).toFixed(2);
 
     console.log(`Detected RAM: ${totalRAM.toFixed(2)} GB`);
 

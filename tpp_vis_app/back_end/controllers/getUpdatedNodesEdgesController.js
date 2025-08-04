@@ -36,7 +36,7 @@ export const getUpdatedNodesEdges = async (req, res) => {
     const colourFlag = flags[3];
 
     const scale = flags[4];
-    //res.json("This pathway works")
+    console.log("scale flag: "+scale);
     let nodeSpacing;
     let layerHeight;
     let nodeSpacingYear;

@@ -14,6 +14,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Router } from '@angular/router';
 import { DataTransferService } from '../services/dataTransferService';
 import { SafeUrlPipe } from '../services/safe-url.pipe';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+
 
 interface GridItem {
   url: string;
@@ -37,7 +40,8 @@ interface GridItem {
       MatProgressSpinnerModule,
       MatTabsModule,
       MatIcon,
-      SafeUrlPipe ],
+      SafeUrlPipe,
+      MatSort ],
   standalone: true,
   templateUrl: './overview.html',
   styleUrls: ['./overview.css']
@@ -48,6 +52,9 @@ export class Overview {
 
 
     loading = false;
+    searchloading: boolean = false;
+
+    selectedVennplot: 'default' | 'labelled' = 'default'; 
 
     siblingCount: any[] = [];
     rankedCount: any[] = [];
@@ -60,6 +67,28 @@ export class Overview {
     yearVenn:GridItem [] = [];
     parentVenn:GridItem [] = [];
     statsImages:GridItem [] = [];
+    storedVenn:GridItem [] = [];
+
+
+    postgresTableColumns = ['table_name','rows', 'total_size'];
+    neo4jDisplayedColumns: string[] = ['key', 'value'];
+
+    postgresSearchColumns  = ['correct_id', 'correct_female', 'correct_male', 'year', 'generation'];
+    neo4jSearchColumns = ['source', 'relation', 'target'];
+    groupedSearchColumns = ['expand', 'female_parent', 'male_parent', 'year', 'entries'];
+
+        // Search Attributes 
+    searchInput: string = '';
+    searchResults: any[] = [];
+    searchPerformed = false;
+   // postgresSearch: any[] = [];
+   // neo4jSearch: any[] = [];
+    postgresSearch = new MatTableDataSource<any>([]);  // initialize with empty array
+    neo4jSearch = new MatTableDataSource<any>([]); 
+    groupedPGSearch: any[] = [];
+
+    expandedElement:  any | null = null;
+
 
     
 
@@ -81,12 +110,15 @@ export class Overview {
       console.log("Getting Diagrams");
 
 
-      this.yearVenn = [
+      this.parentVenn = [
       { url: this.backendApiService.getDiagramUrl('venn_parents_Gener_2.png'), name: 'vennParents', gridArea: 'hero', type: "image",
          title: "Parents per Generation" }];
-      this.parentVenn = [
+      this.yearVenn = [
       { url: this.backendApiService.getDiagramUrl('year_gen_venn_2.png'), name: 'vennYear', gridArea: 'thumb1', title: "Year of Breeding for Each Generation",type: "image"}
-    ];
+      ];
+      this.storedVenn = [
+      { url: this.backendApiService.getStatsImageUrl('year_gen_venn_2_labels.png'), name: 'vennYearStored', gridArea: 'thumb1', title: "Year of Breeding for Each Generation",type: "image"}
+      ];
 
     }
 
@@ -116,6 +148,8 @@ export class Overview {
     }
 
 
+
+
   getImageClass(name: string): string {
       if (name.includes('pca')) {
         return 'thumbnail-img';
@@ -135,5 +169,35 @@ export class Overview {
   closeModal(): void {
     this.selectedImageUrl = null;
   }
+
+      async performSearch() {
+    this.searchloading=true;
+    const term = this.searchInput?.toLowerCase().trim();
+    this.searchPerformed = true;
+    console.log(this.searchInput);
+
+    if (!term) {
+      this.searchResults = [];
+      return;
+    }
+    try{
+      const response = await firstValueFrom(this.backendApiService.searchID([this.searchInput]));
+      console.log('Search Response from backend:', response);
+      this.postgresSearch.data = response['postgres'] || [];
+      this.neo4jSearch.data = response['neo4j'] || [];
+      this.groupedPGSearch = response['grouped'] || [];
+      this.searchloading=false;
+    }
+    catch(error){
+      console.error('Error:', error);
+    }
+  }
+  toggleRow(row: any) {
+    console.log(this.expandedElement);
+    this.expandedElement = this.expandedElement === row ? null : row;
+  }
+
+
+
 
 }

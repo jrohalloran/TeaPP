@@ -46,9 +46,9 @@ const app = express();
 
 // Middleware
 app.use(cors());
-app.use(bodyParser.json({ limit: '10mb' }));
-app.use(express.text({ limit: '10mb' })); 
-app.use(express.json({ limit: '10mb' })); 
+app.use(bodyParser.json({ limit: '10gb' }));
+app.use(express.text({ limit: '10gb' })); 
+app.use(express.json({ limit: '10gb' })); 
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -122,6 +122,31 @@ if (!fs.existsSync(temp_dir)) {
   console.log("---- Making Directory ----");
   fs.mkdirSync(temp_dir);
 }
+
+
+if (fs.existsSync(temp_envir_dir)){
+  console.log("/temp__evir_dir directory exists");
+  console.log("---- Removing Directory ----");
+  fs.rmSync(temp_envir_dir, { recursive: true, force: true })
+}
+if (!fs.existsSync(temp_envir_dir)) {
+  console.log("---- Making Directory ----");
+  fs.mkdirSync(temp_envir_dir);
+}
+
+
+if (fs.existsSync(temp_envir_temp_dir)){
+  console.log("/temp__evir_dir directory exists");
+  console.log("---- Removing Directory ----");
+  fs.rmSync(temp_envir_temp_dir, { recursive: true, force: true })
+}
+if (!fs.existsSync(temp_envir_temp_dir)) {
+  console.log("---- Making Directory ----");
+  fs.mkdirSync(temp_envir_temp_dir);
+}
+
+
+
 
 /// ------------ FILE UPLOAD --------------
 
@@ -346,8 +371,11 @@ app.use('/uploads', express.static('uploads'));
 app.use('/genom_uploads', express.static('genom_uploads'));
 
 
-// DATABASE HANDLING 
+// Stored Stats 
+app.use('/stored_stats', express.static('stored_stats'));
 
+
+// DATABASE HANDLING 
 app.use('/api', databaseRoutes);
 
 
