@@ -13,6 +13,10 @@
       Specific graph layout options can be selected in the right-handside panel, which will render a new visualisation when "update" is selected.
     </p>
     <p>Selection of individual plants will display its pedigree family (closest relatives) in the bottom containe, highlighting the respective individuals in the original graph above.</p>
+    <p style="color: red;">
+        <mat-icon>error</mat-icon>
+        If the visualisation fails to load or is blank, please check the status of the Neoj4 Database in the "Admin Tools" tab located on the Home-Page. If "Offline" please restart the database connection and return to the visulisation page.
+    </p>
   </mat-expansion-panel>
 </mat-accordion>
 </div>
@@ -20,6 +24,21 @@
 
   <!-- Main content area -->
   <div class="app-container">
+  <aside class="left-side-panel">
+
+    <div class='my-legend' *ngIf="legend.length > 0">
+        <h3>Legend</h3>
+        <p>{{legendText}}</p>
+        <div class='legend-scale'>
+          <ul class='legend-labels'>
+            <li *ngFor="let item of legend">
+              <span [ngStyle]="{'background': item.colour}"></span>
+              {{ item.element }}
+            </li>
+          </ul>
+        </div>
+    </div>
+  </aside>
 
     <!-- Left side: split into top and bottom halves -->
     <div class="left-side">
@@ -48,20 +67,20 @@
       </div>
 
     </div>
-
+    
     <!-- Right side panel -->
     <aside class="side-panel">
 
       <!-- Controls section -->
       <div class="top-fixed">
-        <h2>Controls</h2>
+        <h3>Controls</h3>
         <button (click)="zoomIn()">Zoom In</button>
         <button (click)="zoomOut()">Zoom Out</button>
         <button (click)="resetZoom()">Reset</button>
         </div>
         <div class = pedigree>
-        <h2>Pedigree Layout</h2>
-        <h3>Filtered:</h3>
+        <h3>Pedigree Layout</h3>
+        <h4>Filtered:</h4>
               <label>
                 <input
                   type="radio"
@@ -80,7 +99,7 @@
                 />
                 Yes
               </label>
-        <h3>Layer by:</h3>
+        <h4>Layer by:</h4>
               <label>
                 <input
                   type="radio"
@@ -99,7 +118,7 @@
                 />
                 Generation
               </label>
-        <h3>Group by:</h3>
+        <h4>Group by:</h4>
               <label>
                 <input
                   type="radio"
@@ -119,7 +138,7 @@
                 None
               </label>
 
-        <h3>Colour:</h3>
+        <h4>Colour:</h4>
               <label>
                 <input
                   type="radio"
@@ -138,7 +157,7 @@
                 />
                 Generation
               </label>
-        <h3>Node Size:</h3>
+        <h4>Node Size:</h4>
               <label>
                 <input
                   type="radio"
@@ -163,21 +182,9 @@
       </div>
       <div class="side-scrollable">
 
-      <div class='my-legend' *ngIf="legend.length > 0">
-        <h2>Legend</h2>
-        <p>{{selectedColour}}</p>
-        <div class='legend-scale'>
-          <ul class='legend-labels'>
-            <li *ngFor="let item of legend">
-              <span [ngStyle]="{'background': item.colour}"></span>
-              {{ item.element }}
-            </li>
-          </ul>
-        </div>
-      </div>
       <div class="search-panel">
           <!-- Search Input -->
-           <h2>Search</h2>
+           <h3>Search</h3>
            <p>Enter an individual ID:</p>
           <input
             type="text"

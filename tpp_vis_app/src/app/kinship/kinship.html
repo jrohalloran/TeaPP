@@ -9,7 +9,6 @@
   <div class = "title-wrapper">
 
   <h1>Kinship Analysis</h1>
-      <p>Kinship analysis can be performed...</p>
     <mat-accordion class="kinship-bar">
   <mat-expansion-panel [expanded]="true" class="custom-kinship-panel">
     <mat-expansion-panel-header>
@@ -27,7 +26,7 @@
         <p></p>
         <p></p>
         <button mat-raised-button color="primary" (click)="getExistingKinship()">
-          Get stored Kinship Matrix Data
+          Use stored Kinship Matrix Data
         </button>
       </div>
 
@@ -59,6 +58,9 @@
         Help
       </mat-panel-title>
     </mat-expansion-panel-header>
+    <div>
+      <p>Here you can either perform a new kinship matrix calculation for the uploaded pedigree data, or load the stored kinship matrix analysis and plots.</p>
+    </div>
   </mat-expansion-panel>
 </mat-accordion>
   </div>
