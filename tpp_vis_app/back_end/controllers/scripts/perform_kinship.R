@@ -93,7 +93,7 @@ summary(gp)
 
 message("Performing Kinship Matrix")
 kinship.mx <- kin(gp)
-
+kinship.mx <- kinship.mx / 2 
 
 file<- paste0(temp_dir,"/kinship_matrix.txt")
 #write.csv(kinship.mx, file, row.names = TRUE)
