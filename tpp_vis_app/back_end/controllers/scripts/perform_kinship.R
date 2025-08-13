@@ -94,7 +94,7 @@ summary(gp)
 message("Performing Kinship Matrix")
 ## Synbreed 
 kinship.mx <- kin(gp)
-
+kinship.mx <- kinship.mx / 2 
 
 
 file<- paste0(temp_dir,"/kinship_matrix.txt")
