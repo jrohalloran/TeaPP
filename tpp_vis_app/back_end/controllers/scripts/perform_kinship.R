@@ -93,7 +93,7 @@ summary(gp)
 
 message("Performing Kinship Matrix")
 kinship.mx <- kin(gp)
-kinship.mx <- kinship.mx / 2 
+kinship.mx <- kinship.mx / 2  # Halving to convert from relationship value to kinship coeficiant
 
 file<- paste0(temp_dir,"/kinship_matrix.txt")
 #write.csv(kinship.mx, file, row.names = TRUE)
