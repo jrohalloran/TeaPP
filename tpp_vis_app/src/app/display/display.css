@@ -44,7 +44,16 @@
 
 /* Right side panel */
 .side-panel {
-  width: 300px;
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  background-color: #eaeaea;
+  overflow: hidden;
+  font-family: 'World of Water', sans-serif;
+}
+
+.left-side-panel {
+  width: 200px;
   display: flex;
   flex-direction: column;
   background-color: #eaeaea;
@@ -124,6 +133,7 @@
 .my-legend {
   flex-shrink: 0;
   overflow: visible;
+  padding: 2rem;
 }
 
 .my-legend .legend-title {

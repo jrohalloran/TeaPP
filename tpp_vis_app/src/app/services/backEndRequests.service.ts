@@ -29,6 +29,7 @@ export class backendApiService {
   private diagramsBaseUrl = 'http://localhost:3333/diagramImages';
   private rainfallBaseUrl = 'http://localhost:3333/rainfallImages';
   private temperatureBaseUrl = 'http://localhost:3333/temperatureImages';
+  private statsBaseUrl = 'http://localhost:3333/stored_stats';
 
   constructor(private http: HttpClient) {}
 
@@ -146,6 +147,11 @@ export class backendApiService {
 
   }
 
+
+  getStatsImageUrl(fileName: string): string {
+    return `${this.statsBaseUrl}/${fileName}`;
+  }
+
   // ------------- VISUALISATION ------------------
   /// NEO4J API REQUESTS 
 
@@ -154,18 +160,6 @@ export class backendApiService {
     console.log("Retrieving all Nodes and Edges");
     return this.http.get(`${this.apiUrl}/getAllNodesEdges`);
   }
-  /*
-  // POST REQUESTS 
-  getNuclearFamily2(nodeID: string):Observable<any> {
-    console.log("Sending Data to /api/getNuclearFamily");
-    return this.http.post(`${this.apiUrl}/getNuclearFamily2`,nodeID);
-  }*/
-
-  /*
-  getWholeFamily(nodeID: string):Observable<any> {
-    console.log("Sending Data to /api/getWholeFamily");
-    return this.http.post(`${this.apiUrl}/getWholeFamily`,nodeID);
-  }*/
 
   getPedigree(nodeID: any[]):Observable<any> {
     console.log("Sending Data to /api/getPedigree");

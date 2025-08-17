@@ -285,8 +285,8 @@ summary_df <- data.frame(
     "Unique Female Parents",
     "Unique Male Parents",
     "Used as Both",
-    "Female Only",
-    "Male Only"
+    "Used as Female Only",
+    "Used as Male Only"
   ),
   Count = c(
     num_parents,

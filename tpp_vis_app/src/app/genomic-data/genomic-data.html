@@ -79,9 +79,14 @@
       (click)="performFastQC()">
       Run FastQC<mat-icon>arrow_right_alt</mat-icon>
     </button>
-  </div>
-  </div>
 
+      <button class="button"
+      mat-raised-button
+      (click)="retrieveFastQC()">
+      Retrieve Stored FastQC Reports<mat-icon>arrow_right_alt</mat-icon>
+    </button>
+  </div>
+</div>
 <div class = "results" *ngIf="htmlReports.length>0">
   <h3>FastQC Results</h3>
   <p>Please select a FastQC report to view in an external tab:</p>
@@ -93,6 +98,16 @@
     </li>
   </ul>
 </div>
-  </div>
+  <div class = "results" *ngIf="storedReports.length>0">
+  <h3>Stored FastQC Results</h3>
+  <p>Please select a FastQC report to view in an external tab:</p>
+  <ul *ngIf="storedReports.length > 0">
+    <li *ngFor="let file of storedReports">
+      <a [href]="'http://localhost:3333/fastQCReports/' + file" target="_blank" rel="noopener noreferrer">
+        {{ file }}<mat-icon>launch</mat-icon>
+      </a>
+    </li>
+  </ul>
+</div>
   </div>
 </div>

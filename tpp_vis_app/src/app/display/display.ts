@@ -7,6 +7,7 @@ import { VisualisationService } from '../services/visualisation.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatIcon } from '@angular/material/icon';
 
 
 
@@ -45,7 +46,7 @@ interface legend{
 @Component({
   selector: 'app-visualisation',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatExpansionModule],  // Import CommonModule here to use *ngIf, etc.
+  imports: [CommonModule, FormsModule, MatExpansionModule, MatIcon],  // Import CommonModule here to use *ngIf, etc.
   templateUrl: './display.html',
   styleUrls: ['./display.css']
 })
@@ -69,6 +70,9 @@ export class DisplayComponent implements AfterViewInit {
   selectedGroup = 'sibling';//Default Grouping
   selectedColour = 'generation'; //Default Colouring
   selectedLayer = 'year'; //Default Layering
+  scale: boolean = false;
+
+  legendText = 'generation';
 
 
   jsonData: GraphJSON = {
@@ -528,12 +532,14 @@ async getUpdatedData(flags: any[]): Promise<void> {
   console.log(this.selectedGroup);
   console.log(this.selectedLayer);
   console.log(this.isfiltered);
+  console.log(this.scale);
 
-  const flags = [this.selectedGroup,this.selectedLayer, this.isfiltered,this.selectedColour];
+  const flags = [this.selectedGroup,this.selectedLayer, this.isfiltered,this.selectedColour, this.scale];
   console.log(flags);
 
   await this.getUpdatedData(flags);
   this.loadGraph();
+  this.legendText = this.selectedColour;
   this.isTopLoading=false;
 
  }

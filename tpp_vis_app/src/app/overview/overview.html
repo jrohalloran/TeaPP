@@ -1,8 +1,9 @@
 
 <div class="main-wrapper">
   <div class = "instructions">
-  <h1>Summary & Descriptive Statistics <mat-icon> show_chart</mat-icon></h1>
-      <p>Descriptive and summary statistics for the Pedigree Dataset are displayed here</p>
+  <h1>Pedigree Summary & Descriptive Statistics <mat-icon> show_chart</mat-icon></h1>
+      <p>Descriptive and summary statistics for the Pedigree Dataset are displayed here.</p>
+      <p>Scroll down to view statistics, or to use the Clone ID Search feature.</p>
 
   </div>
   
@@ -18,7 +19,7 @@
 
   <div class="stats-section">
     <h2>Plants per Generations</h2>
-      <p>Number of plants in each generation</p>
+      <p>Number of plants in each generation. Generation defined as 1+ highest parental generation.</p>
       <div class="table-scroll-container">
         <table>
           <thead>
@@ -39,7 +40,7 @@
 
         <div class="stats-section">
       <h2>Parental Records</h2>
-      <p></p>
+      <p>Number of individual used as breeding parents (offspring & founders).</p>
       <div class="table-scroll-container">
         <table>
           <thead>
@@ -61,7 +62,8 @@
     <!-- Section 1 -->
     <div class="stats-section">
       <h2>Entry Counts by Sibling</h2>
-      <p>Occurance of recorded siblings and number of unique parents. Defined by the presence of sibling nomeclature (Aa-Ff)</p>
+      <p>Occurance of recorded siblings and number of unique parents. Defined by the presence of sibling nomeclature (A-F).</p>
+      <p>Siblings are considered Year-Wide-Siblings (YWS)(Same parents, same year)</p>
       <div class="table-scroll-container">
         <table>
           <thead>
@@ -105,10 +107,10 @@
     </div>
 
     <div class="stats-section">
-      <h2>Years of breeding</h2>
-      <p>Years where breeding took place for each generation.</p>
+      <h2>Parents Used Per Generation</h2>
+      <p>Overlapping number of parents used for each generation. Details which generations used the same breeding indviduals.</p>
       <div
-          *ngFor="let item of yearVenn"
+          *ngFor="let item of parentVenn"
           class="grid-item"
           [ngStyle]="{ 'grid-area': item.gridArea }"
         >
@@ -131,7 +133,7 @@
   <div class="stats-column">
 
     <div class="stats-section">
-      <h2>Ranked No. of Offspring</h2>
+      <h2>Ranked Breeding Clones</h2>
       <p>The individuals that contributed the most to breeding events - Highest incidence of being a parent</p>
       <div class="table-scroll-container">
         <table>
@@ -153,8 +155,8 @@
 
 
     <div class="stats-section">
-      <h2>Count by Year</h2>
-      <p>Frequency of Offspring bred for each year</p>
+      <h2>Crosses by Year</h2>
+      <p>Frequency of Offspring records detailed for each year (obtained from Clone ID).</p>
       <div class="table-scroll-container">
         <table>
           <thead>
@@ -189,7 +191,7 @@
     </div>
 
     <div class="stats-section">
-      <h2>Formatting Statistics</h2>
+      <h2>QC & Preprocessing Statistics</h2>
       <p>Number of ID/Entries re-formatted on Upload</p>
       <div class="table-scroll-container">
         <table>
@@ -210,10 +212,42 @@
     </div>
 
     <div class="stats-section">
-      <h2>Parents Used Per Generation</h2>
-      <p>Overlapping parents used for each generation. Details which generations used the same breeding indviduals.</p>
-        <div
-        *ngFor="let item of parentVenn"
+      <h2>Years of breeding by Generation</h2>
+      <p>Years where breeding took place for each generation.</p>
+          <div class="plot-selector" style="margin-bottom: 10px;">
+      <button
+      mat-raised-button
+      [color]="selectedVennplot === 'default' ? 'primary' : null"
+      (click)="selectedVennplot = 'default'">
+      Default
+    </button>
+    <button
+      mat-raised-button
+      [color]="selectedVennplot === 'labelled' ? 'primary' : null"
+      (click)="selectedVennplot = 'labelled'">
+      Labelled
+    </button>
+    <div *ngIf="selectedVennplot === 'default'">
+    <div
+        *ngFor="let item of yearVenn"
+        class="grid-item"
+        [ngStyle]="{ 'grid-area': item.gridArea }"
+      >
+      <figure *ngIf="item.url" class="image-figure">
+      <figcaption>
+        <strong>{{ item.title || item.name }}</strong><br />
+      </figcaption>
+      <img 
+        [src]="item.url" 
+        [alt]="item.name" 
+        [ngClass]="getImageClass(item.name)" 
+        (click)="openModal(item.url)" 
+      />
+    </figure>
+      </div></div>
+      <div *ngIf="selectedVennplot === 'labelled'">
+    <div
+        *ngFor="let item of storedVenn"
         class="grid-item"
         [ngStyle]="{ 'grid-area': item.gridArea }"
       >
@@ -229,15 +263,133 @@
       />
     </figure>
 
-      </div>
+      </div></div>
+     </div>
     </div>
+      
   </div>
-  
 
 
     <!-- Modal Viewer -->
   <div class="modal" *ngIf="selectedImageUrl" (click)="closeModal()">
     <img [src]="selectedImageUrl" alt="Enlarged Image" />
   </div>
+</div>
+  
+</div>
+
+        <div class="search-section">
+          <h3>Search Database Entries</h3>
+          <p>Search for full/partial Clone ID e.g. "SFS" or "MRT1"</p>
+
+          <!-- Search Input -->
+          <mat-form-field appearance="outline" class="search-box">
+            <mat-label><mat-icon>search</mat-icon>Search by any field</mat-label>
+            <input matInput [(ngModel)]="searchInput" placeholder="Type any ID or parent..." />
+          </mat-form-field>
+
+          <button mat-stroked-button color="primary" (click)="performSearch()">Search</button>
+
+          <!-- Angular Material Table -->
+        <div class = table-section >
+            <div class="loading-overlay" *ngIf="searchloading">
+            <mat-progress-spinner mode="indeterminate" diameter="60" color="primary"></mat-progress-spinner>
+            <div style="margin-top: 10px; font-size: 1.2rem; color: #333;">Loading Searched Results...</div>
+          </div>
+          <div *ngIf="groupedPGSearch.length > 0 && !searchloading"  style="max-height: 400px; overflow-y: auto;">
+            <h3>Aggregated Postgres Results</h3>
+
+            <table mat-table [dataSource]="groupedPGSearch" multiTemplateDataRows>
+        
+        <!-- expand toggle -->
+        <ng-container matColumnDef="expand">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let element">
+            <button mat-icon-button (click)="toggleRow(element)">
+              <mat-icon>{{ expandedElement === element ? 'expand_less' : 'expand_more' }}</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <!-- female_parent -->
+        <ng-container matColumnDef="female_parent">
+          <th mat-header-cell *matHeaderCellDef>Female Parent</th>
+          <td mat-cell *matCellDef="let element">{{ element.female_parent }}</td>
+        </ng-container>
+
+        <!-- male_parent -->
+        <ng-container matColumnDef="male_parent">
+          <th mat-header-cell *matHeaderCellDef>Male Parent</th>
+          <td mat-cell *matCellDef="let element">{{ element.male_parent }}</td>
+        </ng-container>
+
+        <!-- year -->
+        <ng-container matColumnDef="year">
+          <th mat-header-cell *matHeaderCellDef>Year</th>
+          <td mat-cell *matCellDef="let element">{{ element.year }}</td>
+        </ng-container>
+
+        <!-- entries -->
+        <ng-container matColumnDef="entries">
+          <th mat-header-cell *matHeaderCellDef>No. of Entries</th>
+          <td mat-cell *matCellDef="let element">{{ element.items?.length }}</td>
+        </ng-container>
+
+        <!-- expandedDetail -->
+        <ng-container matColumnDef="expandedDetail">
+          <td mat-cell *matCellDef="let element" [attr.colspan]="groupedSearchColumns.length">
+            <div *ngIf="element.items?.length">
+              <strong>Entries:</strong>
+              <ul>
+                <li *ngFor="let item of element.items">
+                  ID: {{ item.clone_id }}, Female Parent: {{ item.correct_female }}, Male Parent: {{ item.correct_male }}, Year: {{ item.year }}, Generation: {{ item.generation }},
+                </li>
+              </ul>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="groupedSearchColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: groupedSearchColumns;"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" [style.display]="expandedElement === row ? 'table-row' : 'none'"></tr>
+
+      </table>
+
+    </div>
+  </div>
+
+      <!-- Neo4j Search Results Table -->
+  <div class = table-section >
+    <div *ngIf="neo4jSearch.data.length > 0 && !searchloading" style="max-height: 400px; overflow-y: auto;">
+      <h3>Neo4j Results</h3>
+
+      <table mat-table [dataSource]="neo4jSearch" matSort #neo4jSort="matSort">
+
+
+        <!-- Source -->
+        <ng-container matColumnDef="source">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Source</th>
+          <td mat-cell *matCellDef="let item">{{ item.source?.id }}</td>
+        </ng-container>
+
+        <!-- Relation -->
+        <ng-container matColumnDef="relation">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Relation</th>
+          <td mat-cell *matCellDef="let item">{{ item.relation }}</td>
+        </ng-container>
+
+        <!-- Target -->
+        <ng-container matColumnDef="target">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Target</th>
+          <td mat-cell *matCellDef="let item">{{ item.target?.id }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="neo4jSearchColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: neo4jSearchColumns;"></tr>
+
+      </table>
+    </div>
+  </div>
+
 </div>
 

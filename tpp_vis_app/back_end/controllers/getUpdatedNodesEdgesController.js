@@ -34,7 +34,9 @@ export const getUpdatedNodesEdges = async (req, res) => {
     const filterFlag = flags[2];
     console.log(filterFlag);
     const colourFlag = flags[3];
-    //res.json("This pathway works")
+
+    const scale = flags[4];
+    console.log("scale flag: "+scale);
     let nodeSpacing;
     let layerHeight;
     let nodeSpacingYear;
@@ -120,7 +122,7 @@ export const getUpdatedNodesEdges = async (req, res) => {
 
     const cleanedData = removeIsolatedNodes(layeredData);
 
-    const plotData = convertToSigmaFormatDynamic(cleanedData,colourFlag);
+    const plotData = convertToSigmaFormatDynamic(cleanedData,colourFlag,scale);
 
     res.json(plotData);
 

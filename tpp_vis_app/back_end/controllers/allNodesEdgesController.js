@@ -19,6 +19,8 @@ import {
 export const getAllNodesEdges = async (req, res) => {
     console.log("Starting getAllNodesEdges Function");
 
+    const nodeScale= false;
+
     const colourFlag = "generation";
   try {
 
@@ -34,15 +36,13 @@ export const getAllNodesEdges = async (req, res) => {
 
     const groupedData = groupSiblings(filteredData);
 
-    //console.log(filteredData.nodes[0]);
 
     const layeredData = allNodeslayerByYearReverse(groupedData);
 
     const cleanedData = removeIsolatedNodes(layeredData);
 
-    //console.log(layeredData);
 
-    const plotData = convertToSigmaFormatDynamic(cleanedData,colourFlag);
+    const plotData = convertToSigmaFormatDynamic(cleanedData,colourFlag, nodeScale);
 
     
     res.json(plotData);

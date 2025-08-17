@@ -16,7 +16,7 @@ const PASSWORD = 'tAqsiv-tivfif-bomhe9';
 const driver = neo4j.driver(
   URI,
   neo4j.auth.basic(USER, PASSWORD),
-  {
+  { encrypted: false,
     connectionTimeout: 10000, 
     maxConnectionLifetime: 3600000, // 1 hour
     connectionAcquisitionTimeout: 3000000, // 30 seconds
