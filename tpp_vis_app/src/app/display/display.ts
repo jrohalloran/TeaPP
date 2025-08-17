@@ -69,7 +69,7 @@ export class DisplayComponent implements AfterViewInit {
   isfiltered = 'yes';
   selectedGroup = 'sibling';//Default Grouping
   selectedColour = 'generation'; //Default Colouring
-  selectedLayer = 'generation'; //Default Layering
+  selectedLayer = 'year'; //Default Layering
   scale: boolean = false;
 
   legendText = 'generation';
