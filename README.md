@@ -1,20 +1,44 @@
-## User Manual
+## TeaPP
+
+Welcome to TeaPP.
 
 TeaPP is a prototype for the digitalisation, management , analysis and
 visualisation of tea plant breeding data in partnership with
-Brown/Lipton.
+Brown/Lipton as the requirements of a Thesis Project at Cranfield
+University.
 
-<figure>
 <img src="media/media/image1.png"
-style="width:3.74627in;height:1.93569in"
-alt="A logo for a sports team AI-generated content may be incorrect." />
-<figcaption aria-hidden="true">A logo for a sports team AI-generated
-content may be incorrect.</figcaption>
-</figure>
+style="width:3.74627in;height:1.93569in" />
 
-TeaPP can be accessed via GitHub: \_\_\_\_\_\_\_\_\_\_\_\_
+Deployment and login access to TeaPP is available on request. Please
+contact Jenny, (jenny.ohalloran@cranfield.ac.uk) with an inquiries or
+questions
 
-Deployment and login access to TeaPP is available on request.
+### Overview
+
+TeaPP implemented a custom upload, analysis and visualisation pipeline
+for the Brown/Lipton dataset as detailed below.
+![](media/media/overview.png)
+
+This includes:
+
+1)  Data Cleaning and Formating before uploading.
+
+2)  Pedigree Summary and Descriptive Statistics
+
+3)  Interactive Pedigree Visulisation Tool
+
+4)  Kinship Analysis
+
+5)  Administrative Tools
+
+6)  Environmental Analysis
+
+7)  Sequencing Analysis
+
+8)  Future integration of Phenotypic data and analysis
+
+<!-- -->
 
 ### Accessing the Application on AWS
 
@@ -28,23 +52,21 @@ Steps to access and login into TeaPP (see Figure M 1):
 
 1)  & 2) Enter the IP address into your preferred browsers search bar.
 
-<!-- -->
+2)  Enter your username and password
 
-3)  Enter your username and password
+3)  Click Sign In
 
-4)  Click Sign In
-
-5)  If your login details are correct your will be navigated to the
+4)  If your login details are correct your will be navigated to the
     TeaPP Landing Page.
 
 <figure>
 <img src="media/media/image2.png" style="width:5.46458in;height:4.8in"
-alt="A screenshot of a computer AI-generated content may be incorrect." />
-<figcaption aria-hidden="true">A screenshot of a computer AI-generated
-content may be incorrect.</figcaption>
+alt="Figure M 1: User Login steps." />
+<figcaption aria-hidden="true">Figure M 1: User Login
+steps.</figcaption>
 </figure>
 
-Figure M 1: User Login steps.
+<!-- -->
 
 ### Landing Page
 
@@ -63,23 +85,19 @@ From the drop-down menu you can navigate to other pages within TeaPP.
 <figure>
 <img src="media/media/image3.png"
 style="width:7.11111in;height:4.1125in"
-alt="A screenshot of a computer AI-generated content may be incorrect." />
-<figcaption aria-hidden="true">A screenshot of a computer AI-generated
-content may be incorrect.</figcaption>
-</figure>
-
-Additional help can be found in the help-tab by selecting the “help”
-dropdown or “?” icon.
-
-Figure M 2: The Landing Page.
-
-This is the first page in the User Trajectory (Figure 18). Here the user
-can select to upload (1), analyse existing (2) or delete data (3) from
-the databases. The top bar contains features accessible from all pages
-in TeaPP. The user can also navigate the rest of the application via the
+alt="Figure M 2: The Landing Page. This is the first page in the User Trajectory (Figure 18). Here the user can select to upload (1), analyse existing (2) or delete data (3) from the databases. The top bar contains features accessible from all pages in TeaPP. The user can also navigate the rest of the application via the “Menu” dropdown, which will route the display to the respective page. The “help” pop-out can help accessed via the “?” icon or the Menu and displays instructions and prompts to the user." />
+<figcaption aria-hidden="true">Figure M 2: The Landing Page. This is the
+first page in the User Trajectory (Figure 18). Here the user can select
+to upload (1), analyse existing (2) or delete data (3) from the
+databases. The top bar contains features accessible from all pages in
+TeaPP. The user can also navigate the rest of the application via the
 “Menu” dropdown, which will route the display to the respective page.
 The “help” pop-out can help accessed via the “?” icon or the Menu and
-displays instructions and prompts to the user.
+displays instructions and prompts to the user.</figcaption>
+</figure>
+
+Additional help can be found in the help-tab be selecting the “help”
+dropdown or “?” icon.
 
 ### Home Page
 
@@ -97,22 +115,25 @@ the respective tabs .
 
 - Genomic Analysis
 
-- <img src="media/media/image4.png"
-  style="width:7.58204in;height:2.92083in"
-  alt="A screenshot of a computer AI-generated content may be incorrect." />Administrative
-  Tools
+- Administrative Tools
 
-Figure M 3: The Home Page. The tab specifying each other implemented
-analysis and management features currently available in TeaPP, including
-an overview of Summary & Descriptive Statistics (default view), Database
-Management & Status, Pedigree Visualisation, and Kinship, Environment
-and Genomic Analysis respectively. The user can navigate through these
-by selecting each. The current user is display in the top-right corner
-(green box), whilst “dataset” sits as a pacemaker for the future
-development of a multi-dataset management system, where the current
-selected dataset is displayed.
+<figure>
+<img src="media/media/image4.png"
+style="width:7.58204in;height:2.92083in"
+alt="Figure M 3: The Home Page. The tab specifying each other implemented analysis and management features currently available in TeaPP, including an overview of Summary &amp; Descriptive Statistics (default view), Database Management &amp; Status, Pedigree Visualisation, and Kinship, Environment and Genomic Analysis respectively. The user can navigate through these by selecting each. The current user is display in the top-right corner (green box), whilst “dataset” sits as a pacemaker for the future development of a multi-dataset management system, where the current selected dataset is displayed." />
+<figcaption aria-hidden="true">Figure M 3: The Home Page. The tab
+specifying each other implemented analysis and management features
+currently available in TeaPP, including an overview of Summary &amp;
+Descriptive Statistics (default view), Database Management &amp; Status,
+Pedigree Visualisation, and Kinship, Environment and Genomic Analysis
+respectively. The user can navigate through these by selecting each. The
+current user is display in the top-right corner (green box), whilst
+“dataset” sits as a pacemaker for the future development of a
+multi-dataset management system, where the current selected dataset is
+displayed.</figcaption>
+</figure>
 
-### Administrative Tools
+######## Administrative Tools
 
 Administrative functionalities can be accessed via the “Admin Tools”
 tab.
@@ -137,17 +158,21 @@ function successfully.
 <figure>
 <img src="media/media/image6.svg"
 style="width:5.90556in;height:3.86806in"
-alt="Figure M 4: Admin Tools Page." />
-<figcaption aria-hidden="true">Figure M 4: Admin Tools
-Page.</figcaption>
+alt="Figure M 4: Admin Tools Page. (1) Summaries of the PostgreSQL database and (2) Neo4j Database. (3) The “Refresh button” allows you to get updated summares for both databases. (4) Selecting the respective “restart” buttons for each database allows you to restart the database and connection, resulting in a pop-out detailing the success/ failure to restart that database." />
+<figcaption aria-hidden="true">Figure M 4: Admin Tools Page. (1)
+Summaries of the PostgreSQL database and (2) Neo4j Database. (3) The
+“Refresh button” allows you to get updated summares for both databases.
+(4) Selecting the respective “restart” buttons for each database allows
+you to restart the database and connection, resulting in a pop-out
+detailing the success/ failure to restart that database.</figcaption>
 </figure>
 
 **<u>Search feature</u>**
 
 The user can search database to find partially matching entries to a
-search term (Figure M 8).
+search term (Figure M 5).
 
-Instructions for Searching:
+Instructions for Searching :
 
 1.  Enter search term into Search bar
 
@@ -162,9 +187,13 @@ Instructions for Searching:
 <figure>
 <img src="media/media/image8.svg"
 style="width:5.90556in;height:3.72014in"
-alt="Figure M 5: Database Search Feature – Database Status Page." />
+alt="Figure M 5: Database Search Feature – Database Status Page. (1) The Search bar for the user to input of a specific Clone ID. (2) and (4) shows matching entries from PostgreSQL and Neo4j respectively. Orange boxes hiighlight the matching attributes for the entries. (3) Drop down for the entries that have been aggregated for the PostgreSQL database due to grouping my sibling." />
 <figcaption aria-hidden="true">Figure M 5: Database Search Feature –
-Database Status Page.</figcaption>
+Database Status Page. (1) The Search bar for the user to input of a
+specific Clone ID. (2) and (4) shows matching entries from PostgreSQL
+and Neo4j respectively. Orange boxes hiighlight the matching attributes
+for the entries. (3) Drop down for the entries that have been aggregated
+for the PostgreSQL database due to grouping my sibling.</figcaption>
 </figure>
 
 ### Pedigree Data
@@ -172,32 +201,31 @@ Database Status Page.</figcaption>
 Pedigree data detailing the breeding population can be uploaded,
 analysed and visualised within TeaPP.
 
-#### Pedigree Upload.
+### Pedigree Upload.
 
 Within the upload page the user can navigate to the “Pedigree Data” tab
 to start uploading their data file.
 
+<figure>
 <img src="media/media/image10.svg"
-style="width:3.95278in;height:4.87986in" />
+style="width:3.95278in;height:4.87986in"
+alt="Figure M 6: Pedigree Upload GUI. (1) The “Pedigree Data” tab where the user can (2) view the “Help” menu to see the file specifics, (3) choose the file from their local directory, and (4) start uploding the file after intial checks and statistics are displayed." />
+<figcaption aria-hidden="true">Figure M 6: Pedigree Upload GUI. (1) The
+“Pedigree Data” tab where the user can (2) view the “Help” menu to see
+the file specifics, (3) choose the file from their local directory, and
+(4) start uploding the file after intial checks and statistics are
+displayed.</figcaption>
+</figure>
 
-Figure M 6: Pedigree Upload GUI. (1) The “Pedigree Data” tab where the
-user can (2) view the “Help” menu to see the file specifics, (3) choose
-the file from their local directory, and (4) start uploding the file
-after intial checks and statistics are displayed.
-
-Steps to upload a pedigree dataset (Figure) :
+Steps to upload a pedigree dataset (Figure M 6) :
 
 1)  Select the “Pedigree Data” tab in the Upload Page display
 
 2)  The “Help” drop-down displays useful information regarding file
     specifics, including file type, column names.
 
-<figure>
-<img src="media/media/image11.png" style="width:3.14in;height:1.49394in"
-alt="A screenshot of a computer AI-generated content may be incorrect." />
-<figcaption aria-hidden="true">A screenshot of a computer AI-generated
-content may be incorrect.</figcaption>
-</figure>
+<img src="media/media/image11.png"
+style="width:3.14in;height:1.49394in" />
 
 3)  Click “Choose file” to select the pedigree data file from your local
     directory.
@@ -251,7 +279,7 @@ to ensure the records are matching.
 
 </figure>
 
-#### Assessing Invalid Offspring
+### Assessing Invalid Offspring
 
 The invalid offspring, those bred resulting from the breeding programme
 that do not match the nomeclature are highlighted in the displayed
@@ -265,7 +293,7 @@ those in the list or (4) only offspring that have not been used as
 active breeders in the population based on their ID. (5) Then the user
 can proceed to reviewing the invalid parental records.
 
-The user can follow these steps to update the clone IDs (Figure \_\_):
+The user can follow these steps to update the clone IDs (Figure M 8):
 
 1)  The user can manually type in the reformatted Clone ID into the
     corresponding input bar.
@@ -283,7 +311,7 @@ The user can follow these steps to update the clone IDs (Figure \_\_):
     review invalid parents/founders. The reformatted entries are not
     uploaded until after this step.
 
-#### Assessing Invalid Parents/Founders
+### Assessing Invalid Parents/Founders
 
 The invalid parental records, those that have been used as parents but
 do not correspond to an offspring records, therefore are potential
@@ -301,7 +329,7 @@ corresponds to an entry before (3) finalising the uploading of the data
 to TeaPP.</figcaption>
 </figure>
 
-The user can review parental records by:
+The user can review parental records by (Figure M 9):
 
 1)  Manually reformatting the clone ID of the record.
 
@@ -321,9 +349,9 @@ The user can review parental records by:
 ### Pedigree Summary & Descriptive Statistics
 
 Upon reaching the Home Page, TeaPP calculates summary statistics for the
-uploaded pedigree data (Figure ). This includes descriptive statistics
-and metrics detailing characteristics such as the frequency of offspring
-per generation, year, or the number of twins identified.
+uploaded pedigree data (Figure M10). This includes descriptive
+statistics and metrics detailing characteristics such as the frequency
+of offspring per generation, year, or the number of twins identified.
 
 <figure>
 
@@ -369,7 +397,7 @@ bottom container (2). The side panels contain (3) Zoom In/Out controls,
 Statistics on the Secondary diagram. (7) The node colour legend for
 displayed graph.
 
-### Pedigree Layout Parameters
+#### Pedigree Layout Parameters
 
 The top container, displaying the entire pedigree dataset can be
 modified via the selection of a range of parameters.
@@ -404,7 +432,7 @@ modified via the selection of a range of parameters.
 > their cross “year” as determined by the Brown/Lipton nomenclature.
 >
 > **Generation** – Nodes are coloured by their assigned “generation”
-> (Synbreed - (Wimmer et al., 2012).
+> (Synbreed - (Wimmer et al., 2012)).
 
 <u>Node Size:</u>
 
@@ -416,38 +444,38 @@ modified via the selection of a range of parameters.
 The “default” visualisation is set to be filtered, grouped by siblings,
 layered by year, coloured by generation and no node scaling.
 
-<img src="media/media/image19.svg"
-style="width:1.05in;height:2.69097in" />
-
 To change the pedigree layout:
+
+<img src="media/media/image20.png"
+style="width:0.94827in;height:2.21429in" />
 
 1)  Selected your chosen parameters by selecting the respective radio
     buttons.
 
-2)  Click “update” (Figure M 9 – 4- green arrow).
+2)  Click “update” (Figure M 11 – 4- green arrow).
 
 3)  This will display a loading screen while the graph is loading.
 
 4)  The updated graph will be displayed in the top container for
     interactive exploration.
 
-### Node Selection & Searching
+#### Node Selection & Searching
 
-<img src="media/media/image19.svg"
-style="width:1.31181in;height:1.10694in" />
+<img src="media/media/image21.png"
+style="width:1.54375in;height:1.07083in" />
 
 A specific node of interest can be selected from the top container
-(Figure M 9 – 1) or searched to display its linear pedigree (bottom
-container) (Figure M 9 – 2 & 5).
+(Figure M 11– 1) or searched to display its linear pedigree (bottom
+container) (Figure M 11 – 2 & 5).
 
 Follow these steps to display a linear pedigree visualisation:
 
 1)  The node can be selected the top pedigree visualisation (Figure
-    \_\_\_ 1) via clicking on the desired node, or by using the search
+    M 11) via clicking on the desired node, or by using the search
     feature to find and select a plant via its Clone ID.
 
 2)  After selection the bottom visualisation with load the respective
-    pedigree graph.
+    pedigree graph (Figure M 12).
 
 Figure M 12 shows an exemplar linear pedigree graph. Colours are adopted
 from the parameters set in the Primary pedigree visualisation. (e.g.
@@ -456,9 +484,9 @@ descendants.
 
 <figure>
 
-<img src="media/media/image20.png"
+<img src="media/media/image22.png"
 style="width:5.90556in;height:1.55208in"
-alt="A diagram of a graph AI-generated content may be incorrect." />
+alt="" />
 <figcaption>
 
 <p>
@@ -477,7 +505,7 @@ highlighted in bright orange.
 Calculation of a kinship matrix can be performed by selecting the
 “Kinship Analysis” tab.
 
-The follow these steps (Figure M10).:
+The follow these steps (Figure M 13).:
 
 1.  You can choose to ether retrieve a previously performed and stored
     version of the kinship matrix and plots
@@ -491,13 +519,7 @@ The follow these steps (Figure M10).:
 4.  If the kinship matrix calculation and visualisation is successful,
     the respective plots will be displayed to the user.
 
-<figure>
-<img src="media/media/image22.svg"
-style="width:5.90556in;height:5.72292in"
-alt="Figure M 13: Kinship Analysis Page." />
-<figcaption aria-hidden="true">Figure M 13: Kinship Analysis
-Page.</figcaption>
-</figure>
+\![Figure M 13: Kinship Analysis Page.
 
 The user can either select to view the stored results of a kinship
 analysis (1)(implemented due to computational memory requirements of
@@ -506,7 +528,9 @@ calculation (2) if the system performance permits. (3) An alert
 implemented to warn of the lack of RAM storage requirements that
 prevents TeaPP from performing the Kinship Matrix. This displays the
 users current RAM against the 64GB threshold. (4) Exemplar plots
-following successful kinship matrix calculation and visualisation.
+following successful kinship matrix calculation and
+visualisation.\](media/media/image24.svg){width=“5.905555555555556in”
+height=“5.722916666666666in”}
 
 ### Environmental Data
 
@@ -517,13 +541,13 @@ exploration. This currently includes:
 
 - Rainfall Records (mean mm/month)
 
-### Uploading Environmental Data
+#### Uploading Environmental Data
 
 <figure>
 
-<img src="media/media/image23.png"
+<img src="media/media/image25.png"
 style="width:7.74318in;height:5.14634in"
-alt="Screens screenshot of a computer screen AI-generated content may be incorrect." />
+alt="" />
 <figcaption>
 
 <p>
@@ -540,8 +564,8 @@ Temperature. (5) Start upload of the file by clicking “Start Upload”.
 </figure>
 
 Environmental files (rainfall/temperature records) can be uploaded by
-navigating to the Upload Page and following these steps (see Figure
-M11):
+navigating to the Upload Page and following these steps (see Figure M
+14):
 
 1)  Select the ’Environmental” tab of the upload display section.
 
@@ -554,12 +578,12 @@ M11):
 
 Temperature:
 
-<img src="media/media/image24.png"
+<img src="media/media/image26.png"
 style="width:5.90556in;height:0.70694in" />
 
 Rainfall:
 
-<img src="media/media/image25.png"
+<img src="media/media/image27.png"
 style="width:5.90556in;height:0.71042in" />
 
 3)  Your chosen text file can be selected from your local directory.
@@ -576,7 +600,7 @@ style="width:5.90556in;height:0.71042in" />
 ### Environmental Analysis
 
 Currently, the user can select between performing analysis and data
-visualisation of Temperature (1) and Rainfall (2) data.
+visualisation of Temperature (1) and Rainfall (2) data (Figure M 15).
 
 Selecting either analysis options results in the calculation of data
 visualisation plot for the respective data-type (3). You can interact
@@ -584,7 +608,7 @@ with the plots to display specific metric for points on the plot, zoom,
 or pan around the graph.
 
 <figure>
-<img src="media/media/image27.svg"
+<img src="media/media/image29.svg"
 style="width:5.90556in;height:3.26667in"
 alt="Figure M 15: a) GUI implemented to allow for user to select either Temperature (1) or Rainfall (2) data that has been uploaded to TeaPP." />
 <figcaption aria-hidden="true">Figure M 15: a) GUI implemented to allow
@@ -600,24 +624,25 @@ Genomic data can be uploaded for storage and analysis.
 pedigree/environmental records, instead is a place-holder for future
 NGS/GS data\*\*\*
 
-### Uploading Genomic Files
+######### Uploading Genomic Files
 
-<img src="media/media/image28.png"
+<figure>
+<img src="media/media/image30.png"
 style="width:5.90556in;height:4.62778in"
-alt="Screens screenshot of a computer screen AI-generated content may be incorrect." />Genomic
-files can be uploaded by navigating to the Upload Page and selecting the
-“Genomic Data” tab (Figure M14)
-
-Figure M 16: Genomic File Upload Page.
-
+alt="Figure M 16: Genomic File Upload Page. GUI for genomic upload page. (1) Selection of “genomic data” tab. (2) Drop-down “Help” displays file requirements. (3) Option to open local directory to choose a file(s) to upload. (4) Entering the Clone ID of the respective files you have chosen. (5) Upload button to begin the processing of the files." />
+<figcaption aria-hidden="true">Figure M 16: Genomic File Upload Page.
 GUI for genomic upload page. (1) Selection of “genomic data” tab. (2)
 Drop-down “Help” displays file requirements. (3) Option to open local
 directory to choose a file(s) to upload. (4) Entering the Clone ID of
 the respective files you have chosen. (5) Upload button to begin the
-processing of the files.
+processing of the files.</figcaption>
+</figure>
 
 Genomic files can be uploaded by navigating to the Upload Page and
-following these steps (see Figure M14):
+selecting the “Genomic Data” tab (Figure M16)
+
+Genomic files can be uploaded by navigating to the Upload Page and
+following these steps (see Figure M 16):
 
 7)  Select the “Genomic Data” tab of the upload display section.
 
@@ -654,7 +679,7 @@ Genomic records.
 
 On selection of the Genetic data analysis tab, the user can view and
 select genomic records to perform FastQC analysis (Andrews, 2012)
-following these steps (see Figure M15):
+following these steps (see Figure M 17):
 
 1)  Uploaded genomic files are displayed in the table
 
@@ -671,7 +696,7 @@ following these steps (see Figure M15):
 
 <figure>
 
-<img src="media/media/image29.png"
+<img src="media/media/image31.png"
 style="width:7.28919in;height:6.95833in"
 alt="Screens screenshot of a computer AI-generated content may be incorrect." />
 <figcaption>
@@ -695,22 +720,18 @@ the user to select and open in an external browser tab (4).
 
 From the landing, upload and home page the user can access the profile
 page. This currently acts as a placeholder for future functionality to
-customise the GUI and manage user settings (Figure 33).
+customise the GUI and manage user settings (Figure M 18).
 
 <figure>
-<img src="media/media/image30.png"
+<img src="media/media/image32.png"
 style="width:6.83542in;height:3.82847in"
-alt="A screenshot of a computer AI-generated content may be incorrect." />
-<figcaption aria-hidden="true">A screenshot of a computer AI-generated
-content may be incorrect.</figcaption>
-</figure>
-
-## 
-
-Figure M 18: Profile and Setting Page.
-
+alt="Figure M 18: Profile and Setting Page. Implemented as a placeholder for future user profile management. Orange box highlights the current user displayed (provided by Apache2 ((Behlendorf et al., 1999))). All other features are non-functional but indicate potential features such as GUI display themes and customisable pedigree visualisation colours." />
+<figcaption aria-hidden="true">Figure M 18: Profile and Setting Page.
 Implemented as a placeholder for future user profile management. Orange
 box highlights the current user displayed (provided by Apache2
 ((Behlendorf et al., 1999))). All other features are non-functional but
 indicate potential features such as GUI display themes and customisable
-pedigree visualisation colours.
+pedigree visualisation colours.</figcaption>
+</figure>
+
+## 
