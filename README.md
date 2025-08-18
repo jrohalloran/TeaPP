@@ -2,7 +2,7 @@
 
 Welcome to TeaPP.
 
-TeaPP is a prototype for the digitalisation, management , analysis and
+TeaPP is a software prototype for the digitalisation, management , analysis and
 visualisation of tea plant breeding data in partnership with
 Brown/Lipton as the requirements of a Thesis Project at Cranfield
 University.
