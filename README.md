@@ -11,8 +11,8 @@ University.
 style="width:3.74627in;height:1.93569in" />
 
 Deployment and login access to TeaPP is available on request. Please
-contact Jenny, (jenny.ohalloran@cranfield.ac.uk) with an inquiries or
-questions
+contact Jenny, (jenny.ohalloran@cranfield.ac.uk) with any enquiries or
+questions. 
 
 ### Overview
 
