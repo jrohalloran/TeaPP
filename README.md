@@ -620,7 +620,7 @@ Genomic data can be uploaded for storage and analysis.
 pedigree/environmental records, instead is a place-holder for future
 NGS/GS data\*\*\*
 
-######### Uploading Genomic Files
+### Uploading Genomic Files
 
 <figure>
 <img src="media/media/image30.png"
