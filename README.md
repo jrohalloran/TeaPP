@@ -515,20 +515,7 @@ The follow these steps (Figure M 13).:
 4.  If the kinship matrix calculation and visualisation is successful,
     the respective plots will be displayed to the user.
 
-<img src="media/media/image23.png"
-style="width:5.90556in;height:1.55208in"
-alt="Figure M 13: Kinship Analysis Page.
 
-The user can either select to view the stored results of a kinship
-analysis (1)(implemented due to computational memory requirements of
-Synbreed Kinship matrix calculation or perform a new Kinship Matrix
-calculation (2) if the system performance permits. (3) An alert
-implemented to warn of the lack of RAM storage requirements that
-prevents TeaPP from performing the Kinship Matrix. This displays the
-users current RAM against the 64GB threshold. (4) Exemplar plots
-following successful kinship matrix calculation and
-visualisation" />
-<figcaption>
     
 <figure>
 <img src="media/media/image22.svg"
