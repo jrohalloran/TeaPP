@@ -730,8 +730,7 @@ style="width:6.83542in;height:3.82847in"
 alt="Figure M 18: Profile and Setting Page. Implemented as a placeholder for future user profile management. Orange box highlights the current user displayed (provided by Apache2 ((Behlendorf et al., 1999))). All other features are non-functional but indicate potential features such as GUI display themes and customisable pedigree visualisation colours." />
 <figcaption aria-hidden="true">Figure M 18: Profile and Setting Page.
 Implemented as a placeholder for future user profile management. Orange
-box highlights the current user displayed (provided by Apache2
-((Behlendorf et al., 1999))). All other features are non-functional but
+box highlights the current user displayed. All other features are non-functional but
 indicate potential features such as GUI display themes and customisable
 pedigree visualisation colours.</figcaption>
 </figure>
