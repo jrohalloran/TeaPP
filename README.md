@@ -357,17 +357,13 @@ of offspring per generation, year, or the number of twins identified.
 
 <img src="media/media/image17.png"
 style="width:5.90556in;height:1.87431in"
-alt="A screenshot of a computer AI-generated content may be incorrect." />
-<figcaption>
-
-<p>
-
-Figure M 10: Summary & Descriptive Statistics Page. A selection of
+alt="Figure M 10: Summary & Descriptive Statistics Page. A selection of
 descriptive metrics are calculated and displayed to the user regarding
 the uploaded pedigree data. These inlcude plants per generation, twin
 and sibling frequencies, plants bred per year. Summary venn diagrams and
-an interactive HTML histogram of plants bred per year and are displayed.
-</p>
+an interactive HTML histogram of plants bred per year and are displayed." />
+<figcaption>
+
 
 </figcaption>
 
