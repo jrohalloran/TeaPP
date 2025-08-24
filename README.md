@@ -357,17 +357,13 @@ of offspring per generation, year, or the number of twins identified.
 
 <img src="media/media/image17.png"
 style="width:5.90556in;height:1.87431in"
-alt="A screenshot of a computer AI-generated content may be incorrect." />
-<figcaption>
-
-<p>
-
-Figure M 10: Summary & Descriptive Statistics Page. A selection of
+alt="Figure M 10: Summary & Descriptive Statistics Page. A selection of
 descriptive metrics are calculated and displayed to the user regarding
 the uploaded pedigree data. These inlcude plants per generation, twin
 and sibling frequencies, plants bred per year. Summary venn diagrams and
-an interactive HTML histogram of plants bred per year and are displayed.
-</p>
+an interactive HTML histogram of plants bred per year and are displayed." />
+<figcaption>
+
 
 </figcaption>
 
@@ -519,7 +515,13 @@ The follow these steps (Figure M 13).:
 4.  If the kinship matrix calculation and visualisation is successful,
     the respective plots will be displayed to the user.
 
-\![Figure M 13: Kinship Analysis Page.
+
+    
+<figure>
+<img src="media/media/image22.svg"
+style="width:5.90556in;height:3.86806in"
+alt="" />
+<figcaption aria-hidden="true">Figure M 13: Kinship Analysis Page.
 
 The user can either select to view the stored results of a kinship
 analysis (1)(implemented due to computational memory requirements of
@@ -529,8 +531,8 @@ implemented to warn of the lack of RAM storage requirements that
 prevents TeaPP from performing the Kinship Matrix. This displays the
 users current RAM against the 64GB threshold. (4) Exemplar plots
 following successful kinship matrix calculation and
-visualisation.\](media/media/image24.svg){width=“5.905555555555556in”
-height=“5.722916666666666in”}
+visualisation</figcaption>
+</figure>
 
 ### Environmental Data
 
@@ -624,7 +626,7 @@ Genomic data can be uploaded for storage and analysis.
 pedigree/environmental records, instead is a place-holder for future
 NGS/GS data\*\*\*
 
-######### Uploading Genomic Files
+### Uploading Genomic Files
 
 <figure>
 <img src="media/media/image30.png"
@@ -728,8 +730,7 @@ style="width:6.83542in;height:3.82847in"
 alt="Figure M 18: Profile and Setting Page. Implemented as a placeholder for future user profile management. Orange box highlights the current user displayed (provided by Apache2 ((Behlendorf et al., 1999))). All other features are non-functional but indicate potential features such as GUI display themes and customisable pedigree visualisation colours." />
 <figcaption aria-hidden="true">Figure M 18: Profile and Setting Page.
 Implemented as a placeholder for future user profile management. Orange
-box highlights the current user displayed (provided by Apache2
-((Behlendorf et al., 1999))). All other features are non-functional but
+box highlights the current user displayed. All other features are non-functional but
 indicate potential features such as GUI display themes and customisable
 pedigree visualisation colours.</figcaption>
 </figure>
