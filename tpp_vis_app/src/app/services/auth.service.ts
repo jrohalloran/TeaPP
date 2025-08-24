@@ -1,3 +1,13 @@
+/*** 
+ * // Jennifer O'Halloran
+ * // IBIX Thesis Project - TPP Visualisation
+***/
+
+/***
+//----------------------------------------
+// USER SERVICE FOP UPDATING THE USER NAME IN GUI
+
+***/
 
 import { Injectable } from '@angular/core';
 

@@ -1,9 +1,8 @@
 
+### Jennifer O'Halloran
 
-## Jennifer O'Halloran
-
-
-## Thesis Project: TeaPP Visualisation App Prototype 
+## Manual Cleaning and Processing Script 
+## IBIX Thesis Project July/August 2025
 
 
 library(synbreed)

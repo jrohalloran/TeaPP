@@ -1,3 +1,8 @@
+### Jennifer O'Halloran
+
+## HPT Exploration Script
+## IBIX Thesis Project July/August 2025
+
 
 install.packages("openxlsx")
 install.packages("dplyr")

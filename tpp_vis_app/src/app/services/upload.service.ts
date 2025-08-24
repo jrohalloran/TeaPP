@@ -1,3 +1,16 @@
+
+
+/*** 
+ * // Jennifer O'Halloran
+ * // IBIX Thesis Project - TPP Visualisation
+***/
+
+/***
+//----------------------------------------
+// UPLOAD SERVICE --- PROVIDES BACKEND REQUESTS FOR UPLOADING FILES
+
+***/
+
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';

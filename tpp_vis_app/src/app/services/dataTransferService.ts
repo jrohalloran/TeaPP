@@ -1,6 +1,15 @@
 
 
+/*** 
+ * // Jennifer O'Halloran
+ * // IBIX Thesis Project - TPP Visualisation
+***/
 
+/***
+//----------------------------------------
+// SERVICE FOR SENDING DATA BETWEEN COMPONENTS
+
+***/
 
 import { Injectable } from '@angular/core';
 
