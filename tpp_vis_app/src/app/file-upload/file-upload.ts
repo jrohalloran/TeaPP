@@ -321,6 +321,7 @@ async handleFileGenomSelection(event: any) {
 
 
   async uploadFile() {
+    /*
     this.loadingChange.emit(true);
     if (!this.selectedFile) {
       alert("Please select a file before uploading.");
@@ -362,10 +363,13 @@ async handleFileGenomSelection(event: any) {
         this.uploadStatus = 'error';
       }
     });
-    this.loadingChange.emit(false);
+    this.loadingChange.emit(false);*/
+    alert("Uploading Files is suspended in this Demo")
+
   }
 
   async uploadEnvFile() {
+    /*
     this.loadingChange.emit(true);
         if (!this.selectedEnvFile) {
       alert("Please select a file before uploading.");
@@ -432,57 +436,16 @@ async handleFileGenomSelection(event: any) {
     console.log("please select a file type ");
     this.envMessage = "Please select a Data Type";
   }
+    */
+  alert("Uploading Environmental Files is suspended in this Demo")
 
 }
 
 
-/*
-  async uploadGenomFile() {
-    this.loadingChange.emit(true);
-
-    console.log(this.userIDInput);
-    //console.log(this.selectedGenomFile);
-    const filename = this.selectedGenomFile?.name;
-    console.log("Filename: "+filename);
-    if (!this.selectedGenomFile) {
-      alert("Please select a file before uploading.");
-      return;
-    }
-    if (!this.userIDInput || this.userIDInput== null || this.userIDInput==''|| this.userIDInput==' ') {
-      alert("Please Enter Clone ID for the Fastq file.");
-      return;
-    }
-    if (this.userIDInput){
-          console.log("Sending File for Upload")
-          this.uploadService.uploadGENOMFile(this.selectedGenomFile).subscribe({
-          next: (response) => {
-            console.log('Upload response:', response);
-            try{
-              this.processGenomFile()
-            }catch (error){
-              console.error('Error:', error);
-            }
-
-            this.uploadStatus = 'completed';
-            this.processing = true;
-
-
-          },
-          error: (error) => {
-            console.error('Upload error:', error);
-            this.uploadStatus = 'error';
-          }
-        });
-        this.loadingChange.emit(false);
-      }
-
-  }
-
-*/
-
 
 
 async uploadGenomFiles() {
+  /*
   this.loadingChange.emit(true);
 
   if (!this.selectedGenomFiles || this.selectedGenomFiles.length === 0) {
@@ -523,7 +486,8 @@ async uploadGenomFiles() {
     console.error("At least one file failed to upload or process.");
   } finally {
     this.loadingChange.emit(false);
-  }
+  }*/
+  alert("Uploading Genomic Files is suspended in this Demo")
 }
 
 
