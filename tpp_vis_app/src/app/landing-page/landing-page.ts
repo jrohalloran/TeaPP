@@ -81,7 +81,7 @@ export class LandingPage {
 
   async emptyPostgreSQL(){
     console.log("Empty Databases clicked");
-
+/*
 
     try {
         const response = await firstValueFrom(this.backendApiService.emptyPostgreSQL());
@@ -99,12 +99,14 @@ export class LandingPage {
     } catch (error) {
             console.error('Error:', error);
     
-    }
+    }*/
+    alert("Function disabled for this Demo")
 
   }
 
   async emptyNeo4j(){
     console.log("Empty Neo4j clicked");
+    /*
     try {
         const response = await firstValueFrom(this.backendApiService.emptyNeo4j());
         console.log('Response from backend:', response);
@@ -117,7 +119,9 @@ export class LandingPage {
     } catch (error) {
             console.error('Error:', error);
     
-    }
+    }*/
+
+    alert("Function disabled for this Demo")
   }
   
   uploadNewData(){
